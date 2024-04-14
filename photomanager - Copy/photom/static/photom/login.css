@@ -1,0 +1,126 @@
+#login-wrapper {
+    padding: 100px 50px;
+    width: 100%;
+}
+
+#login-sub-wrapper {
+    width: 50%;
+    min-width: 500px;
+    max-width: 800px;
+    margin: auto;
+    background-color: var(--light-gray);
+    border-radius: 10px;
+    padding: 30px 0;
+}
+
+#login-sub-wrapper h1 {
+    text-align: center;
+    padding-top: 50px;
+}
+
+#icon-wrapper {
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+#login-sub-wrapper {
+    width: 60%;
+    min-width: 500px;
+    max-width: 1000px;
+    margin: auto;
+    background-color: var(--light-gray);
+    border-radius: 10px;
+}
+
+#login-sub-wrapper h1 {
+    text-align: center;
+}
+
+#back-icon-wrapper svg:hover {
+    fill: white;
+}
+
+#trash-icon-wrapper svg:hover {
+    fill: red;
+}
+
+/**************** FORM ****************/
+
+.form-title {
+    text-align: center;
+}
+
+.login-form {
+    padding: 30px 0;
+    width: 85%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.login-form input {
+    padding: 8px 10px;
+    border: none;
+    border-radius: 10px;
+}
+
+.login-form input:focus {
+    background-color: #EFFEFF;
+    outline: none;
+}
+
+.login-form select {
+    padding: 8px 10px;
+    border: none;
+    border-radius: 10px;
+}
+
+.login-form select:focus {
+    outline: none;
+}
+
+.login-form-label {
+    padding-top: 5px;
+    font-size: 18px;
+    margin-right: 5px;
+}
+
+.login-form-row {
+    width: 80%;
+    margin: auto;
+    display: grid;
+    grid-template-columns: 25% 75%;
+}
+
+/**************** FORM SUBMIT ****************/
+
+.login-form-submit {
+    padding: 8px;
+    width: 40%;
+    max-width: 200px;
+    border-radius: 20px;
+    background-color: black;
+    color: white;
+    border: none;
+    margin: auto;
+    font-size: 18px;
+    transition: all 0.25s;
+}
+
+.login-form-submit:hover {
+    cursor: pointer;
+    background-color: white;
+    color: black;
+}
+
+/**************** RESET PASSWORD ****************/
+#password-reset-link {
+    text-align: center;
+    font-size: 18px;
+    font-style: italic;
+    text-decoration: underline;
+    color: black;
+}

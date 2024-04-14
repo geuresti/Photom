@@ -1,0 +1,122 @@
+{% extends "photom/base.html" %}
+
+{% load static %}
+
+{% block title %} Home {% endblock %}
+
+{% block style %} 
+    <link rel="stylesheet" href="{% static 'photom/index.css' %}">
+{% endblock %}
+
+{% block content %}
+    
+    <div id="home-content-wrapper">
+    
+        <div id="classes-menu">
+            <h2><a id="classes-menu-title" href="{% url 'manage_classes' %}">Classes</a></h2>
+            <ul>
+                <!--    
+                <li class="class-link">(Test) 3rd Grade Class A</li>
+                <li class="class-link">(Test) 3rd Grade Class B</li>
+                -->
+                
+                {% for class in classes %}
+                    <li class="class-link">{{ class.class_name }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+
+        <div id="title-students-wrapper">
+
+            <div id="class-display-wrapper">
+                <h1 id="class-display">No Classes To Display</h1>
+            </div>
+
+            <div>
+        
+                <!--
+                <div class="class-students">
+        
+                    <div class="student-card">
+                        <a href="">
+                        <img src="https://thumbs.dreamstime.com/b/portrait-nice-cute-gorgeous-girl-bob-hair-wear-striped-pullover-hands-showing-roof-over-head-isolated-blue-color-271961324.jpg">
+                        <p>Jane Doe</p>
+                        </a>
+                    </div>
+                    <div class="student-card">
+                        <img src="https://thumbs.dreamstime.com/b/portrait-nice-cute-gorgeous-girl-bob-hair-wear-striped-pullover-hands-showing-roof-over-head-isolated-blue-color-271961324.jpg">
+                        <p>Mary Doe</p>
+                    </div>
+                
+                    <div class="student-card">
+                        <img src="https://thumbs.dreamstime.com/b/portrait-nice-cute-gorgeous-girl-bob-hair-wear-striped-pullover-hands-showing-roof-over-head-isolated-blue-color-271961324.jpg">
+                        <p>Joanna Doe</p>
+                        
+                    </div>
+                    <div class="student-card">
+                        <img src="https://thumbs.dreamstime.com/b/portrait-nice-cute-gorgeous-girl-bob-hair-wear-striped-pullover-hands-showing-roof-over-head-isolated-blue-color-271961324.jpg">
+                        <p>Martin Doe</p>
+                    </div>
+                
+                    <div class="student-card">
+                        <img src="https://thumbs.dreamstime.com/b/portrait-nice-cute-gorgeous-girl-bob-hair-wear-striped-pullover-hands-showing-roof-over-head-isolated-blue-color-271961324.jpg">
+                        <p>Jessica Doe</p>
+                        
+                    </div>
+                    <div class="student-card">
+                        <img src="https://thumbs.dreamstime.com/b/portrait-nice-cute-gorgeous-girl-bob-hair-wear-striped-pullover-hands-showing-roof-over-head-isolated-blue-color-271961324.jpg">
+                        <p>Jolene Doe</p>
+                    </div>
+            
+                </div>
+        
+                <div class="class-students">
+                
+                    <div class="student-card">
+                        <a href="">
+                            <img src="https://tiermaker.com/images/chart/chart/random-people--1088755/204c7035-dcbf-4715-9324-d1646c531f3cjpeg.png">
+                            <p>John Doe</p>
+                        </a>
+                    </div>
+                    <div class="student-card">
+                        <img src="https://tiermaker.com/images/chart/chart/random-people--1088755/204c7035-dcbf-4715-9324-d1646c531f3cjpeg.png">
+                        <p>Jack Doe</p>
+                    </div>
+                
+                    <div class="student-card">
+                        <img src="https://tiermaker.com/images/chart/chart/random-people--1088755/204c7035-dcbf-4715-9324-d1646c531f3cjpeg.png">
+                        <p>Josh Deer</p>   
+                    </div>
+                    <div class="student-card">
+                        <img src="https://tiermaker.com/images/chart/chart/random-people--1088755/204c7035-dcbf-4715-9324-d1646c531f3cjpeg.png">
+                        <p>Jacob Deer</p>
+                    </div>
+        
+                </div>
+            -->
+        
+                {% for class in classes %}
+                    <div class="class-students">
+                        {% for student in class.student_set.all %}
+                            <div class="student-card">
+                                <a href="{% url 'view_student' student.pk %}">
+                                    <img src="{{ student.student_photo_ID }}">
+                                </a>
+                                <p>{{ student.first_name }} {{ student.last_name }}</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="{% static 'photom/index.js' %}"></script>
+{% endblock %}
+
+
+
