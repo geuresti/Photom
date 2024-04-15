@@ -1,3 +1,13 @@
+#back-icon-wrapper svg {
+    position: absolute;
+    top: 130px;
+    left: 40px;
+}
+
+#back-icon-wrapper svg:hover {
+    fill: var(--light-gray);
+}
+
 #mc-content-wrapper {
     width: 100%;
     justify-content: center;

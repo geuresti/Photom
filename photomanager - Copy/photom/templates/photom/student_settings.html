@@ -32,50 +32,36 @@
 
                 <h1><i>{{ student }}</i></h1>
             </div>
+            
+            <form class="us-form" enctype="multipart/form-data" action="{% url 'student_settings' student.pk %}" method="post">
 
-            {{ student_form.non_field_errors }}
-            <form class="us-form" action="{% url 'student_settings' student.pk %}" method="post">
                 <h2 class="form-title"><b>Update Student Information</b></h2>
                 {% csrf_token %}
                 
                 <div class="us-form-row">
-                    {{ student_form.first_name.errors }}
                     <div class="us-form-label">{{ student_form.first_name.label }}</div>
                     {{ student_form.first_name }}
                 </div>
                 <div class="us-form-row">
-                    {{ student_form.last_name.errors }}
                     <div class="us-form-label">{{ student_form.last_name.label }}</div>
                     {{ student_form.last_name }}
                 </div>
                 <div class="us-form-row">
-                    {{ student_form.student_age.errors }}
                     <div class="us-form-label">{{ student_form.student_age.label }}</div>
                     {{ student_form.student_age }}
                 </div>
                 <div class="us-form-row">
-                    {{ student_form.student_class.errors }}
                     <div class="us-form-label">{{ student_form.student_class.label }}</div>
                     {{ student_form.student_class }}
                 </div>
                 <div class="us-form-row">
-                    {{ student_form.student_ID.errors }}
                     <div class="us-form-label">{{ student_form.student_ID.label }}</div>
                     {{ student_form.student_ID }}
                 </div>
-
-                <div>
-                    <div class="us-form-label"> Student ID Photo </div>
-                    <div>Placeholder</div>
-                </div>
-                <!--
-
                 <div class="us-form-row">
-                    {{ student_form.student_photo_ID.errors }}
-                    <div class="us-form-label">{{ student_form.student_photo_ID.label }}</div>
+                    <div class="us-form-label">Replace Photo ID</div>
                     {{ student_form.student_photo_ID }}
                 </div>
-                -->
                 
                 <input class="us-form-submit" type="submit" name="update-class" value="Submit">
             </form>

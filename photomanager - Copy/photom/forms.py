@@ -1,5 +1,5 @@
 from django import forms
-from .models import Student, Class
+from .models import Student, Class, Photo, SchoolAccount
 from django.utils.translation import gettext as _
 
 from django.contrib.auth.models import User  
@@ -54,7 +54,7 @@ class AccountCreationForm(UserCreationForm):
 
 class ClassForm(forms.ModelForm):
     class Meta:
-        model =  Class
+        model = Class
         fields = ["class_name", "class_teacher", "class_grade"]
         labels = {
             "class_name": _("Class"),
@@ -63,8 +63,11 @@ class ClassForm(forms.ModelForm):
         }
 
 class StudentForm(forms.ModelForm):
+
+    student_photo_ID = forms.ImageField(required=False, error_messages = {'invalid':_("Image files only")}, widget=forms.FileInput)
+
     class Meta:
-        model =  Student
+        model = Student
         fields = [
             "first_name", 
             "last_name", 
@@ -72,17 +75,21 @@ class StudentForm(forms.ModelForm):
             "student_class",
             "student_ID",
             "student_photo_ID",
-            "student_photos",
         ]
         labels = {
             "first_name": _("First Name"),
             "last_name": _("Last Name"),
             "student_age": _("Age"),
             "student_class": _("Class"),
-            "student_ID": _("ID"),
+            "student_ID": _("ID #"),
             "student_photo_ID": _("Photo ID"),
-            "student_photos": _("Upload Pictures"),
         }
 
-class UploadFileForm(forms.Form):
-    image = forms.ImageField()
+# Kind of useless as a model from since I have to manually set
+# some values rather than just calling form.save()
+class PhotoForm(forms.ModelForm):
+    class Meta:
+        model = Photo
+        fields = [
+            "photo"
+        ]

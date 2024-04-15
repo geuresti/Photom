@@ -9,6 +9,14 @@
 {% endblock %}
 
 {% block content %}
+
+    <a id="back-icon-wrapper" href="{% url 'index' %}">
+        <svg width="50" height="50" viewBox="0 0 276 276" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="138" cy="138" r="131" stroke="black" stroke-width="14"/>
+            <path d="M208 145C211.866 145 215 141.866 215 138C215 134.134 211.866 131 208 131L208 145ZM64.0503 133.05C61.3166 135.784 61.3166 140.216 64.0503 142.95L108.598 187.497C111.332 190.231 115.764 190.231 118.497 187.497C121.231 184.764 121.231 180.332 118.497 177.598L78.8995 138L118.497 98.402C121.231 95.6683 121.231 91.2362 118.497 88.5025C115.764 85.7688 111.332 85.7688 108.598 88.5025L64.0503 133.05ZM208 131L69 131L69 145L208 145L208 131Z" fill="black"/>
+        </svg>
+    </a>
+
     <div id="mc-content-wrapper">
         <div id="mc-content-title">
             <h1> Manage Your Classes </h1>
@@ -19,7 +27,7 @@
             <div class="mc-content-block">
                 {{ student_form.non_field_errors }}
                 <form class="mc-form" enctype="multipart/form-data" action="{% url 'manage_classes' %}" method="post">
-                    <h2 class="form-title"><b>Add New Student</b></h2>
+                    <h2 class="form-title"><b>Create New Student</b></h2>
                     {% csrf_token %}
                     
                     <div class="mc-form-row">
@@ -42,9 +50,8 @@
                         <div class="mc-form-label">{{ student_form.student_ID.label }}</div>
                         {{ student_form.student_ID }}
                     </div>
-
                     <div class="mc-form-row">
-                        <div class="mc-form-label">{{ student_form.student_photo_ID.label }}</div>
+                        <div class="mc-form-label">Photo ID</div>
                         {{ student_form.student_photo_ID }}
                     </div>
                     
@@ -104,7 +111,7 @@
                         {% for student in class.student_set.all %}
                         <div class="student-card">
                             <a href="{% url 'view_student' student.pk %}">
-                                <img src="{{ student.student_photo_ID }}">
+                                <img src="{% get_media_prefix %}{{ student.student_photo_ID }}">
                             </a>
                             <p>{{ student.first_name }} {{ student.last_name }}</p>
                         </div>

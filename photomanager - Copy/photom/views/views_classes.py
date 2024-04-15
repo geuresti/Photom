@@ -1,11 +1,9 @@
 from django.shortcuts import render
-from django.http import HttpResponse
-from django.shortcuts import render
-from photom.models import Student, Class
+from photom.models import Class
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from photom.forms import ClassForm, StudentForm, UploadFileForm
+from photom.forms import ClassForm, StudentForm
 
 # CLASS MUST BELONG TO THE USER
 def manage_classes(request):
@@ -22,33 +20,14 @@ def manage_classes(request):
         
         elif "create-student" in dict(request.POST.items()).keys():
             student_form = StudentForm(request.POST, request.FILES)
-            print("\n form data: ", student_form.data, "\n")
-            print("\n received photo id: ", request.FILES)
-           # print("\n form data asd: ", type(student_form.data["student_photo_ID"]), "\n")
 
             if student_form.is_valid():
-                print("STUEDNT FORM VALID \n")
-
-               # print("\n files data: ", request.FILES['student_photo_ID'], "\n")
-                #image_file = request.FILES['student_photo_ID'].file.read()
-              #  print("\n image file:", image_file, "\n")
-
-                new_student = Student()
-
-                assigned_class = get_object_or_404(Class, pk=student_form.data["student_class"])
-                #print("\n assigned class: ", assigned_class, "\n")
-
-                new_student.first_name=student_form.data["first_name"]
-                new_student.last_name=student_form.data["last_name"]
-                new_student.student_age=student_form.data["student_age"]
-                new_student.student_class=assigned_class
-                new_student.student_ID=student_form.data["student_ID"]
-
-                new_student.save()
+                print("\n STUDENT FORM VALID \n")
+                student_form.save()
                 
                 return HttpResponseRedirect(reverse("manage_classes"))
             else:
-                print("STUEDNT FORM NOOOTTTT VALID \n")
+                print("\n STUEDNT FORM INVALID \n")
 
     else:
         classes = Class.objects.all().order_by("-class_grade")
