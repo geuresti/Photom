@@ -1,0 +1,117 @@
+#create-account-wrapper {
+    padding: 100px 0;
+    width: 100%;
+}
+
+#ca-sub-wrapper {
+    width: 85%;
+    min-width: 500px;
+    max-width: 1000px;
+    margin: auto;
+    background-color: var(--light-gray);
+    border-radius: 10px;
+    padding: 80px;
+}
+
+#icon-wrapper {
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+#login-sub-wrapper h1 {
+    text-align: center;
+}
+
+#back-icon-wrapper svg:hover {
+    fill: white;
+}
+
+#trash-icon-wrapper svg:hover {
+    fill: red;
+}
+
+/**************** FORM ****************/
+
+#form-title {
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+
+.credential-notes ul {
+    padding-left: 20px;
+    font-size: 16px;
+}
+
+.ca-form {
+    width: 100%;
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 30px;
+
+    border: 1px solid black;
+}
+
+.ca-form input {
+    padding: 8px 10px;
+    border: none;
+    border-radius: 10px;
+}
+
+.ca-form input:focus {
+    background-color: #EFFEFF;
+    outline: none;
+}
+
+.ca-form select {
+    padding: 8px 10px;
+    border: none;
+    border-radius: 10px;
+}
+
+.ca-form select:focus {
+    outline: none;
+}
+
+.ca-form-label {
+    padding-top: 5px;
+    font-size: 18px;
+    margin-right: 5px;
+    font-weight: bold;
+}
+
+.ca-form-row {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 25% 70%;
+}
+
+#approval-note {
+    text-align: center;
+    font-size: 16px;
+}
+
+/**************** FORM SUBMIT ****************/
+
+.ca-form-submit {
+    padding: 8px;
+    width: 40%;
+    max-width: 200px;
+    border-radius: 20px;
+    background-color: black;
+    color: white;
+    border: none;
+    margin: auto;
+    font-size: 18px;
+    transition: all 0.25s;
+}
+
+.ca-form-submit:hover {
+    cursor: pointer;
+    background-color: #EFFEFF;
+    color: black;
+}
