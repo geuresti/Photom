@@ -130,4 +130,6 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 LOGIN_REDIRECT_URL = '/photom/'
 
+LOGOUT_REDIRECT_URL = '/accounts/login/'
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

@@ -80,6 +80,10 @@
                         <div class="mc-form-label">{{ class_form.class_grade.label }}</div>
                         {{ class_form.class_grade }}
                     </div>
+
+                    <div style="position: absolute;">
+                        {{ class_form.class_school.as_hidden }}
+                    </div>
                     
                     <input class="mc-form-submit" type="submit" name="create-class" value="Submit">
                 </form>

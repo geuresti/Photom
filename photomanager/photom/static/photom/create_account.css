@@ -52,7 +52,7 @@
     flex-direction: column;
     justify-content: center;
     gap: 30px;
-
+    margin-bottom: 30px;
     border: 1px solid black;
 }
 
@@ -108,5 +108,15 @@
 .ca-form-submit:hover {
     cursor: pointer;
     background-color: #EFFEFF;
+    color: black;
+}
+
+/**************** LOGIN LINK ****************/
+
+#login-link {
+    text-align: center;
+    font-size: 18px;
+    font-style: italic;
+    text-decoration: underline;
     color: black;
 }

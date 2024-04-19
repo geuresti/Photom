@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.shortcuts import render
-from photom.models import Class
+from photom.models import Class, SchoolAccount
 from photom.forms import AccountCreationForm  
 from django.http import HttpResponseRedirect
 
@@ -9,21 +9,28 @@ from django.contrib.auth.decorators import login_required
 
 ########################## GENERAL ##########################
 
-# order dropdown
-# USER MUST BE LOGGED IN
+@login_required
 def index(request):
-    classes = Class.objects.all().order_by("-class_grade")
+    school = SchoolAccount.objects.get(user=request.user)
+    classes = Class.objects.filter(class_school = school).order_by("-class_grade")
+
+    print("\n CLASSES:", classes, "\n")
+
     context = {
         "classes":classes,
+        "school":school
     }
+
     return render(request, "photom/index.html", context)
 
+@login_required
 def admin_view(request):
     # If user is superuser, render page
     # Else, redirect to home page
     response = "You're looking at the admin dashboard"
     return HttpResponse(response)
 
+@login_required
 def account_settings(request):
 
     response = "Here is the account settings page"

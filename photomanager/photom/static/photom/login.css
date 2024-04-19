@@ -116,11 +116,14 @@
     color: black;
 }
 
-/**************** RESET PASSWORD ****************/
-#password-reset-link {
+/**************** CREATE ACCOUNT / RESET PASSWORD ****************/
+
+#create-acc-reset-pwd-link {
     text-align: center;
     font-size: 18px;
     font-style: italic;
     text-decoration: underline;
     color: black;
+
+    margin-bottom: 15px;
 }

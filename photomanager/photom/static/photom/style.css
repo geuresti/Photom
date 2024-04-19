@@ -10,6 +10,10 @@
   box-sizing: border-box;
 }
 
+body {
+  overflow-x: hidden;
+}
+
 p {
   color: black;
   font-size: 18px;
@@ -103,4 +107,37 @@ header-height = 91px
 
 #account_settings_link svg:hover {
   rotate: 180deg;
+}
+
+/**************** SETTINGS DROPDOWN ****************/
+
+#dropdown-hover:hover .dropdown-content {
+  right: 0;
+}
+
+.dropdown-content {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  right: -300px;
+  z-index: 1;
+  transition: right 0.5s;
+
+  width: 150px;
+  height: 300px;
+  padding: 15px;
+  border-top: 2px solid black;
+
+  color: black;
+  background-color: var(--light-gray);
+}
+
+.dropdown-content a {
+  font-size: 16px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.dropdown-content a:hover {
+  text-decoration: underline;
 }

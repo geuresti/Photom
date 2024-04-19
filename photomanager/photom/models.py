@@ -16,6 +16,9 @@ class SchoolAccount(models.Model):
     school_name = models.CharField(max_length=100)
     school_position = models.CharField(max_length=100)
 
+    def __str__(self):
+        return self.school_name
+
 class Photo(models.Model):
     photo = models.ImageField(upload_to="student-pictures")
     student = models.ForeignKey("Student", on_delete=models.CASCADE)
@@ -31,12 +34,13 @@ class Student(models.Model):
     student_photo_ID = models.ImageField(default="photo-ids/default-photo-id.PNG", upload_to="photo-ids")
 
     def __str__(self):
-        return self.first_name + " " + self.last_name # + ", " + str(self.student_age) + ", " + str(self.student_class) + ", " + str(self.student_ID)
+        return self.first_name + " " + self.last_name
     
 class Class(models.Model):
     class_name = models.CharField(max_length=50)
     class_teacher = models.CharField(max_length=50)
     class_grade = models.IntegerField()
+    class_school = models.ForeignKey(SchoolAccount, blank=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.class_name

@@ -1,17 +1,14 @@
 from django import forms
 from .models import Student, Class, Photo, SchoolAccount
 from django.utils.translation import gettext as _
-
 from django.contrib.auth.models import User  
 from django.contrib.auth.forms import UserCreationForm  
 from django.core.exceptions import ValidationError
 from phonenumber_field.formfields import PhoneNumberField
-from django.forms.fields import EmailField  
 from django.forms.forms import Form  
 
-
 class AccountCreationForm(UserCreationForm):  
-    first_name = forms.CharField(label="fisrt name", min_length=1, max_length=100)
+    first_name = forms.CharField(label="first name", min_length=1, max_length=100)
     last_name = forms.CharField(label="last name", min_length=1, max_length=100)
     school_phone = PhoneNumberField()
     school_name = forms.CharField(label="school name", max_length=200)
@@ -79,9 +76,10 @@ class AccountCreationForm(UserCreationForm):
         return school
 
 class ClassForm(forms.ModelForm):
+
     class Meta:
         model = Class
-        fields = ["class_name", "class_teacher", "class_grade"]
+        fields = ["class_name", "class_teacher", "class_grade", "class_school"]
         labels = {
             "class_name": _("Class"),
             "class_teacher": _("Teacher"),
@@ -111,8 +109,6 @@ class StudentForm(forms.ModelForm):
             "student_photo_ID": _("Photo ID"),
         }
 
-# Kind of useless as a model from since I have to manually set
-# some values rather than just calling form.save()
 class PhotoForm(forms.ModelForm):
     class Meta:
         model = Photo
