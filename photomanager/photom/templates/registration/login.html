@@ -10,19 +10,6 @@
 
 {% block content %}
 
-    {% if form.errors %}
-        <p>Your username and password didn't match. Please try again.</p>
-    {% endif %}
-
-    {% if next %}
-        {% if user.is_authenticated %}
-        <p>Your account doesn't have access to this page. To proceed,
-        please login with an account that has access.</p>
-        {% else %}
-        <p>Please login to see this page.</p>
-        {% endif %}
-    {% endif %}
-
     <div id="login-wrapper">
         <div id="login-sub-wrapper">
 
@@ -42,18 +29,19 @@
                     <div class="login-form-label">{{ form.password.label_tag }}</div>
                     {{ form.password }}
                 </div>
+
+                {% if form.errors %}
+                <div>
+                    <p style="color: red; font-size: 16px; text-align: center;">* Your username and password did not match</p>
+                </div>
+                {% endif %}
                 
                 <input class="login-form-submit" type="submit" name="update-class" value="Login">
-            
-                <!--
-                <input type="submit" value="login">
-                <input type="hidden" name="next" value="{{ next }}">
-                -->
                 
             </form>
 
             <div id="password-reset-link">
-                <a href="{% url 'password_reset' %}">Lost password?</a>
+                <a href="{% url 'password_reset' %}">Forgot your password?</a>
             </div>
         </div>
     </div>

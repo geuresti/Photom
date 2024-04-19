@@ -1,25 +1,11 @@
-"""
-ORIGINAL IMPORTS
-
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.shortcuts import render
-from .models import Student, Class
-from django.shortcuts import get_object_or_404
-from django.http import HttpResponseRedirect
-from django.urls import reverse
-from .forms import ClassForm, StudentForm, UploadFileForm
-from views.views_classes import *
-"""
-
-from django.shortcuts import render
-from django.http import HttpResponse
-from django.shortcuts import render
-from photom.models import Student, Class
-from django.shortcuts import get_object_or_404
-from django.contrib.auth.models import User
+from photom.models import Class
 from photom.forms import AccountCreationForm  
 from django.http import HttpResponseRedirect
+
+from django.contrib.auth.decorators import login_required
 
 ########################## GENERAL ##########################
 
@@ -52,13 +38,17 @@ def create_account(request):
 
         if account_form.is_valid():
 
-            print("\n USER SUCCESSFULLY CREATED (disabled) \n")
-            #user_form.save()
-            return HttpResponseRedirect("/login/")
-            #user.save()
+            print("\n USER SUCCESSFULLY CREATED \n")
+            account_form.save()
+            return HttpResponseRedirect("/accounts/login/")
         else:
-            print("\n USER FORM INVALID (disabled) \n")
+            print("\n USER FORM INVALID \n")
 
+            context = {
+                "account_form":account_form,
+            }
+
+            return render(request, "registration/create_account.html", context)
     else:
 
         account_form = AccountCreationForm()
@@ -67,30 +57,3 @@ def create_account(request):
         }
 
         return render(request, "registration/create_account.html", context)
-
-
-########################## MISC ##########################
-
-import PIL.Image as Image
-import io
-import base64
-
-def test_image(request):
-    student_instance = get_object_or_404(Student, pk=11)
-    byte_data = student_instance.student_photo_ID_B
-    b = base64.b64decode(byte_data)
-
-    byteImgIO = io.BytesIO(b)
-    byteImg = Image.open(byteImgIO)
-    byteImg.save(byteImgIO, "PNG")
-    byteImgIO.seek(0)
-    byteImg = byteImgIO.read()
-
-    dataBytesIO = io.BytesIO(byteImg)
-    Image.open(dataBytesIO)
-
-    context = {
-        "image": byteImg
-    }
-
-    return render(request, "photom/test_template.html", context)

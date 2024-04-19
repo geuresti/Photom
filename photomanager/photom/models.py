@@ -12,7 +12,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 class SchoolAccount(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    school_phone = PhoneNumberField(default="4155550132") # default needed?
+    school_phone = PhoneNumberField(default="4155550132", blank=True) # remove before live
     school_name = models.CharField(max_length=100)
     school_position = models.CharField(max_length=100)
 

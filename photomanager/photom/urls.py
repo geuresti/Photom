@@ -17,6 +17,4 @@ urlpatterns = [
     path("student_settings/<int:student_id>/", views_students.student_settings, name="student_settings"),
     path("delete_student/<int:student_id>/", views_students.delete_student, name="delete_student"),
     path("download_photo/<int:photo_id>/", views_students.download_photo, name="download_photo"),
-
-    path("test/", views.test_image, name="test_image"),
 ]

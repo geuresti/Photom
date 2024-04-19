@@ -78,7 +78,7 @@
   margin: auto;
   flex-wrap: wrap;
   align-content: flex-start;
-  overflow-y: auto;
+  overflow-y: scroll;
 }
 
 .student-card {
