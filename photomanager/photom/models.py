@@ -2,14 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 from phonenumber_field.modelfields import PhoneNumberField
 
-# user model has:
-# first name *
-# last name *
-# email *
-# username
-# password
-# user permissions
-
 class SchoolAccount(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     school_phone = PhoneNumberField(default="4155550132", blank=True) # remove before live

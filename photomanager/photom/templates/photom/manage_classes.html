@@ -42,9 +42,23 @@
                         <div class="mc-form-label">{{ student_form.student_age.label }}</div>
                         {{ student_form.student_age }}
                     </div>
+
+                    <!-- FIX -->
                     <div class="mc-form-row">
-                        <div class="mc-form-label">{{ student_form.student_class.label }}</div>
-                        {{ student_form.student_class }}
+                        {% if select_error %}
+                        <div class="mc-form-label" style="color: red;"> * {{ student_form.student_class.label }}</div>                       
+                        {% else %}
+                        <div class="mc-form-label" style="color: black;">{{ student_form.student_class.label }}</div>                       
+                        {% endif %}
+
+                        <select name="student_class" required id="id_class_select">
+                            <option value="-1"> Select a Class </option>
+                            {% if classes %}
+                                {% for class in classes %}
+                                <option value="{{ class.pk }}"> {{ class }} </option>
+                                {% endfor %}
+                            {% endif %}
+                        </select>
                     </div>
                     <div class="mc-form-row">
                         <div class="mc-form-label">{{ student_form.student_ID.label }}</div>

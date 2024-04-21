@@ -89,7 +89,7 @@ class ClassForm(forms.ModelForm):
 class StudentForm(forms.ModelForm):
 
     student_photo_ID = forms.ImageField(required=False, error_messages = {'invalid':_("Image files only")}, widget=forms.FileInput)
-
+    
     class Meta:
         model = Student
         fields = [
