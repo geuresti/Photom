@@ -2,9 +2,16 @@ from django.db import models
 from django.contrib.auth.models import User
 from phonenumber_field.modelfields import PhoneNumberField
 
+# Has not been migrated
+#class PhotographerAccount(models.Model):
+ #   user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+  #  def __str__(self):
+   #     return self.user.first_name + ", " + self.user.last_name
+    
 class SchoolAccount(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    school_phone = PhoneNumberField(default="4155550132", blank=True) # remove before live
+    school_phone = PhoneNumberField(region="US")
     school_name = models.CharField(max_length=100)
     school_position = models.CharField(max_length=100)
 

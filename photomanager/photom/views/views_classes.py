@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from photom.forms import ClassForm, StudentForm
 from django.contrib.auth.decorators import login_required
+from .views import belongs_to_authenticated_user
 
 # CLASS MUST BELONG TO THE USER
 @login_required
@@ -41,7 +42,6 @@ def manage_classes(request):
             print("\n STUDENT DATa: ", student_form.data, "\n")
 
             if student_form.data['student_class'] == '-1':
-                print("\n STUDENT FORM NOTHING WAS SELECTED NOW WHAT? \n")
 
                 class_form = ClassForm()
 
@@ -78,12 +78,11 @@ def manage_classes(request):
 # CLASS MUST BELONG TO THE USER
 @login_required
 def class_settings(request, class_id):
-
     class_instance = get_object_or_404(Class, pk=class_id)
     school = SchoolAccount.objects.get(user=request.user)
-
+    
     # Redirect user if accessing the settings of a class that is not theirs
-    if class_instance not in school.class_set.all():
+    if not belongs_to_authenticated_user(request.user, class_id, 'class'):
         return HttpResponseRedirect(reverse("index"))
 
     if request.method == "POST":
@@ -108,15 +107,23 @@ def class_settings(request, class_id):
 
         context = {
             "class": class_instance,
-            "class_form": class_form
+            "class_form": class_form,
+            "school": school
         }
 
         return render(request, "photom/class_settings.html", context)
     
 # CLASS MUST BELONG TO THE USER
+@login_required
 def delete_class(request, class_id):
-
     class_instance = get_object_or_404(Class, pk=class_id)
-    class_instance.delete()
 
+    # Redirect if user attempting to delete class that isn't theirs
+    if not belongs_to_authenticated_user(request.user, class_id, 'class'):
+        return HttpResponseRedirect(reverse("index"))
+
+    print("\n CLASS IS BEING DELETED \n")
+    class_instance.delete()
     return HttpResponseRedirect(reverse("manage_classes"))
+
+

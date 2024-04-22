@@ -1,0 +1,40 @@
+{% extends 'photom/base.html' %}
+
+{% load static %}
+
+{% block title %} About {% endblock %}
+
+{% block style %} 
+    <link rel="stylesheet" href="{% static 'photom/about-contact.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div id="ac-content">
+
+    <h1> About Photom </h1>
+
+    <p>
+        This website was developed by Giovanni Euresti.
+        You can contact me at <b>gioeuresti123@gmail.com</b> for 
+        business inquiries.
+    </p>
+
+    <p>
+        Photom was a commissioned project I made in order to simplify to transfer
+        of photos from photographer through the school to the parents. This project
+        allows for the easy digital distribution of student photos which is something
+        that school photographers do not have widely available or easily afforadble.
+    </p>
+
+    <p>
+        With Photom it's simple; the school account will populate their dashboard
+        with classes and students and the photographer will populate the student 
+        pages with the relevant photos. The school account can then go in and 
+        download and distribute the digital photos to parents as requested.
+    </p>
+
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,129 @@
+{% extends 'photom/base.html' %}
+
+{% load static %}
+
+{% block title %} Account Settings {% endblock %}
+
+{% block style %} 
+    <link rel="stylesheet" href="{% static 'photom/account_settings.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div id="account-settings-content">
+
+    <h1> About Photom </h1>
+
+    <p>
+        This website was developed by Giovanni Euresti.
+        You can contact me at <b>gioeuresti123@gmail.com</b> for 
+        business inquiries.
+    </p>
+
+    <p>
+        Photom was a commissioned project I made in order to simplify to transfer
+        of photos from photographer through the school to the parents. This project
+        allows for the easy digital distribution of student photos which is something
+        that school photographers do not have widely available or easily afforadble.
+    </p>
+
+    <p>
+        With Photom it's simple; the school account will populate their dashboard
+        with classes and students and the photographer will populate the student 
+        pages with the relevant photos. The school account can then go in and 
+        download and distribute the digital photos to parents as requested.
+    </p>
+
+    <br>
+
+    <div>
+        <form class="ca-form" action="{% url 'account_settings' %}" method="post">
+            {% csrf_token %}
+
+            <div class="ca-form-row">
+                <div class="ca-form-label"> Username </div>
+                {{ account_form.username }}
+            </div>
+
+            {% if account_form.username.errors %}
+            <div>
+                {% for error in account_form.username.errors %}
+                    <p style="color: red; font-size: 16px;"> * {{ error }} </p>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="credential-notes">
+                <ul>
+                    <li>Your username must be fewer than 150 characters.</li>
+                </ul>
+            </div>
+
+            <div class="ca-form-row">
+                <div class="ca-form-label"> Full School Name </div>
+                {{ account_form.school_name }}
+            </div>
+
+            {% if account_form.school_name.errors %}
+            <div>
+                {% for error in account_form.school_name.errors %}
+                    <p style="color: red; font-size: 16px;"> * {{ error }} </p>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="ca-form-row">
+                <div class="ca-form-label"> Office Phone Number </div>
+                {{ account_form.school_phone }}
+            </div>
+
+            <div class="credential-notes">
+                <ul>
+                    <li>Format: (123) 456-789</li>
+                    <li>Extension Format: (415) 555-0132 ext. 987</li>
+                </ul>
+            </div>
+
+            {% if account_form.school_phone.errors %}
+            <div>
+                {% for error in account_form.school_phone.errors %}
+                    <p style="color: red; font-size: 16px;"> * {{ error }} </p>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="ca-form-row">
+                <div class="ca-form-label"> Email </div>
+                {{ account_form.email }}
+            </div>
+
+            {% if account_form.email.errors %}
+            <div>
+                {% for error in account_form.email.errors %}
+                    <p style="color: red; font-size: 16px;"> * {{ error }} </p>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="ca-form-row">
+                <div class="ca-form-label"> Position at School </div>
+                {{ account_form.school_position }}
+            </div>
+
+            {% if account_form.school_position.errors %}
+            <div>
+                {% for error in account_form.school_position.errors %}
+                    <p style="color: red; font-size: 16px;"> * {{ error }} </p>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            <input class="ca-form-submit" type="submit" name="create_account" value="Create Account">
+            
+        </form>
+    </div>
+
+</div>
+
+
+{% endblock %}

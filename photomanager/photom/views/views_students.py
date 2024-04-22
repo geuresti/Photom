@@ -6,14 +6,21 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from photom.forms import StudentForm, PhotoForm
 from django.http import FileResponse
-
+from .views import belongs_to_authenticated_user
 from photomanager import settings
+from django.contrib.auth.decorators import login_required
 import os
 
 # STUDENT MUST BELONG TO THE USER
+@login_required
 def student_settings(request, student_id):
 
+    # Redirect if user attempting to view a student that isn't theirs
+    if not belongs_to_authenticated_user(request.user, student_id, 'student'):
+        return HttpResponseRedirect(reverse("index"))
+    
     student_instance = get_object_or_404(Student, pk=student_id)
+    school = SchoolAccount.objects.get(user=request.user)
 
     # Student information is being updated
     if request.method == "POST":
@@ -34,7 +41,8 @@ def student_settings(request, student_id):
             context = {
                 "student_id":student_id,
                 "student":student_instance,
-                "student_form": render_form
+                "student_form": render_form,
+                "school": school
             }
 
             return render(request, "photom/view_student.html", context)
@@ -45,25 +53,30 @@ def student_settings(request, student_id):
         context = {
             "student_id":student_id,
             "student":student_instance,
-            "student_form": student_form
+            "student_form": student_form,
+            "school": school
         }
 
         return render(request, "photom/student_settings.html", context)
     
-# STUDENT MUST BELONG TO THE USER
+@login_required
 def view_student(request, student_id):
     student_instance = get_object_or_404(Student, pk=student_id)
+    school = SchoolAccount.objects.get(user=request.user)
     
+    # Redirect if user attempting to view a student that isn't theirs
+    if not belongs_to_authenticated_user(request.user, student_id, 'student'):
+        return HttpResponseRedirect(reverse("index"))
+
     if request.method == "POST":
         photo_form = PhotoForm(request.POST, request.FILES)
 
         if photo_form.is_valid():
-            # REMOVE HARD CODED FOREIGN KEY AFTER TESTING
-            harcoded_school = SchoolAccount.objects.get(pk=1)
+            school = SchoolAccount.objects.get(user=request.user)
 
             new_photo = Photo()
             new_photo.student = student_instance
-            new_photo.school_account = harcoded_school
+            new_photo.school_account = school
             new_photo.photo = request.FILES['photo']
 
             new_photo.save()
@@ -75,7 +88,8 @@ def view_student(request, student_id):
             context = {
                 "student_id":student_id,
                 "student":student_instance,
-                "photo_form": blank_form
+                "photo_form": blank_form,
+                "school": school
             }
 
             return render(request, "photom/view_student.html", context)
@@ -88,13 +102,22 @@ def view_student(request, student_id):
         context = {
             "student_id":student_id,
             "student":student_instance,
-            "photo_form": photo_form
+            "photo_form": photo_form,
+            "school": school
         }
 
         return render(request, "photom/view_student.html", context)
     
+@login_required
 def download_photo(request, photo_id):
+    # Redirect if user attempting to download a student's photo 
+    # that is not associated with one of their classes
+    if not belongs_to_authenticated_user(request.user, photo_id, 'photo-id'):
+        return HttpResponseRedirect(reverse("index"))
+
     photo = Photo.objects.get(pk=photo_id)
+
+    # Add an index to the end of the student photo filename
     student_pictures = photo.student.photo_set.all()
     index = 1
     for picture in student_pictures:
@@ -106,11 +129,15 @@ def download_photo(request, photo_id):
     filename = photo.student.first_name + "_" + photo.student.last_name + "_" + str(index) + ".png"
     return FileResponse(photo.photo, as_attachment=True, filename=filename)
 
-# CLASS MUST BELONG TO THE USER
+@login_required
 def delete_student(request, student_id):
 
+    # Redirect if user attempting to delete a student from a different school
+    if not belongs_to_authenticated_user(request.user, student_id, 'student'):
+        return HttpResponseRedirect(reverse("index"))
+    
     student_instance = get_object_or_404(Student, pk=student_id)
-    print("\n STUDENT SUCCESSFULLY DELETED (not actually)\n")
     student_instance.delete()
+    print("\n STUDENT SUCCESSFULLY DELETED \n")
 
     return HttpResponseRedirect(reverse("manage_classes"))

@@ -69,6 +69,10 @@
     margin-bottom: 15px;
 }
 
+#student-info b {
+    margin-right: 10px;
+}
+
 /**************** PHOTO UPLOAD ****************/
 
 #photo-upload-form {

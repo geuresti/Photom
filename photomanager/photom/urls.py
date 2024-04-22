@@ -8,6 +8,8 @@ urlpatterns = [
     path("", views.index, name="index"),
     path("admin_view/", views.admin_view, name="admin_view"),
     path("account_settings/", views.account_settings, name="account_settings"),
+    path("about/", views.about, name="about"),
+    path("contact/", views.contact, name="contact"),
 
     path("manage_classes/", views_classes.manage_classes, name="manage_classes"),
     path("class_settings/<int:class_id>/", views_classes.class_settings, name="class_settings"),

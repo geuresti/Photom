@@ -1,0 +1,12 @@
+#account-settings-content {
+    width: 70vw;
+    min-width: 450px;
+    max-width: 750px;
+    height: auto;
+
+    margin: auto;
+    margin-top: 80px;
+    padding: 30px;
+    border-radius: 10px;
+    background-color: var(--light-gray);
+}

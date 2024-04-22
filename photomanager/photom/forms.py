@@ -5,30 +5,23 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm  
 from django.core.exceptions import ValidationError
 from phonenumber_field.formfields import PhoneNumberField
+from phonenumber_field.widgets import RegionalPhoneNumberWidget
 from django.forms.forms import Form  
 
 class AccountCreationForm(UserCreationForm):  
     first_name = forms.CharField(label="first name", min_length=1, max_length=100)
     last_name = forms.CharField(label="last name", min_length=1, max_length=100)
-    school_phone = PhoneNumberField()
+    school_phone = PhoneNumberField(region="US")
+     #   widget=RegionalPhoneNumberWidget(
+    #        region="US",
+       # )
+  #  )
     school_name = forms.CharField(label="school name", max_length=200)
     school_position = forms.CharField(label="position at the school", max_length=100)
     username = forms.CharField(label='username', min_length=5, max_length=150)  
     email = forms.EmailField(label='email')  
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)  
     password2 = forms.CharField(label='Confirm password', widget=forms.PasswordInput)  
-  
-    # Formatting? Region?
-    #def phone_clean(self):
-    #    return 
-
-    # Formatting? Check for copy?
-    # def school_clean(self):
-    #    return 
-
-    # Formatting?
-    # def school_position(self):
-    #   return
 
     def username_clean(self):  
         username = self.cleaned_data['username'].lower()  
