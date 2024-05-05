@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.shortcuts import render
-from photom.models import Class, Student, SchoolAccount, Photo
-from photom.forms import AccountCreationForm  
+from django.urls import reverse
+from photom.models import SchoolAccount, Class, Student, SchoolAccount, Photo
+from photom.forms import AccountForm, AccountSettingsForm
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
@@ -32,7 +33,7 @@ def admin_view(request):
 def account_settings(request):
 
     school = SchoolAccount.objects.get(user=request.user)
-    account_form = AccountCreationForm()
+    account_form = AccountForm()
 
     context = {
         "school":school,
@@ -100,7 +101,7 @@ def belongs_to_authenticated_user(user, pk, association):
 def create_account(request):
     if request.method == "POST":
 
-        account_form = AccountCreationForm(request.POST)
+        account_form = AccountForm(request.POST)
 
         if account_form.is_valid():
 
@@ -117,9 +118,73 @@ def create_account(request):
             return render(request, "registration/create_account.html", context)
     else:
 
-        account_form = AccountCreationForm()
+        account_form = AccountForm()
         context = {
             "account_form":account_form,
         }
 
         return render(request, "registration/create_account.html", context)
+    
+@login_required
+def account_settings(request):
+    
+    #school = SchoolAccount.objects.get(user=request.user)
+    school = SchoolAccount.objects.get(user=request.user)
+
+    if request.method == "POST":
+
+        #account_form = AccountForm(request.POST, instance=school)
+        account_form = AccountSettingsForm(request.POST)
+
+        if account_form.is_valid():
+
+            # Update database object
+            print("\n ACCOUNT FORM VALID \n")
+
+            account_form.save()
+
+            return HttpResponseRedirect(reverse("manage_classes"))
+        
+        else:
+
+            print("\n ACCOUNT FORM INVALID \n")
+
+    account_form = AccountSettingsForm({
+        "primary_key": school.pk,
+        "first_name": school.user.first_name,
+        "last_name": school.user.last_name,
+        "username": school.user.username,
+        "school_name": school.school_name,
+        "school_phone": school.school_phone,
+        "email": school.user.email,
+        "school_position": school.school_position
+    })
+
+    context = {
+        "account_form": account_form,
+        "school": school
+    }
+
+    return render(request, "photom/account_settings.html", context)
+
+@login_required
+def delete_account(request):
+    school_account = get_object_or_404(SchoolAccount, user=request.user)
+    school_account.delete()
+    
+    print("\n ACCOUNT SUCCESSFULLY DELETED \n")
+
+    return HttpResponseRedirect(reverse("manage_classes"))
+
+@login_required
+def delete_student(request, student_id):
+
+    # Redirect if user attempting to delete a student from a different school
+    if not belongs_to_authenticated_user(request.user, student_id, 'student'):
+        return HttpResponseRedirect(reverse("index"))
+    
+    student_instance = get_object_or_404(Student, pk=student_id)
+    student_instance.delete()
+    print("\n STUDENT SUCCESSFULLY DELETED \n")
+
+    return HttpResponseRedirect(reverse("manage_classes"))

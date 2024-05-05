@@ -7,9 +7,11 @@ from .views import views_students
 urlpatterns = [
     path("", views.index, name="index"),
     path("admin_view/", views.admin_view, name="admin_view"),
-    path("account_settings/", views.account_settings, name="account_settings"),
     path("about/", views.about, name="about"),
     path("contact/", views.contact, name="contact"),
+
+    path("account_settings/", views.account_settings, name="account_settings"),
+    path("delete_account/", views.delete_account, name="delete_account"),
 
     path("manage_classes/", views_classes.manage_classes, name="manage_classes"),
     path("class_settings/<int:class_id>/", views_classes.class_settings, name="class_settings"),

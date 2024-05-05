@@ -77,17 +77,8 @@ header-height = 91px
 }
 
 #header-logo {
-  background-image: url("https://t3.ftcdn.net/jpg/02/48/42/64/360_F_248426448_NVKLywWqArG2ADUxDq6QprtIzsF82dMF.jpg");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-
   width: 170px;
-  height: 50px;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  height: auto;
 }
 
 #header-logo p {

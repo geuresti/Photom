@@ -24,6 +24,17 @@ class Photo(models.Model):
     school_account = models.ForeignKey("SchoolAccount", on_delete=models.CASCADE)
     upload_date = models.DateTimeField(auto_now_add=True, blank=True)
 
+"""
+STUDENT DATA 
+
+Grade (can be “KG” or “PK”) (UPDATE TO CHAR FIELD)
+(OPTIONAL) photo id
+Age *
+ID Number
+Student Last Name
+Student First Name
+Homeroom Teacher
+"""
 class Student(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
@@ -39,6 +50,9 @@ class Class(models.Model):
     class_name = models.CharField(max_length=50)
     class_teacher = models.CharField(max_length=50)
     class_grade = models.IntegerField()
+    # CLASS_GRADE needs to be a charfield because grade "PK" and "KG"
+    class_grade = models.IntegerField()
+
     class_school = models.ForeignKey(SchoolAccount, blank=True, on_delete=models.CASCADE)
 
     def __str__(self):

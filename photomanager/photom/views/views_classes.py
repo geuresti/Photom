@@ -75,7 +75,6 @@ def manage_classes(request):
 
         return render(request, "photom/manage_classes.html", context)
     
-# CLASS MUST BELONG TO THE USER
 @login_required
 def class_settings(request, class_id):
     class_instance = get_object_or_404(Class, pk=class_id)
