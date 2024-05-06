@@ -27,7 +27,6 @@ class Photo(models.Model):
 """
 STUDENT DATA 
 
-Grade (can be “KG” or “PK”) (UPDATE TO CHAR FIELD)
 (OPTIONAL) photo id
 Age *
 ID Number
@@ -45,7 +44,12 @@ class Student(models.Model):
 
     def __str__(self):
         return self.first_name + " " + self.last_name
-    
+
+"""
+CLASS DATA
+
+Grade (can be “KG” or “PK”) (UPDATE TO CHAR FIELD)
+"""
 class Class(models.Model):
     class_name = models.CharField(max_length=50)
     class_teacher = models.CharField(max_length=50)

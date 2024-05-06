@@ -87,10 +87,38 @@ header-height = 91px
   color: red;
 }
 
-#right-header {
+.right-header-row {
   display: flex;
   gap: 15px;
 }
+
+#right-header {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/**************** SEARCH BAR DROPDOWN ****************/
+
+#shift-right {
+  align-self: flex-end;
+}
+
+#shift-right form {
+  display: flex;
+  gap: 15px;
+}
+
+#search-bar {
+  padding: 5px;
+}
+
+#search-submit {
+  width: 30px;
+  padding: 5px;
+}
+
+/**************** SETTINGS DROPDOWN ****************/
 
 #account_settings_link svg:hover {
   transition: rotate 0.5s;
@@ -99,8 +127,6 @@ header-height = 91px
 #account_settings_link svg:hover {
   rotate: 180deg;
 }
-
-/**************** SETTINGS DROPDOWN ****************/
 
 #dropdown-hover:hover .dropdown-content {
   right: 0;
@@ -124,7 +150,7 @@ header-height = 91px
 }
 
 .dropdown-content a {
-  font-size: 16px;
+  font-size: 18px;
   margin-bottom: 10px;
   text-align: center;
 }

@@ -58,6 +58,59 @@ def contact(request):
     }
     return render(request, "photom/contact.html", context)
 
+@login_required
+def search_students(request):
+
+    school = SchoolAccount.objects.get(user=request.user)
+
+    context = {
+        "school":school,
+    }
+
+    if request.method == "POST":
+
+        searched = request.POST['searched']
+        context['searched'] = searched
+
+        search_results = []
+
+        classes = school.class_set.all()
+
+        if searched.isnumeric():
+            #print("\n ID SEARCHED \n")
+
+            for cls in classes:
+                students_by_id = cls.student_set.filter(student_ID__contains=searched)
+
+                for student in students_by_id:
+                    search_results.append(student)
+
+            context['search_results'] = search_results
+
+            return render(request, "photom/search_students.html", context)
+
+        else:
+            searched = searched.capitalize()
+
+            # Filter each student of each class by the searched word
+            for cls in classes:
+                students_by_name = cls.student_set.filter(first_name__contains=searched) | cls.student_set.filter(last_name__contains=searched)
+
+                for student in students_by_name:
+                    if student not in search_results:
+                        search_results.append(student)
+
+            #print("\n search results:", search_results, "\n")
+
+            context['search_results'] = search_results
+
+            return render(request, "photom/search_students.html", context)
+    else:
+
+        return render(request, "photom/search_students.html", context)
+
+########################## HELPER FUNCTION ##########################
+
 # Helper function that checks if the associated object
 # belongs to the authenticated user
 def belongs_to_authenticated_user(user, pk, association):
