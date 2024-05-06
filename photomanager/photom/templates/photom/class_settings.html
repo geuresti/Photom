@@ -9,7 +9,6 @@
 {% endblock %}
 
 {% block content %}
-    
     <div id="class-settings-wrapper">
         <div id="class-settings-sub-wrapper">
             <div id="class-name-icon-wrapper">
@@ -19,7 +18,6 @@
                             <circle cx="138" cy="138" r="131" stroke="black" stroke-width="14"/>
                             <path d="M208 145C211.866 145 215 141.866 215 138C215 134.134 211.866 131 208 131L208 145ZM64.0503 133.05C61.3166 135.784 61.3166 140.216 64.0503 142.95L108.598 187.497C111.332 190.231 115.764 190.231 118.497 187.497C121.231 184.764 121.231 180.332 118.497 177.598L78.8995 138L118.497 98.402C121.231 95.6683 121.231 91.2362 118.497 88.5025C115.764 85.7688 111.332 85.7688 108.598 88.5025L64.0503 133.05ZM208 131L69 131L69 145L208 145L208 131Z" fill="black"/>
                         </svg>
-
                     </a>
 
                     <a id="trash-icon-wrapper" href="{% url 'delete_class' class.pk %}" onclick="return confirm('Are you want to delete this class?');">
@@ -57,8 +55,4 @@
             </form>
         </div>
     </div>
-
 {% endblock %}
-
-
-

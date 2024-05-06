@@ -27,7 +27,7 @@
             <div class="mc-content-block">
                 {{ student_form.non_field_errors }}
                 <form class="mc-form" enctype="multipart/form-data" action="{% url 'manage_classes' %}" method="post">
-                    <h2 class="form-title"><b>Create New Student</b></h2>
+                    <h2 class="form-title"><b>Create Student</b></h2>
                     {% csrf_token %}
                     
                     <div class="mc-form-row">
@@ -38,10 +38,13 @@
                         <div class="mc-form-label">{{ student_form.last_name.label }}</div>
                         {{ student_form.last_name }}
                     </div>
+
+                    <!--
                     <div class="mc-form-row">
                         <div class="mc-form-label">{{ student_form.student_age.label }}</div>
                         {{ student_form.student_age }}
                     </div>
+                    -->
 
                     <!-- FIX -->
                     <div class="mc-form-row">
@@ -76,7 +79,7 @@
             <div class="mc-content-block">
                 {{ class_form.non_field_errors }}
                 <form id="bbottom" class="mc-form" enctype="multipart/form-data" action="{% url 'manage_classes' %}" method="post">
-                    <h2 class="form-title"><b>Create New Class</b></h2>
+                    <h2 class="form-title"><b>Create Class</b></h2>
                     {% csrf_token %}
                     
                     <div class="mc-form-row">
@@ -94,7 +97,6 @@
                         <div class="mc-form-label">{{ class_form.class_grade.label }}</div>
                         {{ class_form.class_grade }}
                     </div>
-
                     <div style="position: absolute;">
                         {{ class_form.class_school.as_hidden }}
                     </div>

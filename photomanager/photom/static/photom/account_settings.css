@@ -1,3 +1,7 @@
+#account-settings-wrapper {
+    padding: 60px 0;
+}
+
 #account-settings-content {
     width: 70vw;
     min-width: 50px;
@@ -5,10 +9,11 @@
     height: auto;
 
     margin: auto;
-    margin-top: 80px;
     padding: 30px;
     border-radius: 10px;
     background-color: var(--light-gray);
+
+    font-size: 18px;
 }
 
 /**************** DELETE ACCOUNT ****************/
@@ -28,19 +33,24 @@
     text-align: center;
 }
 
+.credential-notes {
+    margin-bottom: 15px;
+}
+
 .as-form {
     padding-top: 30px;
     width: 85%;
     margin: auto;
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 15px;
 }
 
 .as-form input {
     padding: 8px 10px;
     border: none;
     border-radius: 10px;
+    font-size: 18px;
 }
 
 .as-form input:focus {

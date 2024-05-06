@@ -155,7 +155,7 @@ class StudentForm(forms.ModelForm):
         fields = [
             "first_name", 
             "last_name", 
-            "student_age",
+           # "student_age",
             "student_class",
             "student_ID",
             "student_photo_ID",
@@ -163,7 +163,7 @@ class StudentForm(forms.ModelForm):
         labels = {
             "first_name": _("First Name"),
             "last_name": _("Last Name"),
-            "student_age": _("Age"),
+           # "student_age": _("Age"),
             "student_class": _("Class"),
             "student_ID": _("ID #"),
             "student_photo_ID": _("Photo ID"),

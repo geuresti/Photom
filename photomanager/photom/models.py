@@ -32,12 +32,11 @@ Age *
 ID Number
 Student Last Name
 Student First Name
-Homeroom Teacher
 """
 class Student(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
-    student_age = models.IntegerField()
+    #student_age = models.IntegerField()
     student_class = models.ForeignKey("Class", on_delete=models.CASCADE)
     student_ID = models.IntegerField()
     student_photo_ID = models.ImageField(default="photo-ids/default-photo-id.PNG", upload_to="photo-ids")
@@ -48,14 +47,16 @@ class Student(models.Model):
 """
 CLASS DATA
 
-Grade (can be “KG” or “PK”) (UPDATE TO CHAR FIELD)
+Class Name
+Homeroom Teacher
+Grade (can be “KG” or “PK”)
+School
 """
 class Class(models.Model):
     class_name = models.CharField(max_length=50)
     class_teacher = models.CharField(max_length=50)
-    class_grade = models.IntegerField()
-    # CLASS_GRADE needs to be a charfield because grade "PK" and "KG"
-    class_grade = models.IntegerField()
+    #class_grade = models.IntegerField()
+    class_grade = models.CharField(max_length=50)
 
     class_school = models.ForeignKey(SchoolAccount, blank=True, on_delete=models.CASCADE)
 

@@ -36,7 +36,8 @@
             <ul>
                 <li><b>Name:</b> {{ student.first_name }} {{ student.last_name }} </li>
                 <li><b>Class:</b> {{ student.student_class }} </li>
-                <li><b>Age:</b> {{ student.student_age }} </li>
+                <!--<li><b>Age:</b> {{ student.student_age }} </li>-->
+                <li><b>Grade:</b> {{ student.student_class.class_grade }} </li>
                 <li><b>Student ID:</b> {{ student.student_ID }} </li>
                 <li><b>Total Photos:</b> {{ student.photo_set.all | length }} </li>
             </ul>

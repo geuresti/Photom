@@ -12,8 +12,15 @@ from .views import belongs_to_authenticated_user
 def manage_classes(request):
 
     school = SchoolAccount.objects.get(user=request.user)
-    classes = Class.objects.filter(class_school = school).order_by("-class_grade")
-    print("\n CLASSES: ", classes, "\n")
+
+    filetered_classes = Class.objects.filter(class_school=school).order_by("-class_grade")
+    classes_a = [cls for cls in filetered_classes if cls.class_grade.isnumeric()]
+    classes_b = [cls for cls in filetered_classes if not cls.class_grade.isnumeric()]
+    classes_b.reverse()
+
+    classes = classes_a + classes_b
+
+    #print("\n CLASSES: ", classes, "\n")
 
     if request.method == "POST":
 
