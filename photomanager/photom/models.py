@@ -43,7 +43,7 @@ class Class(models.Model):
     class_school = models.ForeignKey(SchoolAccount, blank=True, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.class_name
+        return "(" + str(self.class_school) + ") " + self.class_name
     
 """
 STUDENT DATA 
@@ -63,7 +63,7 @@ class Student(models.Model):
     student_photo_ID = models.ImageField(default="photo-ids/default-photo-id.PNG", upload_to="photo-ids")
 
     def __str__(self):
-        return self.first_name + " " + self.last_name
+        return self.first_name + " " + self.last_name  + " #" + str(self.student_ID)
 
 class Photo(models.Model):
     photo = models.ImageField(upload_to="student-pictures")
