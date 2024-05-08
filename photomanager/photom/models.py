@@ -17,13 +17,34 @@ class SchoolAccount(models.Model):
 
     def __str__(self):
         return self.school_name
+    
+class Notification(models.Model):
+    title = models.CharField(max_length=50)
+    message = models.CharField(max_length=150)
+    send_date = models.DateTimeField(auto_now_add=True, blank=True)
+    read = models.BooleanField(default=False, blank=True)
+    school = models.ForeignKey(SchoolAccount, blank=True, on_delete=models.CASCADE)
 
-class Photo(models.Model):
-    photo = models.ImageField(upload_to="student-pictures")
-    student = models.ForeignKey("Student", on_delete=models.CASCADE)
-    school_account = models.ForeignKey("SchoolAccount", on_delete=models.CASCADE)
-    upload_date = models.DateTimeField(auto_now_add=True, blank=True)
+    def __str__(self):
+        return self.title
+    
+"""
+CLASS DATA
 
+Class Name
+Homeroom Teacher
+Grade (can be “KG” or “PK”)
+School
+"""
+class Class(models.Model):
+    class_name = models.CharField(max_length=50)
+    class_teacher = models.CharField(max_length=50)
+    class_grade = models.CharField(max_length=50)
+    class_school = models.ForeignKey(SchoolAccount, blank=True, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.class_name
+    
 """
 STUDENT DATA 
 
@@ -44,21 +65,8 @@ class Student(models.Model):
     def __str__(self):
         return self.first_name + " " + self.last_name
 
-"""
-CLASS DATA
-
-Class Name
-Homeroom Teacher
-Grade (can be “KG” or “PK”)
-School
-"""
-class Class(models.Model):
-    class_name = models.CharField(max_length=50)
-    class_teacher = models.CharField(max_length=50)
-    #class_grade = models.IntegerField()
-    class_grade = models.CharField(max_length=50)
-
-    class_school = models.ForeignKey(SchoolAccount, blank=True, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.class_name
+class Photo(models.Model):
+    photo = models.ImageField(upload_to="student-pictures")
+    student = models.ForeignKey("Student", on_delete=models.CASCADE)
+    school_account = models.ForeignKey("SchoolAccount", on_delete=models.CASCADE)
+    upload_date = models.DateTimeField(auto_now_add=True, blank=True)

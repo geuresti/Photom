@@ -1,0 +1,132 @@
+#admin-dashboard-wrapper {
+    width: 70vw;
+    margin: auto;
+    padding: 60px 0;
+
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+}
+
+.ad-block-wrapper {
+    background-color: var(--light-gray);
+
+    height: 700px;
+    width: 100%;
+    min-width: 450px;
+    max-width: 700px;
+
+    padding: 30px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.ad-block-wrapper h1 {
+    text-align: center;
+    text-decoration: underline;
+}
+
+/**************** NOTIFICATION FORM ****************/
+
+#notification-form-wrapper {
+    padding-bottom: 30px;
+    border-bottom: 2px solid black;
+}
+
+#notification-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.nf-row {
+    display: grid;
+    grid-template-columns: 20% 80%;
+    grid-template-rows: auto;
+    margin-bottom: 15px;
+    font-size: 18px;
+    color: black;
+}
+
+.nf-row input {
+    padding: 3px;
+    font-size: 16px;
+}
+
+#notification-form textarea {
+    padding: 3px;
+    font-size: 16px;
+    resize: none;
+}
+
+.error-list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.error-message {
+    color: red;
+    font-size: 16px;
+}
+
+#nf-submit {
+    padding: 5px;
+    width: 100px;
+    max-width: 200px;
+    margin: auto;
+
+    border-radius: 5px;
+    background-color: black;
+    color: white;
+    border: none;
+    font-size: 16px;
+
+    transition: all 0.25s;
+}
+
+#nf-submit:hover {
+    cursor: pointer;
+    background-color: white;
+    color: black;
+}
+
+/**************** NOTIFICATION HISTORY ****************/
+
+#notifications-wrapper {
+
+    padding: 0 10px 0 0 ;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.notification {
+    margin-bottom: 10px;
+
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+
+    background-color: white;
+    border: 1px solid black;
+}
+
+/**************** SCHOOLS LIST ****************/
+
+#schools-wrapper {
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    padding-right: 15px;
+}
+
+.school {
+    margin-bottom: 30px;
+    padding: 10px;
+    background-color: white;
+}
+
+/**************** RESPONSIVE STYLINGS ****************/

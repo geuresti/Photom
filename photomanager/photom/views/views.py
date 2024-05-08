@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
 from photom.models import SchoolAccount, Class, Student, SchoolAccount, Photo
-from photom.forms import AccountForm, AccountSettingsForm
+from photom.forms import AccountForm, AccountSettingsForm, NotificationForm
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
@@ -29,11 +29,28 @@ def index(request):
     return render(request, "photom/index.html", context)
 
 @login_required
-def admin_view(request):
+def admin_dashboard(request):
     # If user is superuser, render page
     # Else, redirect to home page
-    response = "You're looking at the admin dashboard"
-    return HttpResponse(response)
+
+    schools = SchoolAccount.objects.all()
+
+    print("\n schools:", schools, "\n")
+
+    if request.method == "POST":
+
+        # make sure the date, read, and school all look good before saving
+
+        return render(request, "photom/admin_dashboard.html", context)
+    
+    notification_form = NotificationForm()
+
+    context = {
+        "notification_form":notification_form,
+        "schools":schools
+    }
+
+    return render(request, "photom/admin_dashboard.html", context)
 
 @login_required
 def account_settings(request):

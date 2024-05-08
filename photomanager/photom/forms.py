@@ -1,10 +1,27 @@
 from django import forms
-from .models import Student, Class, Photo, SchoolAccount
+from .models import Student, Class, Photo, SchoolAccount, Notification
 from django.utils.translation import gettext as _
 from django.contrib.auth.models import User  
 from django.contrib.auth.forms import UserCreationForm  
 from django.core.exceptions import ValidationError
 from phonenumber_field.formfields import PhoneNumberField
+
+class NotificationForm(forms.ModelForm):
+
+   # def __init__(self, *args, **kwargs):
+      #  super().__init__(*args, **kwargs)
+      #  self.fields["message"].widget = forms.Textarea
+       # self.fields["title"].widget.attrs.update(max_length='10')
+
+    message = forms.CharField(max_length=150, widget=forms.Textarea)
+
+    class Meta:
+        model = Notification
+        fields = ["title", "message"] #, "send_date", "read", "school"]
+        labels = {
+            "title": _("Title"),
+            "message": _("Message"),
+        }
 
 class AccountForm(UserCreationForm):  
     first_name = forms.CharField(label="first name", min_length=1, max_length=100)

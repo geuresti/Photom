@@ -98,6 +98,28 @@ header-height = 91px
   gap: 15px;
 }
 
+/**************** INBOX ****************/
+
+#inbox {
+  padding-top: 2px;
+}
+
+#inbox:hover {
+  color: gray;
+  cursor: pointer;
+}
+
+#inbox-notification {
+  position: absolute;
+  top: 33px;
+  right: 53px;
+
+  z-index: -1;
+
+  font-size: 20px;
+  color: red;
+}
+
 /**************** SEARCH BAR DROPDOWN ****************/
 
 #shift-right {
@@ -125,6 +147,8 @@ header-height = 91px
 }
 
 #account_settings_link svg:hover {
+  fill: gray;
+  cursor: pointer;
   rotate: 180deg;
 }
 

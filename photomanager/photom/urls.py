@@ -6,7 +6,7 @@ from .views import views_students
 # /photomanager/...
 urlpatterns = [
     path("", views.index, name="index"),
-    path("admin_view/", views.admin_view, name="admin_view"),
+    path("admin_dashboard/", views.admin_dashboard, name="admin_dashboard"),
     path("about/", views.about, name="about"),
     path("contact/", views.contact, name="contact"),
     path("search_students/", views.search_students, name="search_students"),
