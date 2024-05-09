@@ -30,9 +30,40 @@
                     </div>
                     {% endif %}
 
-                    <div>
-                        <i id="inbox" class="fa-solid fa-inbox"></i>
-                        <p id="inbox-notification"> * </p>
+                    <div id="inbox-wrapper">
+                        <div id="inbox-icon-wrapper">
+                            <i id="inbox" class="fa-solid fa-inbox"></i>
+                            <p id="unread-message-notification" class="hide"> * </p>
+                        </div>
+                        <div class="inbox-content">
+
+                            <h2 id="inbox-note" style="text-align: center;"> Click on a notification to mark it as read </h2>
+
+                            {% for notif in notifications %}
+
+                                {% if notif.read %}
+                                <div id="notification-{{notif.pk}}" class="notif" data-notifid="{{notif.pk}}">
+                                    <h2> {{ notif.title }} </h2>
+                                    <p> {{ notif.message }} </p>
+                                    <div class="notif-footer">
+                                        <p> Sent <i>{{ notif.send_date }}</i></p>
+                                        <p id="remove-notification-{{notif.pk}}" class="remove-notification" data-notifid="{{notif.pk}}" style="color: red;"> X </p>
+                                    </div>
+                                </div>
+                                {% else %}
+                                <div id="notification-{{notif.pk}}" class="notif unread" data-notifid="{{notif.pk}}">
+                                    <h2> {{ notif.title }} </h2>
+                                    <p> {{ notif.message }} </p>
+                                    <div class="notif-footer">
+                                        <p> Sent <i>{{ notif.send_date }}</i></p>
+                                        <p id="remove-notification-{{notif.pk}}" class="remove-notification" data-notifid="{{notif.pk}}" style="color: red;"> X </p>
+                                    </div>
+                                </div>
+                                {% endif %}
+
+                            {% endfor %}
+
+                        </div>
                     </div>
                     
                     {% if school %}
@@ -69,5 +100,97 @@
         {% block content %}
 
         {% endblock %}
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+        <script type="text/javascript">
+        $('.remove-notification').click(function() {
+            
+            var notif_id;
+            notif_id = $(this).attr("data-notifid");
+
+            console.log(notif_id);
+
+            $.ajax(
+            {
+                type:"GET",
+                url: "/photom/hide_notification/" + notif_id + "/",
+                data: {},
+                success: function( data ) 
+                {
+                    $( '#notification-' + notif_id ).addClass('hide');
+                }
+            })
+        });
+
+        $('.notif').click(function() {
+
+            var notif_id;
+            notif_id = $(this).attr("data-notifid");
+
+            console.log(notif_id);
+
+            $.ajax(
+            {
+                type:"GET",
+                url: "/photom/read_notification/" + notif_id + "/",
+                data: {},
+                success: function( data ) 
+                {
+                    $( '#notification-' + notif_id ).removeClass('unread');
+                }
+            })
+
+            // I think it's still reading the "unread" class from this element
+            update_inbox_unread_notification();
+
+        });
+
+        var inbox_note = document.getElementById("inbox-note");
+        var inbox_empty = document.getElementsByClassName("notif");
+        var unread_notification = document.getElementById("unread-message-notification");
+
+        if (inbox_empty.length == 0) {
+            console.log("no new notifications");
+            inbox_note.innerText = "No new notifications";
+            unread_notification.attributes.display = "none";
+        }
+
+        function update_inbox_unread_notification() {
+
+            var notifications = document.getElementsByClassName("notif");
+            var asdasd = document.getElementsByClassName("unread");
+
+            var unread_messages = false
+
+            if (asdasd.length == 0) {
+                unread_notification.removeClass("hide");
+                console.log("no more swagger");
+            } else {
+                console.log("swagger");
+            }
+
+            /*
+            for (var i = 0; i < notifications.length; i++) {
+                if (notifications[i].classList.contains("unread")) {
+                    console.log("found an unread in ", notifications[i]);
+                    unread_messages = true
+                    break;
+                } else {
+                    notifications[i].attributes.display = "flex";
+                }
+            }
+
+            if (unread_messages) {
+                console.log("swagggerrr");
+            } else {
+                unread_notification.attributes.display = "none";
+                console.log("no more swagger");
+            }
+            */
+        }
+
+        </script>
     </body>
 </html>
+
+

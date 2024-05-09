@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from photom.forms import ClassForm, StudentForm
 from django.contrib.auth.decorators import login_required
-from .views import belongs_to_authenticated_user
+from .views import belongs_to_authenticated_user, organize_classes
 
 # CLASS MUST BELONG TO THE USER
 @login_required
@@ -13,12 +13,7 @@ def manage_classes(request):
 
     school = SchoolAccount.objects.get(user=request.user)
 
-    filetered_classes = Class.objects.filter(class_school=school).order_by("-class_grade")
-    classes_a = [cls for cls in filetered_classes if cls.class_grade.isnumeric()]
-    classes_b = [cls for cls in filetered_classes if not cls.class_grade.isnumeric()]
-    classes_b.reverse()
-
-    classes = classes_a + classes_b
+    classes = organize_classes(school)
 
     #print("\n CLASSES: ", classes, "\n")
 

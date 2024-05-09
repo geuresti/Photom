@@ -6,10 +6,14 @@ from .views import views_students
 # /photomanager/...
 urlpatterns = [
     path("", views.index, name="index"),
-    path("admin_dashboard/", views.admin_dashboard, name="admin_dashboard"),
+    #path("admin_dashboard/", views.admin_dashboard, name="admin_dashboard"),
     path("about/", views.about, name="about"),
     path("contact/", views.contact, name="contact"),
     path("search_students/", views.search_students, name="search_students"),
+
+    path("hide_notification/<int:notif_id>/", views.hide_notification, name="hide_notification"),
+    path("read_notification/<int:notif_id>/", views.read_notification, name="read_notification"),
+    path("reset_notifications/", views.reset_notifications, name="reset_notifications"),
 
     path("account_settings/", views.account_settings, name="account_settings"),
     path("delete_account/", views.delete_account, name="delete_account"),

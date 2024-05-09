@@ -23,6 +23,7 @@ class Notification(models.Model):
     message = models.CharField(max_length=150)
     send_date = models.DateTimeField(auto_now_add=True, blank=True)
     read = models.BooleanField(default=False, blank=True)
+    hidden = models.BooleanField(default=False, blank=True)
     school = models.ForeignKey(SchoolAccount, blank=True, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -68,5 +69,5 @@ class Student(models.Model):
 class Photo(models.Model):
     photo = models.ImageField(upload_to="student-pictures")
     student = models.ForeignKey("Student", on_delete=models.CASCADE)
-    school_account = models.ForeignKey("SchoolAccount", on_delete=models.CASCADE)
+   # school_account = models.ForeignKey("SchoolAccount", on_delete=models.CASCADE)
     upload_date = models.DateTimeField(auto_now_add=True, blank=True)

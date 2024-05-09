@@ -109,15 +109,69 @@ header-height = 91px
   cursor: pointer;
 }
 
-#inbox-notification {
+#unread-message-notification {  
   position: absolute;
   top: 33px;
   right: 53px;
 
   z-index: -1;
 
-  font-size: 20px;
+  font-size: 22px;
   color: red;
+}
+
+/**************** INBOX DROPDOWN ****************/
+
+#inbox-wrapper:hover .inbox-content {
+  top: 0;
+}
+
+.inbox-content {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  position: absolute;
+  top: -600px;
+  right: 50px;
+  z-index: 1;
+  transition: all 0.5s;
+
+  width: 400px;
+  height: auto;
+  padding: 5px;
+
+  color: black;
+  background-color: var(--light-gray);
+}
+
+.hide {
+  display: none;
+}
+
+.unread {
+  background-color: white;
+}
+
+.notif:hover {
+  cursor: pointer;
+}
+
+.notif {
+  font-size: 18px;
+  border: 1px solid black;
+  background-color: none;
+  padding: 5px;
+
+  flex-direction: column;
+  gap: 5px;
+
+  transition: background-color 0.3s ease-out; 
+}
+
+.notif-footer {
+  display: flex;
+  justify-content: space-between;
 }
 
 /**************** SEARCH BAR DROPDOWN ****************/

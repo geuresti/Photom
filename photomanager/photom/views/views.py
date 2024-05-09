@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
-from photom.models import SchoolAccount, Class, Student, SchoolAccount, Photo
+from photom.models import SchoolAccount, Class, Student, SchoolAccount, Photo, Notification
 from photom.forms import AccountForm, AccountSettingsForm, NotificationForm
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
@@ -10,10 +10,7 @@ from django.contrib.auth.decorators import login_required
 
 ########################## GENERAL ##########################
 
-@login_required
-def index(request):
-    school = SchoolAccount.objects.get(user=request.user)
-
+def organize_classes(school):
     filetered_classes = Class.objects.filter(class_school=school).order_by("-class_grade")
     classes_a = [cls for cls in filetered_classes if cls.class_grade.isnumeric()]
     classes_b = [cls for cls in filetered_classes if not cls.class_grade.isnumeric()]
@@ -21,12 +18,63 @@ def index(request):
 
     classes = classes_a + classes_b
 
+    return classes
+
+@login_required
+def index(request):
+    school = SchoolAccount.objects.get(user=request.user)
+
+    classes = organize_classes(school)
+
+    notifications = Notification.objects.filter(school=school, hidden=False)
+
+    print("\n notifs:", notifications, "\n")
+
     context = {
+        "notifications":notifications,
         "classes":classes,
         "school":school
     }
 
     return render(request, "photom/index.html", context)
+
+@login_required
+def hide_notification(request, notif_id):
+
+    notif = get_object_or_404(Notification, pk=notif_id)
+    notif.hidden = True
+    notif.read = True
+    notif.save()
+
+    print("\n HIDE NOTIFICATION #", notif_id, "\n")
+
+    return HttpResponse(notif)
+
+@login_required
+def read_notification(request, notif_id):
+
+    notif = get_object_or_404(Notification, pk=notif_id)
+
+    notif.read = True
+    notif.save()
+
+    print("\n READ NOTIFICATION #", notif_id, "\n")
+
+    return HttpResponse(notif)
+
+# FOR TESTING THE INBOX
+def reset_notifications(request):
+    notifs = Notification.objects.all()
+
+    for notif in notifs:
+        notif.hidden = False
+        notif.read = False
+        notif.save()
+
+    return HttpResponseRedirect(reverse("index"))
+
+
+
 
 @login_required
 def admin_dashboard(request):
@@ -136,6 +184,8 @@ def search_students(request):
 
 # Helper function that checks if the associated object
 # belongs to the authenticated user
+
+# OR RETURN TRUE IF USER IS SUPERUSER
 def belongs_to_authenticated_user(user, pk, association):
     school = SchoolAccount.objects.get(user=user)
 
@@ -163,12 +213,18 @@ def belongs_to_authenticated_user(user, pk, association):
     elif association == 'photo-id':
         # Check if the photo belongs to the user
         photo = get_object_or_404(Photo, pk=pk)
-        if photo.school_account != school:
-            print("\n ERROR: THIS PHOTO DOES NOT BLEONG TO YOUR STUDENTS \n")
-            return False
-        else:
-            print("\n SUCCESS: PHOTO ACCESSED \n")
-            return True
+        classes = school.class_set.all()
+
+        for cls in classes:
+            students = cls.student_set.all()
+            for student in students:
+                if photo.student == student:
+                    print("\n SUCCESS: PHOTO ACCESSED \n")
+                    return True
+            
+        print("\n ERROR: THIS PHOTO DOES NOT BLEONG TO YOUR STUDENTS \n")
+        return False
+            
     else:
         return -1
 

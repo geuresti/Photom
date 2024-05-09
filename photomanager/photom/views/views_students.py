@@ -59,6 +59,7 @@ def student_settings(request, student_id):
 
         return render(request, "photom/student_settings.html", context)
     
+# Remove PhotoForm
 @login_required
 def view_student(request, student_id):
     student_instance = get_object_or_404(Student, pk=student_id)
