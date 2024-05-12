@@ -2,13 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 from phonenumber_field.modelfields import PhoneNumberField
 
-# Has not been migrated
-#class PhotographerAccount(models.Model):
- #   user = models.OneToOneField(User, on_delete=models.CASCADE)
-
-  #  def __str__(self):
-   #     return self.user.first_name + ", " + self.user.last_name
-    
 class SchoolAccount(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     school_phone = PhoneNumberField(region="US")
@@ -18,10 +11,14 @@ class SchoolAccount(models.Model):
     def __str__(self):
         return self.school_name
     
+    class Meta:
+        verbose_name = "School"
+        verbose_name_plural = "Schools"
+    
 class Notification(models.Model):
     title = models.CharField(max_length=50)
     message = models.CharField(max_length=150)
-    send_date = models.DateTimeField(auto_now_add=True, blank=True)
+    date_sent = models.DateTimeField(auto_now_add=True, blank=True)
     read = models.BooleanField(default=False, blank=True)
     hidden = models.BooleanField(default=False, blank=True)
     school = models.ForeignKey(SchoolAccount, blank=True, on_delete=models.CASCADE)
@@ -46,6 +43,9 @@ class Class(models.Model):
     def __str__(self):
         return "(" + str(self.class_school) + ") " + self.class_name
     
+    class Meta:
+        verbose_name = "Class"
+        verbose_name_plural = "Classes"
 """
 STUDENT DATA 
 
@@ -71,3 +71,7 @@ class Photo(models.Model):
     student = models.ForeignKey("Student", on_delete=models.CASCADE)
    # school_account = models.ForeignKey("SchoolAccount", on_delete=models.CASCADE)
     upload_date = models.DateTimeField(auto_now_add=True, blank=True)
+
+    def __str__(self):
+        string = str(self.photo).split("/")[1]
+        return string
