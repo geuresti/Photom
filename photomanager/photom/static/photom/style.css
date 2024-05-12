@@ -102,22 +102,25 @@ header-height = 91px
 
 #inbox {
   padding-top: 2px;
+  color: black;
+}
+
+.inbox-flash {
+  animation-name: flash-red;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate-reverse;
+  animation-timing-function: ease-in-out;
+}
+
+@keyframes flash-red {
+  from {color: black;}
+  to {color: red;}
 }
 
 #inbox:hover {
   color: gray;
   cursor: pointer;
-}
-
-#unread-message-notification {  
-  position: absolute;
-  top: 33px;
-  right: 53px;
-
-  z-index: -1;
-
-  font-size: 22px;
-  color: red;
 }
 
 /**************** INBOX DROPDOWN ****************/
@@ -129,7 +132,7 @@ header-height = 91px
 .inbox-content {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 8px;
 
   position: absolute;
   top: -600px;
@@ -137,9 +140,9 @@ header-height = 91px
   z-index: 1;
   transition: all 0.5s;
 
-  width: 400px;
+  width: 450px;
   height: auto;
-  padding: 5px;
+  padding: 8px;
 
   color: black;
   background-color: var(--light-gray);
@@ -149,10 +152,6 @@ header-height = 91px
   display: none;
 }
 
-.unread {
-  background-color: white;
-}
-
 .notif:hover {
   cursor: pointer;
 }
@@ -160,13 +159,18 @@ header-height = 91px
 .notif {
   font-size: 18px;
   border: 1px solid black;
-  background-color: none;
-  padding: 5px;
+  background-color: rgb(226, 226, 226);
+  padding: 8px;
 
+  display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 8px;
 
   transition: background-color 0.3s ease-out; 
+}
+
+.unread {
+  background-color: white;
 }
 
 .notif-footer {
@@ -234,5 +238,18 @@ header-height = 91px
 }
 
 .dropdown-content a:hover {
+  text-decoration: underline;
+}
+
+#logout-form button {
+  font-size: 18px;
+  margin-bottom: 10px;
+  border: none;
+  color: black;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+#logout-form button:hover {
   text-decoration: underline;
 }

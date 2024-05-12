@@ -28,12 +28,12 @@
                             Logged in as: <b style="margin-left: 10px;"> {{ school.school_name }} </b>
                         </p>
                     </div>
-                    {% endif %}
+
+                    <!-- INBOX DROPDOWN -->
 
                     <div id="inbox-wrapper">
                         <div id="inbox-icon-wrapper">
                             <i id="inbox" class="fa-solid fa-inbox"></i>
-                            <p id="unread-message-notification" class="hide"> * </p>
                         </div>
                         <div class="inbox-content">
 
@@ -42,31 +42,24 @@
                             {% for notif in notifications %}
 
                                 {% if notif.read %}
-                                <div id="notification-{{notif.pk}}" class="notif" data-notifid="{{notif.pk}}">
-                                    <h2> {{ notif.title }} </h2>
-                                    <p> {{ notif.message }} </p>
-                                    <div class="notif-footer">
-                                        <p> Sent <i>{{ notif.send_date }}</i></p>
-                                        <p id="remove-notification-{{notif.pk}}" class="remove-notification" data-notifid="{{notif.pk}}" style="color: red;"> X </p>
-                                    </div>
-                                </div>
+                                <div id="notification-{{notif.pk}}" class="notif" data-notifid="{{notif.pk}}" onclick="updateFlasher()">
                                 {% else %}
-                                <div id="notification-{{notif.pk}}" class="notif unread" data-notifid="{{notif.pk}}">
+                                <div id="notification-{{notif.pk}}" class="notif unread" data-notifid="{{notif.pk}}" onclick="updateFlasher()">
+                                {% endif %}
                                     <h2> {{ notif.title }} </h2>
                                     <p> {{ notif.message }} </p>
                                     <div class="notif-footer">
-                                        <p> Sent <i>{{ notif.send_date }}</i></p>
+                                        <p><i>{{ notif.send_date }}</i></p>
                                         <p id="remove-notification-{{notif.pk}}" class="remove-notification" data-notifid="{{notif.pk}}" style="color: red;"> X </p>
                                     </div>
                                 </div>
-                                {% endif %}
 
                             {% endfor %}
 
                         </div>
                     </div>
-                    
-                    {% if school %}
+
+                    <!-- SETTINGS DROPDOWN -->
                     <div>
                         <a id="account_settings_link" href="{% url 'account_settings' %}">
                             <div id="dropdown-hover">
@@ -78,13 +71,23 @@
                                     <a href="{% url 'account_settings' %}"> Settings </a>
                                     <a href="{% url 'about' %}"> About </a>
                                     <a href="{% url 'contact' %}"> Contact </a>
-                                    <a href="{% url 'logout' %}"> Logout </a>
+                                    <a> 
+                                        <form id="logout-form" action="{% url 'logout' %}" method="post"> 
+                                            {% csrf_token %} 
+                                            <button type="submit">
+                                                Logout
+                                            </button>
+                                        </form>
+                                    </a>
                                 </div>
                             </div>
                         </a>
                     </div>
                     {% endif %}
+
                 </div>
+
+                {% if school %}
 
                 <div id="shift-right" class="right-header-row">
                     <form action="{% url 'search_students' %}" method="post">
@@ -93,6 +96,8 @@
                         <button id="search-submit" type="submit"><i class="fa fa-search"></i></button>
                     </form> 
                 </div>
+
+                {% endif %}
 
             </div>
         </div>
@@ -107,8 +112,6 @@
             
             var notif_id;
             notif_id = $(this).attr("data-notifid");
-
-            console.log(notif_id);
 
             $.ajax(
             {
@@ -127,8 +130,6 @@
             var notif_id;
             notif_id = $(this).attr("data-notifid");
 
-            console.log(notif_id);
-
             $.ajax(
             {
                 type:"GET",
@@ -140,53 +141,33 @@
                 }
             })
 
-            // I think it's still reading the "unread" class from this element
-            update_inbox_unread_notification();
-
         });
 
         var inbox_note = document.getElementById("inbox-note");
-        var inbox_empty = document.getElementsByClassName("notif");
-        var unread_notification = document.getElementById("unread-message-notification");
+        var inbox_content = document.getElementsByClassName("notif");
+        var inbox = document.getElementById("inbox");
 
-        if (inbox_empty.length == 0) {
-            console.log("no new notifications");
+        /* Check if there are notifications in the inbox */
+        if (inbox_content.length == 0) {
+            /* Add note in inbox if empty */
             inbox_note.innerText = "No new notifications";
-            unread_notification.attributes.display = "none";
-        }
-
-        function update_inbox_unread_notification() {
-
-            var notifications = document.getElementsByClassName("notif");
-            var asdasd = document.getElementsByClassName("unread");
-
-            var unread_messages = false
-
-            if (asdasd.length == 0) {
-                unread_notification.removeClass("hide");
-                console.log("no more swagger");
-            } else {
-                console.log("swagger");
-            }
-
-            /*
-            for (var i = 0; i < notifications.length; i++) {
-                if (notifications[i].classList.contains("unread")) {
-                    console.log("found an unread in ", notifications[i]);
-                    unread_messages = true
+        } else {
+            /* Inbox flashes red if there are unread notifications */
+            for (var i = 0; i < inbox_content.length; i++) {
+                if (inbox_content[i].classList.contains("unread")) {
+                    inbox.classList.add("inbox-flash");
                     break;
-                } else {
-                    notifications[i].attributes.display = "flex";
                 }
             }
+        }
 
-            if (unread_messages) {
-                console.log("swagggerrr");
-            } else {
-                unread_notification.attributes.display = "none";
-                console.log("no more swagger");
+        // Remove the flash on the inbox icon if there are no more unread notifications
+        function updateFlasher() {
+            var unread_notifications = document.getElementsByClassName("unread");
+
+            if (unread_notifications.length === 1) {
+                inbox.classList.remove("inbox-flash");
             }
-            */
         }
 
         </script>

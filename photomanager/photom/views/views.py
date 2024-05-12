@@ -28,8 +28,6 @@ def index(request):
 
     notifications = Notification.objects.filter(school=school, hidden=False)
 
-    print("\n notifs:", notifications, "\n")
-
     context = {
         "notifications":notifications,
         "classes":classes,
@@ -42,6 +40,10 @@ def index(request):
 def hide_notification(request, notif_id):
 
     notif = get_object_or_404(Notification, pk=notif_id)
+
+    if not belongs_to_authenticated_user(request.user, notif.pk, 'notification'):
+        return HttpResponseRedirect(reverse("index"))
+    
     notif.hidden = True
     notif.read = True
     notif.save()
@@ -55,12 +57,16 @@ def read_notification(request, notif_id):
 
     notif = get_object_or_404(Notification, pk=notif_id)
 
+    if not belongs_to_authenticated_user(request.user, notif.pk, 'notification'):
+        return HttpResponseRedirect(reverse("index"))
+    
     notif.read = True
     notif.save()
 
     print("\n READ NOTIFICATION #", notif_id, "\n")
 
     return HttpResponse(notif)
+
 
 # FOR TESTING THE INBOX
 def reset_notifications(request):
@@ -72,8 +78,6 @@ def reset_notifications(request):
         notif.save()
 
     return HttpResponseRedirect(reverse("index"))
-
-
 
 
 @login_required
@@ -199,6 +203,7 @@ def belongs_to_authenticated_user(user, pk, association):
         else:
             print("\n SUCCESS: CLASS ACCESSED \n")
             return True
+        
     elif association == 'student':
         # Check if student belongs to the user
         student_instance = get_object_or_404(Student, pk=pk)
@@ -210,6 +215,7 @@ def belongs_to_authenticated_user(user, pk, association):
         else:
             print("\n SUCCESS: STUDENT ACCESSED \n")
             return True
+        
     elif association == 'photo-id':
         # Check if the photo belongs to the user
         photo = get_object_or_404(Photo, pk=pk)
@@ -224,6 +230,18 @@ def belongs_to_authenticated_user(user, pk, association):
             
         print("\n ERROR: THIS PHOTO DOES NOT BLEONG TO YOUR STUDENTS \n")
         return False
+    
+    elif association == 'notification':
+        # Check if the photo belongs to the user
+        notif = get_object_or_404(Notification, pk=pk)
+        notifications = school.notification_set.all()
+
+        if notif in notifications:
+            print("\n SUCCESS: NOTIFICATION ACCESSED \n")
+            return True
+        else:
+            print("\n ERROR: THIS NOTIFICATION DOES NOT BELONG TO YOU \n")
+            return False
             
     else:
         return -1
