@@ -66,11 +66,18 @@ class Student(models.Model):
     def __str__(self):
         return self.first_name + " " + self.last_name  + " #" + str(self.student_ID)
 
+from django.utils.html import format_html
+
 class Photo(models.Model):
     photo = models.ImageField(upload_to="student-pictures")
     student = models.ForeignKey("Student", on_delete=models.CASCADE)
-   # school_account = models.ForeignKey("SchoolAccount", on_delete=models.CASCADE)
     upload_date = models.DateTimeField(auto_now_add=True, blank=True)
+
+    def preview(self):
+        return format_html('<img href="{0}" src="{0}" width="50" height="50" />'.format(self.photo.url))
+
+    def picture(self):
+        return format_html('<img href="{0}" src="{0}" width="150" height="150" />'.format(self.photo.url))
 
     def __str__(self):
         string = str(self.photo).split("/")[1]

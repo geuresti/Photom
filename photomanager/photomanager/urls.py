@@ -10,3 +10,5 @@ urlpatterns = [
     path("accounts/", include("django.contrib.auth.urls")),
     path("accounts/create_account/", views.create_account, name="create_account"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+#  I want to exclude some of the auth urls

@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from .models import Student, Class, Notification, SchoolAccount, Photo
+from .forms import NotificationForm
 from django.db import models
 
 # Remove "Groups" "User Permissions" from 
@@ -9,6 +10,12 @@ from django.db import models
 class UserAdmin(BaseUserAdmin):
     actions = None
     list_display = ['first_name', 'last_name', 'email']
+    
+    fieldsets = [
+        ('User Info', {'fields': ('first_name', 'last_name', 'email')}),
+        ('Account Info', {'fields': ('password', 'is_active')}),
+        ('Authentication', {'fields': ('last_login', 'date_joined')}),
+    ]
 
 class SchoolAccountAdmin(admin.ModelAdmin):
     actions = None
@@ -39,10 +46,16 @@ class StudentAdmin(admin.ModelAdmin):
     search_fields = ['last_name', 'first_name', 'student_ID']
 
 class PhotoAdmin(admin.ModelAdmin):
+    fieldsets = [
+        (None, {'fields': (('photo', 'picture'), 'student', 'upload_date')}),
+    ]
+    
     actions = None
-    list_display = ['__str__', 'student', 'upload_date']
-    readonly_fields = ['upload_date']
+    list_display = ['__str__', 'student', 'upload_date', 'preview']
+    readonly_fields = ['upload_date', 'preview', 'picture']
     search_fields = ['student__last_name', 'student__first_name', 'student__student_ID']
+    autocomplete_fields = ['student']
+    list_per_page = 10
 
 class NotificationAdmin(admin.ModelAdmin):
     list_display = ['title', 'school', 'date_sent', 'read']
@@ -50,6 +63,8 @@ class NotificationAdmin(admin.ModelAdmin):
     readonly_fields = ['read', 'date_sent']
     ordering = ['-date_sent']
     search_fields = ['title', 'school__school_name']
+
+    form = NotificationForm
 
     #formfield_overrides = {
 #        models.TextField: {"widget": models.TextField},

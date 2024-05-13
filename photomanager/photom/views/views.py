@@ -79,31 +79,6 @@ def reset_notifications(request):
 
     return HttpResponseRedirect(reverse("index"))
 
-
-@login_required
-def admin_dashboard(request):
-    # If user is superuser, render page
-    # Else, redirect to home page
-
-    schools = SchoolAccount.objects.all()
-
-    print("\n schools:", schools, "\n")
-
-    if request.method == "POST":
-
-        # make sure the date, read, and school all look good before saving
-
-        return render(request, "photom/admin_dashboard.html", context)
-    
-    notification_form = NotificationForm()
-
-    context = {
-        "notification_form":notification_form,
-        "schools":schools
-    }
-
-    return render(request, "photom/admin_dashboard.html", context)
-
 @login_required
 def account_settings(request):
 
@@ -320,9 +295,13 @@ def account_settings(request):
 @login_required
 def delete_account(request):
     school_account = get_object_or_404(SchoolAccount, user=request.user)
-    school_account.delete()
+    #school_account.delete()
+
+    # Note: users might still be able to log in.
+    school_account.user.is_active = False
+    school_account.user.save()
     
-    print("\n ACCOUNT SUCCESSFULLY DELETED \n")
+    print("\n ACCOUNT SUCCESSFULLY DISABLED \n")
 
     return HttpResponseRedirect(reverse("manage_classes"))
 

@@ -3,13 +3,19 @@ from . import views
 from .views import views_classes
 from .views import views_students
 
+from django.contrib.auth import views as auth_views
+
 # /photomanager/...
 urlpatterns = [
     path("", views.index, name="index"),
-    #path("admin_dashboard/", views.admin_dashboard, name="admin_dashboard"),
     path("about/", views.about, name="about"),
     path("contact/", views.contact, name="contact"),
     path("search_students/", views.search_students, name="search_students"),
+
+    path('reset_password/', auth_views.PasswordResetView.as_view(), name="reset_password"),
+    path('reset_password_sent/', auth_views.PasswordResetDoneView.as_view(), name="password_reset_done"),
+    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name="password_reset_confirm"),
+    path('reset_password_complete/', auth_views.PasswordResetCompleteView.as_view(), name="password_reset_complete"),
 
     path("hide_notification/<int:notif_id>/", views.hide_notification, name="hide_notification"),
     path("read_notification/<int:notif_id>/", views.read_notification, name="read_notification"),

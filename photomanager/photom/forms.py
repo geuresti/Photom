@@ -8,20 +8,15 @@ from phonenumber_field.formfields import PhoneNumberField
 
 class NotificationForm(forms.ModelForm):
 
-   # def __init__(self, *args, **kwargs):
-      #  super().__init__(*args, **kwargs)
-      #  self.fields["message"].widget = forms.Textarea
-       # self.fields["title"].widget.attrs.update(max_length='10')
-
-    message = forms.CharField(max_length=150, widget=forms.Textarea)
+    message = forms.CharField(
+        widget=forms.Textarea(
+            attrs={'style':'resize:none;'}
+        )
+    )                                        
 
     class Meta:
         model = Notification
-        fields = ["title", "message"] #, "send_date", "read", "school"]
-        labels = {
-            "title": _("Title"),
-            "message": _("Message"),
-        }
+        fields = ["title", "message"]
 
 class AccountForm(UserCreationForm):  
     first_name = forms.CharField(label="first name", min_length=1, max_length=100)

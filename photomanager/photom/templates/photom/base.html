@@ -22,6 +22,7 @@
             <div id="right-header">
 
                 <div class="right-header-row">
+                    <!-- if superuser -->
                     {% if school %}
                     <div id="logged-in">
                         <p>
@@ -31,6 +32,7 @@
 
                     <!-- INBOX DROPDOWN -->
 
+                    {% if not request.user.is_superuser %}
                     <div id="inbox-wrapper">
                         <div id="inbox-icon-wrapper">
                             <i id="inbox" class="fa-solid fa-inbox"></i>
@@ -58,6 +60,7 @@
 
                         </div>
                     </div>
+                    {% endif %}
 
                     <!-- SETTINGS DROPDOWN -->
                     <div>
@@ -68,7 +71,11 @@
                                 </svg>
             
                                 <div class="dropdown-content">
+                                    {% if request.user.is_superuser %}
+                                    <a href="{% url 'admin:index' %}"> Admin </a>
+                                    {% else %}
                                     <a href="{% url 'account_settings' %}"> Settings </a>
+                                    {% endif %}
                                     <a href="{% url 'about' %}"> About </a>
                                     <a href="{% url 'contact' %}"> Contact </a>
                                     <a> 
