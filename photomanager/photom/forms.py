@@ -6,11 +6,32 @@ from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 from phonenumber_field.formfields import PhoneNumberField
 
+from django.contrib.auth.forms import AuthenticationForm
+from django.forms.widgets import PasswordInput, TextInput
+
+class CustomLoginForm(AuthenticationForm):
+    username = forms.CharField(
+        widget = TextInput(
+            attrs = {
+                'class':'validate',
+                'placeholder': 'Username'
+            }
+        )
+    )
+
+    password = forms.CharField(
+        widget = PasswordInput(
+            attrs = {
+                'placeholder':'Password'
+            }
+        )
+    )
+
 class NotificationForm(forms.ModelForm):
 
     message = forms.CharField(
-        widget=forms.Textarea(
-            attrs={'style':'resize:none;'}
+        widget = forms.Textarea(
+            attrs = {'style':'resize:none;'}
         )
     )                                        
 
@@ -19,15 +40,94 @@ class NotificationForm(forms.ModelForm):
         fields = ["title", "message"]
 
 class AccountForm(UserCreationForm):  
-    first_name = forms.CharField(label="first name", min_length=1, max_length=100)
-    last_name = forms.CharField(label="last name", min_length=1, max_length=100)
-    school_phone = PhoneNumberField(region="US")
-    school_name = forms.CharField(label="school name", max_length=200)
-    school_position = forms.CharField(label="position at the school", max_length=100)
-    username = forms.CharField(label='username', min_length=5, max_length=150)  
-    email = forms.EmailField(label='email')  
-    password1 = forms.CharField(label='Password', widget=forms.PasswordInput)  
-    password2 = forms.CharField(label='Confirm password', widget=forms.PasswordInput)  
+    first_name = forms.CharField(
+        label="first name", 
+        min_length=1, 
+        max_length=100,
+        widget = TextInput(
+            attrs = {
+                'placeholder': 'First Name'
+            }
+        )
+    )
+    
+    last_name = forms.CharField(
+        label="last name",
+        min_length=1,
+        max_length=100,
+        widget = TextInput(
+            attrs = {
+                'placeholder': 'Last Name'
+            }
+        )
+    )
+
+    school_phone = PhoneNumberField(
+        region="US",
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': 'Phone Number'
+            }
+        ),
+    )
+
+    school_name = forms.CharField(
+        label="school name",
+        max_length=200,
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': 'Name of School'
+            }
+        ),
+    )
+
+    school_position = forms.CharField(
+        label="position at the school",
+        max_length=100,
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': 'Position at School'
+            }
+        ),
+    )
+
+    username = forms.CharField(
+        label='username',
+        min_length=5,
+        max_length=150,
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': 'Username'
+            }
+        ),
+    )  
+
+    email = forms.EmailField(
+        label='email',
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': 'Email'
+            }
+        ),
+    )  
+
+    password1 = forms.CharField(
+        label='Password',
+        widget=forms.PasswordInput(
+            attrs={
+                'placeholder': 'Password'
+            }
+        ),
+    )  
+
+    password2 = forms.CharField(
+        label='Confirm password',
+        widget=forms.PasswordInput(
+            attrs={
+                'placeholder': 'Retype Password'
+            }
+        ),
+    )  
 
   # INACTIVE
     def username_clean(self):  
@@ -79,13 +179,76 @@ class AccountForm(UserCreationForm):
     
 class AccountSettingsForm(forms.Form):  
     primary_key = forms.IntegerField()
-    first_name = forms.CharField(label="first name", min_length=1, max_length=100)
-    last_name = forms.CharField(label="last name", min_length=1, max_length=100)
-    school_phone = PhoneNumberField(region="US")
-    school_name = forms.CharField(label="school name", max_length=200)
-    school_position = forms.CharField(label="position at the school", max_length=100)
-    username = forms.CharField(label='username', min_length=5, max_length=150)  
-    email = forms.EmailField(label='email')  
+    first_name = forms.CharField(
+        label="first name",
+        min_length=1,
+        max_length=100,
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': 'First Name'
+            }
+        ),
+    )
+    
+    last_name = forms.CharField(
+        label="last name",
+        min_length=1,
+        max_length=100,
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': 'Last Name'
+            }
+        ),
+    )
+
+    school_phone = PhoneNumberField(
+        region="US",
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': 'Phone Number'
+            }
+        ),
+    )
+
+    school_name = forms.CharField(
+        label="school name",
+        max_length=200,
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': 'Name of School'
+            }
+        ),
+    )
+
+    school_position = forms.CharField(
+        label="position at the school",
+        max_length=100,
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': 'Position at School'
+            }
+        ),
+    )
+
+    username = forms.CharField(
+        label='username',
+        min_length=5,
+        max_length=150,
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': 'Username'
+            }
+        ),
+    )  
+
+    email = forms.EmailField(
+        label='email',
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': 'Email'
+            }
+        ),
+    )  
 
     def clean_username(self):  
 
@@ -157,6 +320,11 @@ class ClassForm(forms.ModelForm):
             "class_teacher": _("Teacher"),
             "class_grade": _("Grade")
         }
+        widgets = {
+            "class_name": forms.TextInput(attrs={'placeholder': 'Class Name'}),
+            "class_teacher": forms.TextInput(attrs={'placeholder': 'Homeroom Teacher'}),
+            "class_grade": forms.TextInput(attrs={'placeholder': 'Grade'}),
+        }
 
 class StudentForm(forms.ModelForm):
 
@@ -179,6 +347,11 @@ class StudentForm(forms.ModelForm):
             "student_class": _("Class"),
             "student_ID": _("ID #"),
             "student_photo_ID": _("Photo ID"),
+        }
+        widgets = {
+            "first_name": forms.TextInput(attrs={'placeholder': 'First Name'}),
+            "last_name": forms.TextInput(attrs={'placeholder': 'Last Name'}),
+            "student_ID": forms.TextInput(attrs={'placeholder': 'ID Number'}),
         }
 
 class PhotoForm(forms.ModelForm):

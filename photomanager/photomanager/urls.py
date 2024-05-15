@@ -5,10 +5,20 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
 
+from photom.forms import CustomLoginForm
+
 urlpatterns = [
     path("photom/", include("photom.urls")),
     path("admin/", admin.site.urls),
     path("accounts/", include("django.contrib.auth.urls")),
+
+    path("photom/login/",
+        auth_views.LoginView.as_view(
+            template_name="registration/login.html",
+            authentication_form=CustomLoginForm
+            ),
+        name="login"
+    ),
 
     path('accounts/reset/<uidb64>/<token>/',
         auth_views.PasswordResetConfirmView.as_view(template_name="photom/registration/password_reset_form.html"),

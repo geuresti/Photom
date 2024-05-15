@@ -5,29 +5,28 @@
 {% block title %} Login {% endblock %}
 
 {% block style %} 
-    <link rel="stylesheet" href="{% static 'photom/login.css' %}">
+    <link rel="stylesheet" href="{% static 'photom/form.css' %}">
 {% endblock %}
 
 {% block content %}
 
-    <div id="login-wrapper">
-        <div id="login-sub-wrapper">
+    <div class="form-outer-wrapper">
 
-            <div id="student-name-icon-wrapper">
-                <h1><b>Sign in to your account</b></h1>
+        <div class="form-wrapper">
+
+            <div>
+                <h1 class="form-title"><b>Log In</b></h1>
             </div>
 
-            <form class="login-form" action="{% url 'login' %}" method="post">
+            <form class="form" action="{% url 'login' %}" method="post">
                 {% csrf_token %}
 
-                <div class="login-form-row">
-                    <div class="login-form-label">{{ form.username.label_tag }}</div>
-                    {{ form.username }}
+                <div class="form-row">
+                    <div id="form-username">{{ form.username }}</div>
                 </div>
 
-                <div class="login-form-row">
-                    <div class="login-form-label">{{ form.password.label_tag }}</div>
-                    {{ form.password }}
+                <div class="form-row">
+                    <div id="form-password">{{ form.password }}</div>
                 </div>
 
                 {% if form.errors %}
@@ -36,16 +35,13 @@
                 </div>
                 {% endif %}
                 
-                <input class="login-form-submit" type="submit" name="update-class" value="Login">
+                <input class="form-submit" type="submit" name="update-class" value="Login">
                 
             </form>
 
-            <div id="create-acc-reset-pwd-link" style="margin-bottom: 15px;">
-                <a href="{% url 'create_account' %}">Click here to create an account</a>
-            </div>
-
-            <div id="create-acc-reset-pwd-link">
-                <a href="{% url 'password_reset' %}">Forgot your password? Click here</a>
+            <div class="link-wrapper">
+                <p>Click <a href="{% url 'create_account' %}" class="link">here</a> to create an account.</p>
+                <p>Forgot your password? Click <a href="{% url 'password_reset' %}" class="link">here</a>.</p>
             </div>
         </div>
     </div>

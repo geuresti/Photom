@@ -17,18 +17,21 @@ body {
 p {
   color: black;
   font-size: 18px;
+  font-family: 'Arial', 'Helvetica', 'sans-serif';
 }
 
 h1 {
   color: black;
   font-size: 35px;
   font-weight: normal;
+  font-family: 'Arial', 'Helvetica', 'sans-serif';
 }
 
 h2 {
   color: black;
   font-size: 22px;
   font-weight: normal;
+  font-family: 'Arial', 'Helvetica', 'sans-serif';
 }
 
 html {
@@ -47,6 +50,8 @@ a {
   color: black;
   text-decoration: none;
   text-underline-position: under;
+  font-size: 18px;
+  font-family: 'Arial', 'Helvetica', 'sans-serif';
 }
 
 a:visited {

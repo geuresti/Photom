@@ -63,6 +63,7 @@
                     {% endif %}
 
                     <!-- SETTINGS DROPDOWN -->
+                    
                     <div>
                         <a id="account_settings_link" href="{% url 'account_settings' %}">
                             <div id="dropdown-hover">
@@ -71,6 +72,7 @@
                                 </svg>
             
                                 <div class="dropdown-content">
+                                    <a href="{% url 'index' %}"> Home </a>
                                     {% if request.user.is_superuser %}
                                     <a href="{% url 'admin:index' %}"> Admin </a>
                                     {% else %}

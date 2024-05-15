@@ -6,6 +6,7 @@
 
 {% block style %} 
     <link rel="stylesheet" href="{% static 'photom/manage_classes.css' %}">
+    <link rel="stylesheet" href="{% static 'photom/form.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -76,25 +77,23 @@
                 </form>
             </div>
 
-            <div class="mc-content-block">
+           <!-- <div class="mc-content-block"> -->
+            <div class="form-wrapper">
                 {{ class_form.non_field_errors }}
-                <form id="bbottom" class="mc-form" enctype="multipart/form-data" action="{% url 'manage_classes' %}" method="post">
+                <form id="bbottom" class="form" enctype="multipart/form-data" action="{% url 'manage_classes' %}" method="post">
                     <h2 class="form-title"><b>Create Class</b></h2>
                     {% csrf_token %}
                     
-                    <div class="mc-form-row">
+                    <div class="form-row">
                         {{ class_form.class_name.errors }}
-                        <div class="mc-form-label">{{ class_form.class_name.label }}</div>
                         {{ class_form.class_name }}
                     </div>
-                    <div class="mc-form-row">
+                    <div class="form-row">
                         {{ class_form.class_teacher.errors }}
-                        <div class="mc-form-label">{{ class_form.class_teacher.label }}</div>
                         {{ class_form.class_teacher }}
                     </div>
-                    <div class="mc-form-row">
+                    <div class="form-row">
                         {{ class_form.class_grade.errors }}
-                        <div class="mc-form-label">{{ class_form.class_grade.label }}</div>
                         {{ class_form.class_grade }}
                     </div>
                     <div style="position: absolute;">
@@ -105,8 +104,10 @@
                 </form>
 
                 <div id="classes-menu">
+                    <!--
                     <h2><b>Classes</b></h2>
-                    <ul>
+                    -->
+                    <ul id="classes-select">
                         {% for class in classes %}
                         <div class="settings-class-link-wrapper">
                             <a href="{% url 'class_settings' class.pk %}">
