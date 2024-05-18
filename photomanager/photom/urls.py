@@ -12,24 +12,35 @@ urlpatterns = [
     path("contact/", views.contact, name="contact"),
     path("search_students/", views.search_students, name="search_students"),
 
-   # path('reset_password/', 
-   #     auth_views.PasswordResetView.as_view(
-   #         template_name="registration/password_reset.html",
-            #html_email_template_name="registration/email_template.html"
-   #         ),
-   #     name="reset_password"),
+#############################################################################
 
-   # path('reset_password_sent/', 
-   #     auth_views.PasswordResetDoneView.as_view(template_name="registration/password_reset_sent.html"), 
-   #     name="password_reset_done"),
+    path('password_reset/', 
+        auth_views.PasswordResetView.as_view(
+            template_name="registration/password_reset.html",
+            html_email_template_name="registration/email_template.html",
+           #success_url='password_reset_done'
+        ),
+        name="photom_password_reset"),
 
-   # path('reset/<uidb64>/<token>/',
-   #     auth_views.PasswordResetConfirmView.as_view(template_name="registration/password_reset_form.html"),
-   #     name="password_reset_confirm"),
+    path('password_reset_done/', 
+        auth_views.PasswordResetDoneView.as_view(
+            template_name="registration/password_reset_done.html"
+        ), 
+        name="photom_password_reset_done"),
 
-   # path('reset_password_complete/',
-   #     auth_views.PasswordResetCompleteView.as_view(template_name="registration/password_reset_done.html"),
-   #     name="password_reset_complete"),
+    path('password_reset_confirm/<uidb64>/<token>/',
+        auth_views.PasswordResetConfirmView.as_view(
+           template_name="registration/password_reset_confirm.html",
+        ),
+        name="photom_password_reset_confirm"),
+
+    path('password_reset_complete/',
+        auth_views.PasswordResetCompleteView.as_view(
+            template_name="registration/password_reset_complete.html"
+        ),
+        name="photom_password_reset_complete"),
+
+#############################################################################
 
     path("hide_notification/<int:notif_id>/", views.hide_notification, name="hide_notification"),
     path("read_notification/<int:notif_id>/", views.read_notification, name="read_notification"),

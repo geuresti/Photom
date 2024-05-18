@@ -1,10 +1,9 @@
 {% autoescape off %}
 
-You'reasdfasdfagafdgggggggggggrequested a password reset for your user account at {{ site_name }}.
+MY EMAIL TEMPLATE
 
-Please go to the following page and choose a new password:
 {% block reset_link %}
-{{ protocol }}://{{ domain }}{% url photom.views.password_reset_confirm uidb36=uid, token=token %}
+{{ protocol }}://{{ domain }}{% url 'photom_password_reset_confirm' uidb64=uid token=token %}
 {% endblock %}
 
 Your username, in case you've forgotten: {{ user.username }}
