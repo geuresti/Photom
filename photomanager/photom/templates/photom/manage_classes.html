@@ -25,35 +25,20 @@
 
         <div id="mc-content-block-wrapper">
 
-            <div class="mc-content-block">
+            <div class="form-wrapper">
                 {{ student_form.non_field_errors }}
-                <form class="mc-form" enctype="multipart/form-data" action="{% url 'manage_classes' %}" method="post">
+                <form class="form" enctype="multipart/form-data" action="{% url 'manage_classes' %}" method="post">
                     <h2 class="form-title"><b>Create Student</b></h2>
                     {% csrf_token %}
                     
-                    <div class="mc-form-row">
-                        <div class="mc-form-label">{{ student_form.first_name.label }}</div>
+                    <div class="form-row">
                         {{ student_form.first_name }}
                     </div>
-                    <div class="mc-form-row">
-                        <div class="mc-form-label">{{ student_form.last_name.label }}</div>
+                    <div class="form-row">
                         {{ student_form.last_name }}
                     </div>
 
-                    <!--
-                    <div class="mc-form-row">
-                        <div class="mc-form-label">{{ student_form.student_age.label }}</div>
-                        {{ student_form.student_age }}
-                    </div>
-                    -->
-
-                    <!-- FIX -->
-                    <div class="mc-form-row">
-                        {% if select_error %}
-                        <div class="mc-form-label" style="color: red;"> * {{ student_form.student_class.label }}</div>                       
-                        {% else %}
-                        <div class="mc-form-label" style="color: black;">{{ student_form.student_class.label }}</div>                       
-                        {% endif %}
+                    <div class="form-row">
 
                         <select name="student_class" required id="id_class_select">
                             <option value="-1"> Select a Class </option>
@@ -64,16 +49,15 @@
                             {% endif %}
                         </select>
                     </div>
-                    <div class="mc-form-row">
-                        <div class="mc-form-label">{{ student_form.student_ID.label }}</div>
+                    <div class="form-row">
                         {{ student_form.student_ID }}
                     </div>
-                    <div class="mc-form-row">
-                        <div class="mc-form-label">Photo ID</div>
+                    <div class="form-row">
+                        <p> Student Photo ID (optional) </p>
                         {{ student_form.student_photo_ID }}
                     </div>
                     
-                    <input class="mc-form-submit" type="submit" name="create-student" value="Submit">
+                    <input class="form-submit" type="submit" name="create-student" value="Submit">
                 </form>
             </div>
 
@@ -100,7 +84,7 @@
                         {{ class_form.class_school.as_hidden }}
                     </div>
                     
-                    <input class="mc-form-submit" type="submit" name="create-class" value="Submit">
+                    <input class="form-submit" type="submit" name="create-class" value="Submit">
                 </form>
 
                 <div id="classes-menu">

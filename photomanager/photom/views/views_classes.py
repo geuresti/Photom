@@ -115,16 +115,21 @@ def class_settings(request, class_id):
         return render(request, "photom/class_settings.html", context)
     
 # CLASS MUST BELONG TO THE USER
+
+# This view doesn't seem to be working
+# when called from class settings
 @login_required
 def delete_class(request, class_id):
-    class_instance = get_object_or_404(Class, pk=class_id)
+    
+    print("\n DELETE CLASS CALELD \n")
 
+    class_instance = get_object_or_404(Class, pk=class_id)
     # Redirect if user attempting to delete class that isn't theirs
     if not belongs_to_authenticated_user(request.user, class_id, 'class'):
         return HttpResponseRedirect(reverse("index"))
 
-    print("\n CLASS IS BEING DELETED \n")
-    class_instance.delete()
+    print("\n CLASS IS BEING DELETED (DISABLED) \n")
+    #class_instance.delete()
     return HttpResponseRedirect(reverse("manage_classes"))
 
 

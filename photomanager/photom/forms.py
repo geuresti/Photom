@@ -330,10 +330,8 @@ class StudentForm(forms.ModelForm):
 
     student_photo_ID = forms.ImageField(required=False, error_messages = {'invalid':_("Image files only")}, widget=forms.FileInput)
 
-    #def __init__(self, user, *args, **kwargs):
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user')
-        #super(StudentForm, self).__init__(*args, **kwargs)
         super().__init__(*args, **kwargs)
         school = SchoolAccount.objects.get(user=user)
         options = Class.objects.filter(class_school=school)

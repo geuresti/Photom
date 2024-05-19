@@ -25,7 +25,7 @@ def student_settings(request, student_id):
     # Student information is being updated
     if request.method == "POST":
 
-        student_form = StudentForm(request.POST, request.FILES, instance=student_instance)
+        student_form = StudentForm(request.POST, request.FILES, instance=student_instance, user=request.user)
         old_photo_id = str(student_instance.student_photo_ID)
 
         if student_form.is_valid():
@@ -36,7 +36,7 @@ def student_settings(request, student_id):
             
             student_form.save()
 
-            render_form = StudentForm(request.POST, instance=student_instance)
+            render_form = StudentForm(request.POST, instance=student_instance, user=request.user)
 
             context = {
                 "student_id":student_id,
@@ -48,7 +48,7 @@ def student_settings(request, student_id):
             return render(request, "photom/view_student.html", context)
     
     else:
-        student_form = StudentForm(instance=student_instance)
+        student_form = StudentForm(instance=student_instance, user=request.user)
 
         context = {
             "student_id":student_id,
