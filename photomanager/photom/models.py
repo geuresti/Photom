@@ -42,6 +42,7 @@ class Class(models.Model):
 
     def __str__(self):
         return "(" + str(self.class_school) + ") " + self.class_name
+       # return self.class_name
     
     class Meta:
         verbose_name = "Class"

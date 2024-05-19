@@ -39,7 +39,7 @@ def manage_classes(request):
                 print("\n CLASS FORM INVALID \n")
 
         elif "create-student" in dict(request.POST.items()).keys():
-            student_form = StudentForm(request.POST, request.FILES)
+            student_form = StudentForm(request.POST, request.FILES, user=request.user)
 
             print("\n STUDENT DATa: ", student_form.data, "\n")
 
@@ -66,7 +66,7 @@ def manage_classes(request):
                 print("\n STUDENT FORM INVALID \n")
     else:
         class_form = ClassForm()
-        student_form = StudentForm()
+        student_form = StudentForm(user=request.user)
 
         context = {
             "class_form": class_form,

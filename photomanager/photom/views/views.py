@@ -3,12 +3,20 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
 from photom.models import SchoolAccount, Class, Student, SchoolAccount, Photo, Notification
-from photom.forms import AccountForm, AccountSettingsForm, NotificationForm
+from photom.forms import AccountForm, AccountSettingsForm
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 
 ########################## GENERAL ##########################
+
+def redirect_view(request):
+
+    print("\n REDIRECT VIEW CALLED \n")
+
+    #return HttpResponse("swag money", , context={})
+
+    return render(request, "registration/password_reset_complete.html", context={})
 
 def organize_classes(school):
     filetered_classes = Class.objects.filter(class_school=school).order_by("-class_grade")
