@@ -10,14 +10,6 @@ from django.contrib.auth.decorators import login_required
 
 ########################## GENERAL ##########################
 
-def redirect_view(request):
-
-    print("\n REDIRECT VIEW CALLED \n")
-
-    #return HttpResponse("swag money", , context={})
-
-    return render(request, "registration/password_reset_complete.html", context={})
-
 def organize_classes(school):
     filetered_classes = Class.objects.filter(class_school=school).order_by("-class_grade")
     classes_a = [cls for cls in filetered_classes if cls.class_grade.isnumeric()]
@@ -306,12 +298,12 @@ def delete_account(request):
     #school_account.delete()
 
     # Note: users might still be able to log in.
-    school_account.user.is_active = False
-    school_account.user.save()
+    #school_account.user.is_active = False
+   # school_account.user.save()
     
-    print("\n ACCOUNT SUCCESSFULLY DISABLED \n")
+    print("\n ACCOUNT SUCCESSFULLY DEACTIVATED (DISABLED) \n")
 
-    return HttpResponseRedirect(reverse("manage_classes"))
+    return HttpResponseRedirect(reverse("login"))
 
 @login_required
 def delete_student(request, student_id):

@@ -138,7 +138,7 @@ def delete_student(request, student_id):
         return HttpResponseRedirect(reverse("index"))
     
     student_instance = get_object_or_404(Student, pk=student_id)
-    student_instance.delete()
-    print("\n STUDENT SUCCESSFULLY DELETED \n")
+   # student_instance.delete()
+    print("\n STUDENT SUCCESSFULLY DELETED (DISABLED) \n")
 
     return HttpResponseRedirect(reverse("manage_classes"))

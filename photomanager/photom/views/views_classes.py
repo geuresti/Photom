@@ -127,6 +127,8 @@ def delete_class(request, class_id):
     # Redirect if user attempting to delete class that isn't theirs
     if not belongs_to_authenticated_user(request.user, class_id, 'class'):
         return HttpResponseRedirect(reverse("index"))
+    else:
+        print("\n yup this bleongs to ya big dawggie \n")
 
     print("\n CLASS IS BEING DELETED (DISABLED) \n")
     #class_instance.delete()

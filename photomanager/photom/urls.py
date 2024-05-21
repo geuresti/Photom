@@ -4,6 +4,8 @@ from django.contrib.auth import views as auth_views
 from . import views
 from .views import views_classes, views_students
 
+from photom.forms import CustomPasswordResetForm, CustomEmailPasswordResetForm
+
 urlpatterns = [
     path("", views.index, name="index"),
     path("about/", views.about, name="about"),
@@ -14,6 +16,7 @@ urlpatterns = [
         auth_views.PasswordResetView.as_view(
             template_name="registration/password_reset.html",
             html_email_template_name="registration/email_template.html",
+            form_class=CustomEmailPasswordResetForm
         ),
         name="photom_password_reset"),
     
@@ -28,6 +31,7 @@ urlpatterns = [
     path('password_reset_confirm/<uidb64>/<token>/',
         auth_views.PasswordResetConfirmView.as_view(
            template_name="registration/password_reset_confirm.html",
+           form_class=CustomPasswordResetForm,
         ),
         name="photom_password_reset_confirm"),
 

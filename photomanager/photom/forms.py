@@ -2,12 +2,40 @@ from django import forms
 from .models import Student, Class, Photo, SchoolAccount, Notification
 from django.utils.translation import gettext as _
 from django.contrib.auth.models import User  
-from django.contrib.auth.forms import UserCreationForm  
+from django.contrib.auth.forms import UserCreationForm, SetPasswordForm, PasswordResetForm
 from django.core.exceptions import ValidationError
 from phonenumber_field.formfields import PhoneNumberField
 
 from django.contrib.auth.forms import AuthenticationForm
 from django.forms.widgets import PasswordInput, TextInput
+
+class CustomPasswordResetForm(SetPasswordForm):
+
+    new_password1 = forms.CharField(
+        widget = PasswordInput(
+            attrs = {
+                'placeholder': 'Password'
+            }
+        )
+    )
+
+    new_password2 = forms.CharField(
+        widget = PasswordInput(
+            attrs = {
+                'placeholder':'Retype Password'
+            }
+        )
+    )
+
+class CustomEmailPasswordResetForm(PasswordResetForm):
+
+    email = forms.CharField(
+        widget = TextInput(
+            attrs = {
+                'placeholder':'Email'
+            }
+        )
+    )
 
 class CustomLoginForm(AuthenticationForm):
     username = forms.CharField(

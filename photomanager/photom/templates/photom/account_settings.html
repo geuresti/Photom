@@ -16,119 +16,118 @@
         
         <h2 class="form-title"><b>Update Account Information</b></h2>
 
-        <div>
-            <form class="form" action="{% url 'account_settings' %}" method="post">
-                {% csrf_token %}
+        <form class="form" action="{% url 'account_settings' %}" method="post">
+            {% csrf_token %}
 
-                <div style="display: none;">
-                    {{ account_form.primary_key }}
-                </div>
+            <div style="display: none;">
+                {{ account_form.primary_key }}
+            </div>
 
-                <div class="form-row">
-                    {{ account_form.username }}
-                </div>
-                
-                {% if account_form.username.errors %}
-                <div>
-                    {% for error in account_form.username.errors %}
-                        <p style="color: red; font-size: 16px;"> * {{ error }} </p>
-                    {% endfor %}
-                </div>
-                {% endif %}
+            <div class="form-row">
+                {{ account_form.username }}
+            </div>
+            
+            {% if account_form.username.errors %}
+            <div>
+                {% for error in account_form.username.errors %}
+                    <p style="color: red; font-size: 16px;"> * {{ error }} </p>
+                {% endfor %}
+            </div>
+            {% endif %}
 
-                <div class="form-notes">
-                    <ul>
-                        <li>Your username must be fewer than 150 characters.</li>
-                    </ul>
-                </div>
+            <div class="form-notes">
+                <ul>
+                    <li>Your username must be fewer than 150 characters.</li>
+                </ul>
+            </div>
 
-                <div class="form-row">
-                    {{ account_form.school_name }}
-                </div>
+            <div class="form-row">
+                {{ account_form.school_name }}
+            </div>
 
-                {% if account_form.school_name.errors %}
-                <div>
-                    {% for error in account_form.school_name.errors %}
-                        <p style="color: red; font-size: 16px;"> * {{ error }} </p>
-                    {% endfor %}
-                </div>
-                {% endif %}
+            {% if account_form.school_name.errors %}
+            <div>
+                {% for error in account_form.school_name.errors %}
+                    <p style="color: red; font-size: 16px;"> * {{ error }} </p>
+                {% endfor %}
+            </div>
+            {% endif %}
 
-                <div class="form-row">
-                    {{ account_form.school_phone }}
-                </div>
+            <div class="form-row">
+                {{ account_form.school_phone }}
+            </div>
 
-                <div class="form-notes">
-                    <ul>
-                        <li>Format: (123) 456-789</li>
-                    <!-- <li>Extension Format: (415) 555-0132 ext. 987</li> -->
-                    </ul>
-                </div>
+            <div class="form-notes">
+                <ul>
+                    <li>Format: (123) 456-789</li>
+                <!-- <li>Extension Format: (415) 555-0132 ext. 987</li> -->
+                </ul>
+            </div>
 
-                {% if account_form.school_phone.errors %}
-                <div>
-                    {% for error in account_form.school_phone.errors %}
-                        <p style="color: red; font-size: 16px;"> * {{ error }} </p>
-                    {% endfor %}
-                </div>
-                {% endif %}
+            {% if account_form.school_phone.errors %}
+            <div>
+                {% for error in account_form.school_phone.errors %}
+                    <p style="color: red; font-size: 16px;"> * {{ error }} </p>
+                {% endfor %}
+            </div>
+            {% endif %}
 
-                <div class="form-row">
-                    {{ account_form.email }}
-                </div>
+            <div class="form-row">
+                {{ account_form.email }}
+            </div>
 
-                {% if account_form.email.errors %}
-                <div>
-                    {% for error in account_form.email.errors %}
-                        <p style="color: red; font-size: 16px;"> * {{ error }} </p>
-                    {% endfor %}
-                </div>
-                {% endif %}
+            {% if account_form.email.errors %}
+            <div>
+                {% for error in account_form.email.errors %}
+                    <p style="color: red; font-size: 16px;"> * {{ error }} </p>
+                {% endfor %}
+            </div>
+            {% endif %}
 
-                <div class="form-row">
-                    {{ account_form.first_name }}
-                </div>
+            <div class="form-row">
+                {{ account_form.first_name }}
+            </div>
 
-                {% if account_form.first_name.errors %}
-                <div>
-                    {% for error in account_form.first_name.errors %}
-                        <p style="color: red; font-size: 16px;"> * {{ error }} </p>
-                    {% endfor %}
-                </div>
-                {% endif %}
+            {% if account_form.first_name.errors %}
+            <div>
+                {% for error in account_form.first_name.errors %}
+                    <p style="color: red; font-size: 16px;"> * {{ error }} </p>
+                {% endfor %}
+            </div>
+            {% endif %}
 
-                <div class="form-row">
-                    {{ account_form.last_name }}
-                </div>
+            <div class="form-row">
+                {{ account_form.last_name }}
+            </div>
 
-                {% if account_form.last_name.errors %}
-                <div>
-                    {% for error in account_form.last_name.errors %}
-                        <p style="color: red; font-size: 16px;"> * {{ error }} </p>
-                    {% endfor %}
-                </div>
-                {% endif %}
+            {% if account_form.last_name.errors %}
+            <div>
+                {% for error in account_form.last_name.errors %}
+                    <p style="color: red; font-size: 16px;"> * {{ error }} </p>
+                {% endfor %}
+            </div>
+            {% endif %}
 
-                <div class="form-row">
-                    {{ account_form.school_position }}
-                </div>
+            <div class="form-row">
+                {{ account_form.school_position }}
+            </div>
 
-                {% if account_form.school_position.errors %}
-                <div>
-                    {% for error in account_form.school_position.errors %}
-                        <p style="color: red; font-size: 16px;"> * {{ error }} </p>
-                    {% endfor %}
-                </div>
-                {% endif %}
-                
-                <input class="form-submit" type="submit" name="create_account" value="Update Settings" onclick="return confirm('Are you want to update your account settings?');">
+            {% if account_form.school_position.errors %}
+            <div>
+                {% for error in account_form.school_position.errors %}
+                    <p style="color: red; font-size: 16px;"> * {{ error }} </p>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            <input class="form-submit" type="submit" name="create_account" value="Update Settings" onclick="return confirm('Are you want to update your account settings?');">
+            
+        </form>
 
-                <form action="{% url 'delete_account' %}">
-                    <input class="form-submit" type="submit" value="Delete Account" onclick="return confirm('Are you want to delete this account? This action cannot be undone.');">
-                </form>
-                
-            </form>
-        </div>
+        <form class="form" action="{% url 'delete_account' %}">
+            <input class="form-submit" type="submit" value="Delete Account" onclick="return confirm('Are you want to delete this account? This action cannot be undone.');">
+        </form>
+
     </div>
 </div>
 
