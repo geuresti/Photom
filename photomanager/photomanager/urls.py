@@ -7,6 +7,7 @@ from django.contrib.auth import views as auth_views
 from photom.forms import CustomLoginForm
 
 urlpatterns = [
+    path("", views.index),
     path("photom/", include("photom.urls")),
     path("admin/", admin.site.urls),
     path("accounts/", include("django.contrib.auth.urls")),

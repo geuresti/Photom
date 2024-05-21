@@ -12,36 +12,31 @@
 
 <div id="search-page-wrapper">
 
-   <!-- <div id="search-page-sub-wrapper"> -->
-
     {% if searched %}
-        <h1> Results for "{{ searched }}" </h1>
+    <h1> Results for "{{ searched }}" </h1>
+    {% if search_results %}
 
-        {% if search_results %}
-
-        <div id="search-results-wrapper">
-            {% for result in search_results %}
-            <div class="search-result">
-                <div class="img-result">
-                    <a href="{% url 'view_student' result.pk %}">
-                        <img class="img-result-photo" src="{% get_media_prefix %}{{ result.student_photo_ID }}" loading="lazy" alt="student-photo">
-                    </a>
-                </div>
-                <div class="text-result">
-                    <a href="{% url 'view_student' result.pk %}">{{ result.first_name }} {{ result.last_name }}</a>
-                    <p> #{{ result.student_ID }} </p>
-                </div>
+    <div id="search-results-wrapper">
+        {% for result in search_results %}
+        <div class="search-result">
+            <div class="img-result">
+                <a href="{% url 'view_student' result.pk %}">
+                    <img class="img-result-photo" src="{% get_media_prefix %}{{ result.student_photo_ID }}" loading="lazy" alt="student-photo">
+                </a>
             </div>
-            {% endfor %}
+            <div class="text-result">
+                <a href="{% url 'view_student' result.pk %}">{{ result.first_name }} {{ result.last_name }}</a>
+                <p> #{{ result.student_ID }} </p>
+            </div>
         </div>
-        
-        {% else %}
-            
-            <div id="search-results-wrapper">
-                <p> No results found... </p>
-            </div>
-
-        {% endif %}
+        {% endfor %}
+    </div>
+    
+    {% else %}
+    <div id="search-results-wrapper">
+        <p> No results found... </p>
+    </div>
+    {% endif %}
 
     {% else %}
         <h1> Type something in the search bar... </h1>

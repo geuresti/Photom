@@ -3,10 +3,7 @@ from django.contrib.auth.models import User, Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from .models import Student, Class, Notification, SchoolAccount, Photo
 from .forms import NotificationForm
-from django.db import models
 
-# Remove "Groups" "User Permissions" from 
-# User edit page in admin dashboard
 class UserAdmin(BaseUserAdmin):
     actions = None
     list_display = ['first_name', 'last_name', 'email']
@@ -44,6 +41,11 @@ class StudentAdmin(admin.ModelAdmin):
     list_display = ['last_name', 'first_name', 'student_ID', 'student_class']
     ordering = ['last_name']
     search_fields = ['last_name', 'first_name', 'student_ID']
+    readonly_fields = ['get_photos']
+
+    @admin.display(description="Student Pictures")
+    def get_photoz(self, obj):
+        return obj.photo_set.all()
 
 class PhotoAdmin(admin.ModelAdmin):
     fieldsets = [
@@ -65,10 +67,6 @@ class NotificationAdmin(admin.ModelAdmin):
     search_fields = ['title', 'school__school_name']
 
     form = NotificationForm
-
-    #formfield_overrides = {
-#        models.TextField: {"widget": models.TextField},
-   # }
 
 admin.site.register(SchoolAccount, SchoolAccountAdmin)
 admin.site.register(Class, ClassAdmin)

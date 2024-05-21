@@ -79,6 +79,7 @@ header-height = 91px
   justify-content: space-between;
   padding: 20px;
   border-bottom: 1px solid black;
+  min-width: 800px;
 }
 
 #header-logo {
@@ -236,7 +237,8 @@ header-height = 91px
   width: 150px;
   height: 300px;
   padding: 15px;
-  border-top: 2px solid black;
+  border: 2px solid black;
+  border-right: none;
 
   color: black;
   background-color: var(--light-gray);
@@ -263,4 +265,14 @@ header-height = 91px
 
 #logout-form button:hover {
   text-decoration: underline;
+}
+
+/**************** RESPONSIVE STYLINGS ****************/
+
+@media screen and (max-width: 1000px) {
+
+  #class-display {
+    font-size: 27px;
+  }
+
 }

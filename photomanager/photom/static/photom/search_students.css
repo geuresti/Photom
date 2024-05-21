@@ -55,3 +55,13 @@
     flex-direction: column;
     gap: 10px;
 }
+
+/**************** RESPONSIVE STYLINGS ****************/
+
+@media screen and (max-width: 1200px) {
+
+    #search-results-wrapper {
+        grid-template-columns: repeat(2, 1fr);
+    }
+  
+  }

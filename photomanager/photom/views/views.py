@@ -22,6 +22,9 @@ def organize_classes(school):
 
 @login_required
 def index(request):
+    if request.user.is_superuser:
+        return HttpResponseRedirect(reverse("admin:index"))
+
     school = SchoolAccount.objects.get(user=request.user)
 
     classes = organize_classes(school)
@@ -168,6 +171,11 @@ def search_students(request):
 
 # OR RETURN TRUE IF USER IS SUPERUSER
 def belongs_to_authenticated_user(user, pk, association):
+
+    if user.is_superuser:
+        print("\n ACCESSED BY SUPERUSER \n")
+        return True
+
     school = SchoolAccount.objects.get(user=user)
 
     if association == 'class':

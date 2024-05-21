@@ -2,6 +2,7 @@
 
 #home-content-wrapper {  
   width: 100%;
+  min-width: 900px;
   height: calc(100vh - var(--header-height));
   display: grid;
   grid-template-columns: 20% 80%;
@@ -52,6 +53,7 @@
   width: 80%;
   max-width: 1300px;
   height: 100%;
+  max-height: 800px;
   margin: auto;
   display: grid;
   grid-template-rows: 15% 75%;
@@ -105,4 +107,14 @@
 
 .student-card p {
   padding-top: 10px;
+}
+
+/**************** RESPONSIVE STYLINGS ****************/
+
+@media screen and (max-width: 1000px) {
+
+  #class-display {
+    font-size: 27px;
+  }
+
 }

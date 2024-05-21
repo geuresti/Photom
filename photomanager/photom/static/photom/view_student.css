@@ -2,9 +2,11 @@
 
 #student-view-wrapper {
     width: 85%;
+    min-width: 900px;
+    max-width: 1500px;
     height: 700px;
     margin: auto;
-    padding: 50px 0;
+    padding: 100px 0;
 
     display: flex;
     justify-content: center;
@@ -212,7 +214,7 @@
 @media screen and (max-width: 1000px) {
 
     #student-view-wrapper {
-        width: 90%;    
+        width: 90%;  
     }
 
     #student-id-photo {

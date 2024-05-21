@@ -65,7 +65,7 @@ class NotificationForm(forms.ModelForm):
 
     class Meta:
         model = Notification
-        fields = ["title", "message"]
+        fields = ["title", "message", "school"]
 
 class AccountForm(UserCreationForm):  
     first_name = forms.CharField(
