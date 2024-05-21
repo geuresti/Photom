@@ -1,18 +1,28 @@
 #search-page-wrapper {
     width: 70vw;
     margin: auto;
-    padding: 100px 0;
+    padding: 50px 0;
 }
 
 #search-page-wrapper h1 {
-    margin-bottom: 100px;
+    margin-bottom: 50px;
     text-align: center;
     text-decoration: underline;
 }
 
 #search-results-wrapper {
-    width: fit-content;
+    background-color: white;
+
+    display: grid;
+    grid-template-rows: auto;
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 15px;
+    width: 99%;
     margin: auto;
+    max-width: 1100px;
+    height: 100%;
+    padding: 15px;
 }
 
 /**************** SEARCH RESULTS ****************/

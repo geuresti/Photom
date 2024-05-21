@@ -14,7 +14,7 @@
             <h2><a id="classes-menu-title" href="{% url 'manage_classes' %}">Classes</a></h2>
             <ul>
                 {% for class in classes %}
-                    <li class="class-link">{{ class.class_name }}</li>
+                <li class="class-link">{{ class.class_name }}</li>
                 {% endfor %}
             </ul>
         </div>
@@ -22,8 +22,8 @@
             <div id="class-display-wrapper">
                 <h1 id="class-display">No Classes To Display</h1>
                 <div id="order-by-wrapper">
-                    <label for="sort-by">Sort Students: </label>
-                    <select name="sort-by" id="sort-by">
+                    <label class="text-styling" for="sort-by">Sort Students: </label>
+                    <select class="text-styling" name="sort-by" id="sort-by">
                         <option value="order-added" selected="selected">Order Added</option>
                         <option value="most-recent">Most Recent</option>
                         <option value="last-name">Last Name</option>
@@ -33,17 +33,17 @@
             </div>
             <div id="class-students-wrapper">
                 {% for class in classes %}
-                    <div class="class-students">
-                        {% for student in class.student_set.all %}
-                            <div class="student-card">
-                                <a href="{% url 'view_student' student.pk %}">
-                                    <p class="primary-key" style="display: none;"> {{ student.pk }} </p>
-                                    <img src="{% get_media_prefix %}{{ student.student_photo_ID }}">
-                                </a>
-                                <p>{{ student.first_name }} {{ student.last_name }}</p>
-                            </div>
-                        {% endfor %}
+                <div class="class-students">
+                    {% for student in class.student_set.all %}
+                    <div class="student-card">
+                        <a href="{% url 'view_student' student.pk %}">
+                            <p class="primary-key" style="display: none;"> {{ student.pk }} </p>
+                            <img src="{% get_media_prefix %}{{ student.student_photo_ID }}">
+                        </a>
+                        <p>{{ student.first_name }} {{ student.last_name }}</p>
                     </div>
+                    {% endfor %}
+                </div>
                 {% endfor %}
             </div>
         </div>

@@ -2,16 +2,11 @@
     padding: 100px 50px;
     width: 100%;
 
-    background-color: aliceblue;
+    /*background-color: aliceblue;*/
 }
 
 .form-wrapper {
-    /*width: 50%;*/
     width: 400px;
-    /*
-    min-width: 500px;
-    max-width: 800px;
-    */
     margin: auto;
 
     background-color: var(--light-gray);
@@ -49,7 +44,7 @@
     flex-direction: column;
     gap: 20px;
 
-    border: 1px solid blue;
+    /*border: 1px solid blue;*/
 }
 
 .form input {

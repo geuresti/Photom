@@ -9,7 +9,12 @@
 }
 
 #mc-content-wrapper {
-    width: 100%;
+    width: 1400px;
+    max-width: 2200px;
+    margin: auto;
+    height: 100%;
+    max-height: 800px;
+
     justify-content: center;
     display: flex;
     flex-direction: column;
@@ -23,20 +28,35 @@
 }
 
 #mc-content-block-wrapper {
-    width: 100%;
-    justify-content: center;
+    height: 65vh;
+    min-height: 500px;
+    max-height: 1000px;
+    width: 95%;
+    min-width: 1200px;
+    margin: auto;
+
     display: flex;
+    justify-content: space-between;
     gap: 30px;
 }
 
-
 .mc-content-block {
-    width: 30vw;
+    width: 28vw;
+    min-width: 400px;
     max-width: 650px;
-    height: 70vh;
-    max-height: 1000px;
-    border-radius: 10px;
+    height: 100%;
+
     background-color: var(--light-gray);
+    border-radius: 10px;
+    padding: 20px 30px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.larger {
+    width: 35vw;
 }
 
 /**************** CLASSES MENU ****************/
@@ -51,11 +71,7 @@
 }
 
 #classes-select {
-    border: 1px solid red;
-}
-
-#classes-menu h2 {
-    text-align: center;
+   height: auto;
 }
 
 .settings-class-link-wrapper {
@@ -74,15 +90,14 @@
 
 #classes-menu ul {
     list-style-type: none;
-    height: 90%;
-    padding-right: 15px;
+    height: 100%;
     overflow-y: scroll;
 }
 
 #classes-menu li {
     font-size: 18px;
     width: fit-content;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 #classes-menu li:hover {
@@ -90,32 +105,23 @@
     cursor: pointer;
 }
 
-#classes-menu h2 {
-    margin-bottom: 15px;
-}
-
 /**************** CLASS STUDENTS ****************/
 
 #class-display {
     text-align: center;
-    padding-top: 30px;
     font-weight: bold;
 }
 
 .class-students {
     display: none;
     background-color: white;
-    border: 10px solid var(--light-gray);
-    border-radius: 10px;
 
     gap: 15px;
     width: 100%;
-    height: 90%;
+    height: 100%;
     padding: 15px;
 
     align-content: flex-start;
-    justify-content: center;
-    margin: auto;
     flex-wrap: wrap;
     overflow-y: scroll;
 }
@@ -140,21 +146,33 @@
 
 @media screen and (max-width: 1000px) {
 
+
     #mc-content-wrapper {
-        padding-bottom: 0px;
+        width: 800px;
+        max-height: unset;
+        height: auto;
+        padding-bottom: 60px;
     }
 
     #mc-content-block-wrapper {
+        max-height: unset;
         height: 100%;
+        max-width: unset;
+        min-width: unset;
+        width: 100%;
+    
         flex-direction: column;
         align-items: center;
-        gap: 50px;
     }
 
     .mc-content-block {
-        width: 70%;
+        width: 90%;
         min-width: 300px;
         height: auto;
+    }
+
+    .larger {
+        height: 650px;
     }
 
 }

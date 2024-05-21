@@ -117,8 +117,12 @@
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
         <script type="text/javascript">
+
+        // Whenever the X button is clicked hide the notification
         $('.remove-notification').click(function() {
             
+            console.log("hide notification");
+
             var notif_id;
             notif_id = $(this).attr("data-notifid");
 
@@ -129,11 +133,17 @@
                 data: {},
                 success: function( data ) 
                 {
-                    $( '#notification-' + notif_id ).addClass('hide');
+                    // IT DID ADD THE HIDE CLASS    
+                 //   $( '#notification-' + notif_id ).addClass('hide');
+
+                    var hide_notif = document.getElementById('notification-' + notif_id);
+                    hide_notif.style.display = "none";
+                    console.log(hide_notif);
                 }
             })
         });
 
+        // Whenever the notification is clicked mark it as read
         $('.notif').click(function() {
 
             var notif_id;

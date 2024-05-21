@@ -50,6 +50,7 @@
 
 #title-students-wrapper {
   width: 80%;
+  max-width: 1300px;
   height: 100%;
   margin: auto;
   display: grid;
@@ -71,19 +72,21 @@
   width: 100%;
   height: 100%;
   margin: auto;
-  padding: 20px 0;
-  border: 1px solid black;
+  border: 2px solid black;
 }
 
 .class-students {
   display: none;
+  background-color: white;
+
   gap: 15px;
-  width: 80%;
+  width: 100%;
+
   height: 100%;
-  max-width: 1200px;
-  margin: auto;
-  flex-wrap: wrap;
+  padding: 15px;
+
   align-content: flex-start;
+  flex-wrap: wrap;
   overflow-y: scroll;
 }
 

@@ -39,6 +39,8 @@ def index(request):
 @login_required
 def hide_notification(request, notif_id):
 
+    print("\n attempting to hide notif \n")
+
     notif = get_object_or_404(Notification, pk=notif_id)
 
     if not belongs_to_authenticated_user(request.user, notif.pk, 'notification'):
