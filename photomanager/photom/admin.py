@@ -30,7 +30,7 @@ class SchoolAccountAdmin(admin.ModelAdmin):
         return False
 
 class ClassAdmin(admin.ModelAdmin):
-    actions = None
+    #actions = None
     list_display = ['class_name', 'class_school', 'class_grade', 'class_teacher']
     list_display_links = ['class_name']
     ordering = ['class_school']

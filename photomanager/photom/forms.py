@@ -10,7 +10,16 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.forms.widgets import PasswordInput, TextInput
 
 class CSVUploadForm(forms.Form):
+
+    schools = SchoolAccount.objects.all()
+    school_options = [(-1, 'Select a School')] + [(school.pk, school.school_name) for school in schools]
+
+   # print("\nSCHOOLS:", school_options, "\n")
+
     csv_file = forms.FileField()
+    school = forms.ChoiceField(
+        choices = school_options,
+    )
 
 class CustomPasswordResetForm(SetPasswordForm):
 

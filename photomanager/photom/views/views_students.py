@@ -15,49 +15,86 @@ import csv
 from csv import DictReader
 from io import TextIOWrapper
 
-LAST_NAME = 0
-FIRST_NAME = 1
-GRADE = 2
-TEACHER = 3
-ID_NUMBER = 4
-
-def upload_csv(request):
-
-    if request.method == "POST":
-        print("\nFILES:", request.FILES, "\n")
-
-        read_students_csv(request, request.FILES["csv_file"])
-      #  if form.is_valid():
-         #   handle_uploaded_file(request.FILES["file"])
-         #   return HttpResponseRedirect("/success/url/")
-    else:
-        print("\n ERR RRR \n")
-
-    return HttpResponseRedirect(reverse("manage_classes"))
 
 @login_required
-def read_students_csv(request, file):
-   # print("\n read_students_csv() CALLED \n")
+def upload_csv(request):
+
+    errs = None
+
+    print("\nFILES:", request.FILES, "\n")
+
+    if request.user.is_superuser == False:
+        return HttpResponseRedirect(reverse("index"))
+
+    if request.method == "POST":
+
+        if request.FILES["csv_file"]:
+            school_id = request.POST.get('school')
+
+            if school_id == '-1':
+                print("\n ERROR: please select a school \n")
+                errs = ('You must select a school')
+            else:
+                school = SchoolAccount.objects.get(pk=school_id)
+            #  print("\nGOT:", school, "\n")
+                return read_students_csv(request, request.FILES["csv_file"], school)
+        else:
+            print("\nERROR: Received non csv file\n")
+
+    csv_form = CSVUploadForm()
+
+    context = {
+        "csv_form": csv_form,
+        "errs": errs
+    }
+
+    return render(request, "photom/upload_csv.html", context)
+
+@login_required
+def read_students_csv(request, file, school):
+
+    csv_form = CSVUploadForm()
 
     errors = []
+    new_classes = []
 
-    school = SchoolAccount.objects.get(user=request.user)
-
-    print("\nSCHOOL:", school)
+   # print("\nSCHOOL:", school)
 
     rows = TextIOWrapper(file, encoding="utf-8", newline="")
 
     csv_file_content = list(csv.DictReader(rows))
 
+    school_classes = school.class_set.all()
+
+    correct_keys = ['Student Last Name', 'Student First Name', 'Grade', 'Teacher', 'Id Number']
+
+    for row in csv_file_content:
+        for key in correct_keys:
+            if key not in row.keys():
+               # print("\n ERROR: Incorrectly formatted csv file \n")
+                context = {
+                    "csv_form": csv_form,
+                    "errs": "Incorrectly formatted file was given"
+                }
+
+                return render(request, "photom/upload_csv.html", context)
+
     # Create classes from csv file
     for row in csv_file_content:
-        #print("\n", row, "\n")
+
+        class_already_exists = False
+       # print("\n", row, "\n")
         student_class = Class.objects.filter(class_teacher=row['Teacher'])
 
-        # Check if the class already exists
-        if len(student_class) == 0:
+        # Check if the class already exists in the query results
+        for sc in student_class:
+            # Check if queried class exists for this school specifically
+            if sc in school_classes:
+                class_already_exists = True
+                break
 
-            # Create new class
+        # Create new class
+        if not class_already_exists and row['Teacher'] not in new_classes:
             new_class = Class(
                 class_name = row['Teacher'] + " " + row['Grade'],
                 class_teacher = row['Teacher'],
@@ -65,47 +102,56 @@ def read_students_csv(request, file):
                 class_school = school
             )
 
+            new_classes.append(new_class.class_teacher)
             new_class.save()
+            print("\n MADE NEW CLASS (enabled) \n")
+        else:
+            print("\n class arleady exists, skipping \n")
 
     # Add students to classes in csv file
     for row in csv_file_content:
-        
-        class_set = Class.objects.filter(class_teacher=row['Teacher'])
 
-        # Check if class exists
-        if len(class_set) == 0:
-            err_str = "Class not found for:", row['Student First Name'], row['Student Last Name']
-            errors.append(err_str)
-            continue
+        class_to_add_student_to = school.class_set.filter(class_teacher=row['Teacher'])[0]
+    
+        # Check if the class grade and student grade correspond
+        if class_to_add_student_to.class_grade == row['Grade']:
 
-        student_class = class_set[0]
+            student_check = class_to_add_student_to.student_set.all()
+            student_ids = [stdnt.student_ID for stdnt in student_check]
 
-        # Check if the student and class' grade correspond
-        if student_class.class_grade != row['Grade']:
+            # Check if the student (by id) already exists in this class
+            if int(row['Id Number']) not in student_ids:
+
+                # Create a new student
+                print("\n student isnt in my class yet yipeee")
+                student = Student(
+                    first_name = row['Student First Name'],
+                    last_name = row['Student Last Name'],
+                    student_class = class_to_add_student_to,
+                    student_ID = row['Id Number']
+                )            
+
+                student.save()
+                print("\n STUDENT ADDED (enabled)\n")
+            else:
+                err_str = "Student already in class:", row['Student First Name'], row['Student Last Name']
+                errors.append(err_str)
+                continue
+        else:
             err_str = "Student grade and class grade did not match for: not found for student:", row['Student First Name'], row['Student Last Name']
             errors.append(err_str)
             continue
 
-        student_check = Student.objects.filter(student_ID = row['Id Number'])
-
-        # Check if the student is already in the class roster
-        if len(student_check) > 0:
-            continue
-
-        # Create new student
-        student = Student(
-            first_name = row['Student First Name'],
-            last_name = row['Student Last Name'],
-            student_class = student_class,
-            student_ID = row['Id Number']
-        )            
-
-        student.save()
-
+    # Print errors to console
     for error in errors:
         print("\nERR:", error)
 
-    return HttpResponseRedirect(reverse("manage_classes"))
+    context = {
+        "csv_form": csv_form,
+        "success": "Successfully uploaded csv"
+    }
+
+    return render(request, "photom/upload_csv.html", context)
 
 # STUDENT MUST BELONG TO THE USER
 @login_required
