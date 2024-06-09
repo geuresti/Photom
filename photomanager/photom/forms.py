@@ -9,6 +9,9 @@ from phonenumber_field.formfields import PhoneNumberField
 from django.contrib.auth.forms import AuthenticationForm
 from django.forms.widgets import PasswordInput, TextInput
 
+class CSVUploadForm(forms.Form):
+    csv_file = forms.FileField()
+
 class CustomPasswordResetForm(SetPasswordForm):
 
     new_password1 = forms.CharField(

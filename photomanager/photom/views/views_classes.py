@@ -3,7 +3,7 @@ from photom.models import Class, SchoolAccount
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from photom.forms import ClassForm, StudentForm
+from photom.forms import ClassForm, StudentForm, CSVUploadForm
 from django.contrib.auth.decorators import login_required
 from .views import belongs_to_authenticated_user, organize_classes
 
@@ -67,8 +67,10 @@ def manage_classes(request):
     else:
         class_form = ClassForm()
         student_form = StudentForm(user=request.user)
+        csv_form = CSVUploadForm()
 
         context = {
+            "csv_form": csv_form,
             "class_form": class_form,
             "student_form": student_form,
             "classes":classes,

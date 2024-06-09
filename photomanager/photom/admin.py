@@ -44,7 +44,7 @@ class StudentAdmin(admin.ModelAdmin):
     readonly_fields = ['get_photos']
 
     @admin.display(description="Student Pictures")
-    def get_photoz(self, obj):
+    def get_photos(self, obj):
         return obj.photo_set.all()
 
 class PhotoAdmin(admin.ModelAdmin):

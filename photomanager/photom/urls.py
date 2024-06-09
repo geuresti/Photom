@@ -25,8 +25,6 @@ urlpatterns = [
             template_name="registration/password_reset_done.html"
         ), 
         name="photom_password_reset_done"),
-    
-# superPhotom2001
 
     path('password_reset_confirm/<uidb64>/<token>/',
         auth_views.PasswordResetConfirmView.as_view(
@@ -41,8 +39,6 @@ urlpatterns = [
         ),
         name="photom_password_reset_complete"),
 
-#############################################################################
-
     path("hide_notification/<int:notif_id>/", views.hide_notification, name="hide_notification"),
     path("read_notification/<int:notif_id>/", views.read_notification, name="read_notification"),
     path("reset_notifications/", views.reset_notifications, name="reset_notifications"),
@@ -53,6 +49,8 @@ urlpatterns = [
     path("manage_classes/", views_classes.manage_classes, name="manage_classes"),
     path("class_settings/<int:class_id>/", views_classes.class_settings, name="class_settings"),
     path("delete_class/<int:class_id>/", views_classes.delete_class, name="delete_class"),
+    path("rsc/", views_students.read_students_csv, name="read_students_csv"),
+    path("csv/", views_students.upload_csv, name="upload_csv"),
 
     path("view_student/<int:student_id>/", views_students.view_student, name="view_student"),
     path("student_settings/<int:student_id>/", views_students.student_settings, name="student_settings"),

@@ -1,15 +1,111 @@
 from django.shortcuts import render
 from django.shortcuts import render
-from photom.models import Student, Photo, SchoolAccount
+from photom.models import Student, Class, Photo, SchoolAccount
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from photom.forms import StudentForm, PhotoForm
+from photom.forms import StudentForm, PhotoForm, CSVUploadForm
 from django.http import FileResponse
 from .views import belongs_to_authenticated_user
 from photomanager import settings
 from django.contrib.auth.decorators import login_required
 import os
+import csv
+
+from csv import DictReader
+from io import TextIOWrapper
+
+LAST_NAME = 0
+FIRST_NAME = 1
+GRADE = 2
+TEACHER = 3
+ID_NUMBER = 4
+
+def upload_csv(request):
+
+    if request.method == "POST":
+        print("\nFILES:", request.FILES, "\n")
+
+        read_students_csv(request, request.FILES["csv_file"])
+      #  if form.is_valid():
+         #   handle_uploaded_file(request.FILES["file"])
+         #   return HttpResponseRedirect("/success/url/")
+    else:
+        print("\n ERR RRR \n")
+
+    return HttpResponseRedirect(reverse("manage_classes"))
+
+@login_required
+def read_students_csv(request, file):
+   # print("\n read_students_csv() CALLED \n")
+
+    errors = []
+
+    school = SchoolAccount.objects.get(user=request.user)
+
+    print("\nSCHOOL:", school)
+
+    rows = TextIOWrapper(file, encoding="utf-8", newline="")
+
+    csv_file_content = list(csv.DictReader(rows))
+
+    # Create classes from csv file
+    for row in csv_file_content:
+        #print("\n", row, "\n")
+        student_class = Class.objects.filter(class_teacher=row['Teacher'])
+
+        # Check if the class already exists
+        if len(student_class) == 0:
+
+            # Create new class
+            new_class = Class(
+                class_name = row['Teacher'] + " " + row['Grade'],
+                class_teacher = row['Teacher'],
+                class_grade = row['Grade'],
+                class_school = school
+            )
+
+            new_class.save()
+
+    # Add students to classes in csv file
+    for row in csv_file_content:
+        
+        class_set = Class.objects.filter(class_teacher=row['Teacher'])
+
+        # Check if class exists
+        if len(class_set) == 0:
+            err_str = "Class not found for:", row['Student First Name'], row['Student Last Name']
+            errors.append(err_str)
+            continue
+
+        student_class = class_set[0]
+
+        # Check if the student and class' grade correspond
+        if student_class.class_grade != row['Grade']:
+            err_str = "Student grade and class grade did not match for: not found for student:", row['Student First Name'], row['Student Last Name']
+            errors.append(err_str)
+            continue
+
+        student_check = Student.objects.filter(student_ID = row['Id Number'])
+
+        # Check if the student is already in the class roster
+        if len(student_check) > 0:
+            continue
+
+        # Create new student
+        student = Student(
+            first_name = row['Student First Name'],
+            last_name = row['Student Last Name'],
+            student_class = student_class,
+            student_ID = row['Id Number']
+        )            
+
+        student.save()
+
+    for error in errors:
+        print("\nERR:", error)
+
+    return HttpResponseRedirect(reverse("manage_classes"))
 
 # STUDENT MUST BELONG TO THE USER
 @login_required

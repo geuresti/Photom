@@ -2,8 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 from phonenumber_field.modelfields import PhoneNumberField
 
-from django.contrib import admin
-
 class SchoolAccount(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     school_phone = PhoneNumberField(region="US")
@@ -65,12 +63,6 @@ class Student(models.Model):
     student_class = models.ForeignKey("Class", on_delete=models.CASCADE)
     student_ID = models.IntegerField()
     student_photo_ID = models.ImageField(default="photo-ids/default-photo-id.PNG", upload_to="photo-ids")
-    
-  #  @admin.display(description="Student Pictures")
-  #  def get_photos(self):
-  #      photos = self.photo_set.all()
-   #     print("\n GOT PHOTOS:", photos, "\n")
-  #      return photos
 
     def __str__(self):
         return self.first_name + " " + self.last_name  + " #" + str(self.student_ID)
