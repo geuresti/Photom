@@ -39,7 +39,7 @@
                 <!--<li><b>Age:</b> {{ student.student_age }} </li>-->
                 <li><b>Grade:</b> {{ student.student_class.class_grade }} </li>
                 <li><b>Student ID:</b> {{ student.student_ID }} </li>
-                <li><b>Total Photos:</b> {{ student.photo_set.all | length }} </li>
+                <!--<li><b>Total Photos:</b> {{ student.photo_set.all | length }} </li>-->
             </ul>
 
             <!--
@@ -73,7 +73,7 @@
                 </div>
             {% endfor %}
         
-        <!-- DUMMY PHOTO CARDS FOR TESTING -->
+        <!-- DUMMY PHOTO CARDS FOR TESTING
             <div class="student-photo-wrapper">
                 <div class="student-photo">
                     <img src="{% get_media_prefix %}photo-ids/default-photo-id.PNG" loading="lazy" alt="student-photo">
@@ -98,6 +98,7 @@
                     <a> Download </a>
                 </div>
             </div>
+        -->
 
         </div>
 

@@ -35,6 +35,13 @@ class ClassAdmin(admin.ModelAdmin):
     list_display_links = ['class_name']
     ordering = ['class_school']
     search_fields = ['class_name', 'class_school__school_name']
+    readonly_fields = ['get_students']
+
+    @admin.display(description="Students")
+    def get_students(self, obj):
+        students = [student.first_name + " " + student.last_name for student in obj.student_set.all()]
+        formatted = ', '.join(students)
+        return formatted
 
 class StudentAdmin(admin.ModelAdmin):
     actions = None
@@ -45,7 +52,9 @@ class StudentAdmin(admin.ModelAdmin):
 
     @admin.display(description="Student Pictures")
     def get_photos(self, obj):
-        return obj.photo_set.all()
+        photos = [image.photo.name for image in obj.photo_set.all()]
+        formatted = ', '.join(photos)
+        return formatted
 
 class PhotoAdmin(admin.ModelAdmin):
     fieldsets = [

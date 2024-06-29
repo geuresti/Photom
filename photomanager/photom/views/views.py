@@ -22,8 +22,8 @@ def organize_classes(school):
 
 @login_required
 def index(request):
-    if request.user.is_superuser:
-        return HttpResponseRedirect(reverse("admin:index"))
+   # if request.user.is_superuser:
+   #     return HttpResponseRedirect(reverse("admin:index"))
 
     school = SchoolAccount.objects.get(user=request.user)
 

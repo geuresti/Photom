@@ -110,6 +110,7 @@
 /**************** STUDENT PICTURES / MODAL ****************/
 #student-pictures-wrapper {
     width: fit-content;
+    min-width: 400px;
 
     padding: 30px;
     background-color: var(--light-gray);

@@ -9,9 +9,38 @@ from phonenumber_field.formfields import PhoneNumberField
 from django.contrib.auth.forms import AuthenticationForm
 from django.forms.widgets import PasswordInput, TextInput
 
+
+class MultipleFileInput(forms.ClearableFileInput):
+    allow_multiple_selected = True
+
+class MultipleFileField(forms.FileField):
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault("widget", MultipleFileInput())
+        super().__init__(*args, **kwargs)
+
+    def clean(self, data, initial=None):
+        single_file_clean = super().clean
+        if isinstance(data, (list, tuple)):
+            result = [single_file_clean(d, initial) for d in data]
+        else:
+            result = [single_file_clean(data, initial)]
+        return result
+
+class ImagesForm(forms.Form):
+    photos = MultipleFileField()
+
+    schools = SchoolAccount.objects.all()
+
+    school_options = [(-1, 'Select a School')] + [(school.pk, school.school_name) for school in schools]
+   
+    school = forms.ChoiceField(
+        choices = school_options,
+    )
+
 class CSVUploadForm(forms.Form):
 
     schools = SchoolAccount.objects.all()
+
     school_options = [(-1, 'Select a School')] + [(school.pk, school.school_name) for school in schools]
 
    # print("\nSCHOOLS:", school_options, "\n")
