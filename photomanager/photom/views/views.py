@@ -10,24 +10,25 @@ from django.contrib.auth.decorators import login_required
 
 ########################## GENERAL ##########################
 
+# This function organizes the classes by grade descending
 def organize_classes(school):
     filetered_classes = Class.objects.filter(class_school=school).order_by("-class_grade")
-    classes_a = [cls for cls in filetered_classes if cls.class_grade.isnumeric()]
-    classes_b = [cls for cls in filetered_classes if not cls.class_grade.isnumeric()]
-    classes_b.reverse()
+    num_grades = [cls for cls in filetered_classes if cls.class_grade.isnumeric()]
+    let_grades = [cls for cls in filetered_classes if not cls.class_grade.isnumeric()]
+    let_grades.reverse()
 
-    classes = classes_a + classes_b
+    organized_classes = num_grades + let_grades
+    return organized_classes
 
-    return classes
-
+# Index view
 @login_required
 def index(request):
     school = SchoolAccount.objects.get(user=request.user)
-
     classes = organize_classes(school)
-
     notifications = Notification.objects.filter(school=school, hidden=False)
 
+    # classes are needed for main display
+    # school and notifications are needed for most views for the header
     context = {
         "notifications":notifications,
         "classes":classes,
@@ -36,11 +37,13 @@ def index(request):
 
     return render(request, "photom/index.html", context)
 
+# This view sets the specified notifcation to be hidden
 @login_required
 def hide_notification(request, notif_id):
 
     notif = get_object_or_404(Notification, pk=notif_id)
 
+    # Check that the notification belongs to the authenticated user
     if not belongs_to_authenticated_user(request.user, notif.pk, 'notification'):
         return HttpResponseRedirect(reverse("index"))
     
@@ -48,27 +51,29 @@ def hide_notification(request, notif_id):
     notif.read = True
     notif.save()
 
-    print("\n HIDE NOTIFICATION #", notif_id, "\n")
+    print("\n HIDING NOTIFICATION #", notif_id, "\n")
 
     return HttpResponse(notif)
 
+# This view sets the specified notifcation to be hidden
 @login_required
 def read_notification(request, notif_id):
 
     notif = get_object_or_404(Notification, pk=notif_id)
 
+    # Check that the notification belongs to the authenticated user
     if not belongs_to_authenticated_user(request.user, notif.pk, 'notification'):
         return HttpResponseRedirect(reverse("index"))
     
     notif.read = True
     notif.save()
 
-    print("\n READ NOTIFICATION #", notif_id, "\n")
+    print("\n NOTIFICATION #", notif_id, "MARKED AS READ \n")
 
     return HttpResponse(notif)
 
-
-# FOR TESTING
+# This view is for testing only. It resets the 'hidden' and
+# 'read' flags on all notifications
 def reset_notifications(request):
     notifs = Notification.objects.all()
 

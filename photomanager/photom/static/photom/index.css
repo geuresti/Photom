@@ -92,20 +92,25 @@
   overflow-y: scroll;
 }
 
-.student-card {
+.index-student-card {
   width: 200px;
   height: 200px;
   background-color: #D9D9D9;
   text-align: center;
 }
 
-.student-card img {
+.index-student-card:hover {
+  background-color: #969696;
+  cursor: pointer;
+}
+
+.index-student-card img {
   width: 200px;
   height: 160px;
   object-fit: cover;
 }
 
-.student-card p {
+.index-student-card p {
   padding-top: 10px;
 }
 

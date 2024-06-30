@@ -1,9 +1,7 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
-
 from . import views
 from .views import views_classes, views_students
-
 from photom.forms import CustomPasswordResetForm, CustomEmailPasswordResetForm
 
 urlpatterns = [
@@ -41,7 +39,7 @@ urlpatterns = [
 
     path("hide_notification/<int:notif_id>/", views.hide_notification, name="hide_notification"),
     path("read_notification/<int:notif_id>/", views.read_notification, name="read_notification"),
-    path("reset_notifications/", views.reset_notifications, name="reset_notifications"),
+   # path("reset_notifications/", views.reset_notifications, name="reset_notifications"),
 
     path("account_settings/", views.account_settings, name="account_settings"),
     path("delete_account/", views.delete_account, name="delete_account"),

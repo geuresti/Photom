@@ -7,6 +7,9 @@ from photom.forms import ClassForm, StudentForm
 from django.contrib.auth.decorators import login_required
 from .views import belongs_to_authenticated_user, organize_classes
 
+
+# This view allows users to create students, create classes,
+# and view a list of all their classes and the students within
 @login_required
 def manage_classes(request):
 
@@ -27,6 +30,7 @@ def manage_classes(request):
             if class_form.is_valid():
                 print("\n CLASS FORM VALID \n")
 
+                # Populate new form and save
                 new_class = Class()
                 new_class.class_name = class_form.data['class_name']
                 new_class.class_teacher = class_form.data['class_teacher']
@@ -43,6 +47,7 @@ def manage_classes(request):
         elif "create-student" in dict(request.POST.items()).keys():
             student_form = StudentForm(request.POST, request.FILES, user=request.user)
 
+            # Check if the user selected a class before submitting
             if student_form.data['student_class'] == '-1':
 
                 class_form = ClassForm()
@@ -60,12 +65,14 @@ def manage_classes(request):
             elif student_form.is_valid():
                 print("\n STUDENT FORM VALID \n")
                 student_form.save()    
-
                 return HttpResponseRedirect(reverse("manage_classes"))
             else:
-                print("\n STUDENT FORM INVALID \n")
+                print("\n ERROR: STUDENT FORM INVALID \n")
     else:
         class_form = ClassForm()
+
+        # Pass the user to the form, this allows me to limit the class
+        # dropdown options to classes belonging to the user's school
         student_form = StudentForm(user=request.user)
 
         context = {
@@ -77,6 +84,7 @@ def manage_classes(request):
 
         return render(request, "photom/manage_classes.html", context)
     
+# This view lets the user adjust the fields of the selected class
 @login_required
 def class_settings(request, class_id):
     class_instance = get_object_or_404(Class, pk=class_id)
@@ -104,6 +112,7 @@ def class_settings(request, class_id):
 
             return HttpResponseRedirect(reverse("manage_classes"))
     else:
+        # Populate the form with the current class field values
         class_form = ClassForm(instance=class_instance)
 
         context = {
@@ -113,7 +122,8 @@ def class_settings(request, class_id):
         }
 
         return render(request, "photom/class_settings.html", context)
-    
+
+# This view deletes the class using the given id  
 @login_required
 def delete_class(request, class_id):
     
@@ -125,7 +135,7 @@ def delete_class(request, class_id):
     if not belongs_to_authenticated_user(request.user, class_id, 'class'):
         return HttpResponseRedirect(reverse("index"))
 
-    print("\n CLASS IS BEING DELETED (ENBALED) \n")
+    print("\n CLASS ID", class_id, "HAS BEING DELETED \n")
     class_instance.delete()
 
     return HttpResponseRedirect(reverse("manage_classes"))
