@@ -10,7 +10,6 @@
         <title>{% block title %} Default Page Title {% endblock %}</title>
 
         <script src="https://kit.fontawesome.com/de872b992f.js" crossorigin="anonymous"></script>
-
     </head>
     
     <body>
@@ -22,7 +21,6 @@
             <div id="right-header">
 
                 <div class="right-header-row">
-                    <!-- if superuser -->
                     {% if school %}
                     <div id="logged-in">
                         <p>
@@ -31,7 +29,6 @@
                     </div>
 
                     <!-- INBOX DROPDOWN -->
-
                     {% if not request.user.is_superuser %}
                     <div id="inbox-wrapper">
                         <div id="inbox-icon-wrapper">
@@ -39,7 +36,7 @@
                         </div>
                         <div class="inbox-content">
 
-                            <h2 id="inbox-note" style="text-align: center;"> Click on a notification to mark it as read </h2>
+                            <h2 id="inbox-note" style="text-align: center;"> Click the check to mark as read </h2>
 
                             {% for notif in notifications %}
 
@@ -52,7 +49,8 @@
                                     <p> {{ notif.message }} </p>
                                     <div class="notif-footer">
                                         <p><i>{{ notif.send_date }}</i></p>
-                                        <p id="remove-notification-{{notif.pk}}" class="remove-notification" data-notifid="{{notif.pk}}" style="color: red;"> X </p>
+                                        <p id="read-notification-{{notif.pk}}" class="read-notification fa-solid fa-check" data-notifid="{{notif.pk}}"></p>
+                                        <p id="remove-notification-{{notif.pk}}" class="remove-notification fa-solid fa-trash" data-notifid="{{notif.pk}}"></p>
                                     </div>
                                 </div>
 
@@ -123,10 +121,10 @@
         // Whenever the X button is clicked hide the notification
         $('.remove-notification').click(function() {
             
-            console.log("hide notification");
-
             var notif_id;
             notif_id = $(this).attr("data-notifid");
+
+            console.log("hide notification " + notif_id);
 
             $.ajax(
             {
@@ -135,9 +133,6 @@
                 data: {},
                 success: function( data ) 
                 {
-                    // IT DID ADD THE HIDE CLASS    
-                 //   $( '#notification-' + notif_id ).addClass('hide');
-
                     var hide_notif = document.getElementById('notification-' + notif_id);
                     hide_notif.style.display = "none";
                     console.log(hide_notif);
@@ -146,7 +141,8 @@
         });
 
         // Whenever the notification is clicked mark it as read
-        $('.notif').click(function() {
+     //   $('.notif').click(function() {
+        $('.read-notification').click(function() {
 
             var notif_id;
             notif_id = $(this).attr("data-notifid");

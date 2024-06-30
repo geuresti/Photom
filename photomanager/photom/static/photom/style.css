@@ -147,10 +147,10 @@ header-height = 91px
   gap: 8px;
 
   position: absolute;
-  top: -600px;
+  top: -3000px;
   right: 50px;
   z-index: 1;
-  transition: all 0.5s;
+  transition: all 0.5s ease-in-out;
 
   width: 450px;
   height: auto;
@@ -164,9 +164,10 @@ header-height = 91px
   display: none;
 }
 
+/*
 .notif:hover {
   cursor: pointer;
-}
+}*/
 
 .notif {
   font-size: 18px;
@@ -187,7 +188,31 @@ header-height = 91px
 
 .notif-footer {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
+  padding: 0 5px;
+  gap: 15px;
+}
+
+.remove-notification {
+  font-size: 18px;
+  color: black;
+  transition: color 0.3s;
+}
+
+.remove-notification:hover {
+  color: red;
+  cursor: pointer;
+}
+
+.read-notification {
+  font-size: 20px;
+  color: black;
+  transition: color 0.3s;
+}
+
+.read-notification:hover {
+  color: green;
+  cursor: pointer;
 }
 
 /**************** SEARCH BAR DROPDOWN ****************/

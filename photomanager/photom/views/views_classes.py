@@ -7,19 +7,20 @@ from photom.forms import ClassForm, StudentForm
 from django.contrib.auth.decorators import login_required
 from .views import belongs_to_authenticated_user, organize_classes
 
-# CLASS MUST BELONG TO THE USER
 @login_required
 def manage_classes(request):
 
+    # Get school of authenticated user
     school = SchoolAccount.objects.get(user=request.user)
 
+    # Organize classes (by order of grade descending)
     classes = organize_classes(school)
-
-    #print("\n CLASSES: ", classes, "\n")
 
     if request.method == "POST":
 
+        # If the user submits a new class form
         if "create-class" in dict(request.POST.items()).keys():
+
             # add POST data into form object
             class_form = ClassForm(request.POST)
 
@@ -36,12 +37,11 @@ def manage_classes(request):
 
                 return HttpResponseRedirect(reverse("manage_classes"))
             else:
-                print("\n CLASS FORM INVALID \n")
+                print("\n ERROR: CLASS FORM INVALID \n")
 
+        # If the user submits a new student form
         elif "create-student" in dict(request.POST.items()).keys():
             student_form = StudentForm(request.POST, request.FILES, user=request.user)
-
-            print("\n STUDENT DATa: ", student_form.data, "\n")
 
             if student_form.data['student_class'] == '-1':
 
@@ -114,24 +114,18 @@ def class_settings(request, class_id):
 
         return render(request, "photom/class_settings.html", context)
     
-# CLASS MUST BELONG TO THE USER
-
-# This view doesn't seem to be working
-# when called from class settings
 @login_required
 def delete_class(request, class_id):
     
     print("\n DELETE CLASS CALELD \n")
 
     class_instance = get_object_or_404(Class, pk=class_id)
+
     # Redirect if user attempting to delete class that isn't theirs
     if not belongs_to_authenticated_user(request.user, class_id, 'class'):
         return HttpResponseRedirect(reverse("index"))
-    else:
-        print("\n yup this bleongs to ya big dawggie \n")
 
-    print("\n CLASS IS BEING DELETED (DISABLED) \n")
-    #class_instance.delete()
+    print("\n CLASS IS BEING DELETED (ENBALED) \n")
+    class_instance.delete()
+
     return HttpResponseRedirect(reverse("manage_classes"))
-
-

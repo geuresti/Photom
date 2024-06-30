@@ -29,6 +29,8 @@
     width: 40%;
     max-width: 400px;
     min-width: 250px;
+
+    border: 1px solid black;
 }
 
 #student-id-photo {

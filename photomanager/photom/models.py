@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from phonenumber_field.modelfields import PhoneNumberField
+from django.utils.html import format_html
 
 class SchoolAccount(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -26,14 +27,6 @@ class Notification(models.Model):
     def __str__(self):
         return self.title
     
-"""
-CLASS DATA
-
-Class Name
-Homeroom Teacher
-Grade (can be “KG” or “PK”)
-School
-"""
 class Class(models.Model):
     class_name = models.CharField(max_length=50)
     class_teacher = models.CharField(max_length=50)
@@ -47,15 +40,7 @@ class Class(models.Model):
     class Meta:
         verbose_name = "Class"
         verbose_name_plural = "Classes"
-"""
-STUDENT DATA 
 
-(OPTIONAL) photo id
-Age *
-ID Number
-Student Last Name
-Student First Name
-"""
 class Student(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
@@ -67,7 +52,6 @@ class Student(models.Model):
     def __str__(self):
         return self.first_name + " " + self.last_name  + " #" + str(self.student_ID)
 
-from django.utils.html import format_html
 
 class Photo(models.Model):
     photo = models.ImageField(upload_to="student-pictures")

@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import render
 from photom.models import Student, Class, Photo, SchoolAccount
+from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -20,7 +21,17 @@ from io import TextIOWrapper
 class FileFieldFormView(FormView):
     form_class = ImagesForm
     template_name = "photom/upload_photos.html"
-    success_url = "success"  
+    success_url = "success"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(FileFieldFormView, self).get_context_data(*args,**kwargs)
+
+        users = User.objects.filter(is_superuser=True)
+        if len(users) > 0:
+            admin = users[0]
+            school = SchoolAccount.objects.get(user=admin)
+            context['school'] = school
+        return context
 
     def form_valid(self, form):
         school_id = form.cleaned_data['school']
@@ -42,13 +53,20 @@ class FileFieldFormView(FormView):
             for s in students:
                 filtered_students.append(s)
         
-        print("\n STUDENTS:", filtered_students, "\n")
+        #print("\n STUDENTS:", filtered_students, "\n")
 
         # Iterate over photos
         for f in files:
 
             # Extract id from filename
-            photo_student_id = f.name[:f.name.index('.')]
+            if "_" in f.name:
+                delim = '_'
+            else:
+                delim = '.'
+
+            photo_student_id = f.name[:f.name.index(delim)]
+
+            #print("\nFILE NAME:", photo_student_id, "\n")
 
             # Check that it's numeric
             if photo_student_id.isnumeric():
@@ -58,13 +76,36 @@ class FileFieldFormView(FormView):
 
                     # Create a new photo
                     if student.student_ID == int(photo_student_id):
-                        print("\nSTUDENT ID FOUND")
+
+                        # Check if student already has a photo with that ID
+                        photos = student.photo_set.all()
+
+                        #print("\nPHOTOS:", photos, "\n")
+
+                        for p in photos:
+                            p_name = str(p)
+
+                            if "_" in p_name:
+                                delimiter = '_'
+                            else:
+                                delimiter = '.'
+
+                            photo_id = p_name[:p_name.index(delimiter)]
+                            #print("\n extracted ID:", photo_id, "\n")
+
+                            if photo_id == photo_student_id:
+                                print("\n removing old photo:", str(p))
+                                os.remove(os.path.join(settings.MEDIA_ROOT, "student-pictures\\" + str(p)))
+                                p.delete()
+
+                        #print("\nSTUDENT ID FOUND")
                         photo = Photo(
                           photo=f,
                           student=student
                         )
+
                         photo.save()
-                        print("\nSTUDENT SAVED (enabled)")
+                        print("\n PHOTO SAVED TO STUDENT (enabled)")
                         break
                 else:
                     print("\nERROR: STUDENT ID", photo_student_id, "NOT FOUND")  

@@ -22,9 +22,6 @@ def organize_classes(school):
 
 @login_required
 def index(request):
-   # if request.user.is_superuser:
-   #     return HttpResponseRedirect(reverse("admin:index"))
-
     school = SchoolAccount.objects.get(user=request.user)
 
     classes = organize_classes(school)
@@ -41,8 +38,6 @@ def index(request):
 
 @login_required
 def hide_notification(request, notif_id):
-
-    print("\n attempting to hide notif \n")
 
     notif = get_object_or_404(Notification, pk=notif_id)
 
@@ -73,7 +68,7 @@ def read_notification(request, notif_id):
     return HttpResponse(notif)
 
 
-# FOR TESTING THE INBOX
+# FOR TESTING
 def reset_notifications(request):
     notifs = Notification.objects.all()
 
@@ -167,9 +162,7 @@ def search_students(request):
 ########################## HELPER FUNCTION ##########################
 
 # Helper function that checks if the associated object
-# belongs to the authenticated user
-
-# OR RETURN TRUE IF USER IS SUPERUSER
+# belongs to the authenticated user (or if the user is an admin)
 def belongs_to_authenticated_user(user, pk, association):
 
     if user.is_superuser:

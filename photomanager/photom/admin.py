@@ -50,10 +50,11 @@ class StudentAdmin(admin.ModelAdmin):
     search_fields = ['last_name', 'first_name', 'student_ID']
     readonly_fields = ['get_photos']
 
-    @admin.display(description="Student Pictures")
+    @admin.display(description="Student Picture(s)")
     def get_photos(self, obj):
-        photos = [image.photo.name for image in obj.photo_set.all()]
+        photos = ["/media/" + str(image.photo) for image in obj.photo_set.all()]
         formatted = ', '.join(photos)
+
         return formatted
 
 class PhotoAdmin(admin.ModelAdmin):
