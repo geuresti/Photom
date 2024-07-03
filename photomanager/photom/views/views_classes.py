@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from photom.models import Class, SchoolAccount
+from photom.models import Class, SchoolAccount, Notification
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -15,6 +15,7 @@ def manage_classes(request):
 
     # Get school of authenticated user
     school = SchoolAccount.objects.get(user=request.user)
+    notifications = Notification.objects.filter(school=school, hidden=False)
 
     # Organize classes (by order of grade descending)
     classes = organize_classes(school)
@@ -55,8 +56,9 @@ def manage_classes(request):
                 context = {
                     "class_form": class_form,
                     "student_form": student_form,
-                    "classes":classes,
-                    "school":school,
+                    "classes": classes,
+                    "school": school,
+                    "notifications": notifications,
                     "select_error":True
                 }
 
@@ -78,8 +80,9 @@ def manage_classes(request):
         context = {
             "class_form": class_form,
             "student_form": student_form,
-            "classes":classes,
-            "school":school
+            "classes": classes,
+            "school": school,
+            "notifications": notifications
         }
 
         return render(request, "photom/manage_classes.html", context)

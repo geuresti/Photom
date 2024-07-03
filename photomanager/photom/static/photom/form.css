@@ -32,6 +32,10 @@
     text-align: center;
 }
 
+.form-title-link {
+    font-size: 32px;
+}
+
 .form {
     padding: 0;
 

@@ -259,8 +259,8 @@ header-height = 91px
   z-index: 1;
   transition: right 0.5s;
 
-  width: 150px;
-  height: 300px;
+  width: 200px;
+  height: auto;
   padding: 15px;
   border: 2px solid black;
   border-right: none;

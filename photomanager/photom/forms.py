@@ -5,10 +5,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, SetPasswordForm, PasswordResetForm
 from django.core.exceptions import ValidationError
 from phonenumber_field.formfields import PhoneNumberField
-
 from django.contrib.auth.forms import AuthenticationForm
 from django.forms.widgets import PasswordInput, TextInput
-
 
 class MultipleFileInput(forms.ClearableFileInput):
     allow_multiple_selected = True
@@ -29,26 +27,28 @@ class MultipleFileField(forms.FileField):
 class ImagesForm(forms.Form):
     photos = MultipleFileField()
 
-    schools = SchoolAccount.objects.all()
+    """schools = SchoolAccount.objects.all()
 
     school_options = [(-1, 'Select a School')] + [(school.pk, school.school_name) for school in schools]
-   
+    
     school = forms.ChoiceField(
         choices = school_options,
-    )
+    )"""
 
 class CSVUploadForm(forms.Form):
 
-    schools = SchoolAccount.objects.all()
+   # schools = SchoolAccount.objects.all()
 
-    school_options = [(-1, 'Select a School')] + [(school.pk, school.school_name) for school in schools]
-
-   # print("\nSCHOOLS:", school_options, "\n")
-
+   # school_options = [(-1, 'Select a School')] + [(school.pk, school.school_name) for school in schools]
+    
     csv_file = forms.FileField()
+
     school = forms.ChoiceField(
-        choices = school_options,
+        #choices = school_options,
+       choices = [(-1, 'Select a School')]
     )
+
+
 
 class CustomPasswordResetForm(SetPasswordForm):
 
@@ -198,7 +198,7 @@ class AccountForm(UserCreationForm):
         ),
     )  
 
-  # INACTIVE
+    # INACTIVE
     def username_clean(self):  
         username = self.cleaned_data['username'].lower()  
         already_exists = User.objects.filter(username=username)  
@@ -412,7 +412,6 @@ class StudentForm(forms.ModelForm):
         fields = [
             "first_name", 
             "last_name", 
-           # "student_age",
             "student_class",
             "student_ID",
             "student_photo_ID",
@@ -420,7 +419,6 @@ class StudentForm(forms.ModelForm):
         labels = {
             "first_name": _("First Name"),
             "last_name": _("Last Name"),
-           # "student_age": _("Age"),
             "student_class": _("Class"),
             "student_ID": _("ID #"),
             "student_photo_ID": _("Photo ID"),

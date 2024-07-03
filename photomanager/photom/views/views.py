@@ -84,14 +84,16 @@ def reset_notifications(request):
 
     return HttpResponseRedirect(reverse("index"))
 
+# WHAT THE FUCK?????????????
 @login_required
 def account_settings(request):
-
     school = SchoolAccount.objects.get(user=request.user)
+    notifications = Notification.objects.filter(school=school, hidden=False)
     account_form = AccountForm()
 
     context = {
         "school":school,
+        "notifications":notifications,
         "account_form":account_form
     }
 
@@ -100,16 +102,20 @@ def account_settings(request):
 @login_required
 def about(request):
     school = SchoolAccount.objects.get(user=request.user)
+    notifications = Notification.objects.filter(school=school, hidden=False)
     context = {
-        'school': school
+        "school": school,
+        "notifications": notifications
     }
     return render(request, "photom/about.html", context)
 
 @login_required
 def contact(request):
     school = SchoolAccount.objects.get(user=request.user)
+    notifications = Notification.objects.filter(school=school, hidden=False)
     context = {
-        'school': school
+        'school': school,
+        "notifications": notifications
     }
     return render(request, "photom/contact.html", context)
 
@@ -117,9 +123,11 @@ def contact(request):
 def search_students(request):
 
     school = SchoolAccount.objects.get(user=request.user)
+    notifications = Notification.objects.filter(school=school, hidden=False)
 
     context = {
-        "school":school,
+        "school": school,
+        "notifications": notifications
     }
 
     if request.method == "POST":
@@ -161,7 +169,6 @@ def search_students(request):
 
             return render(request, "photom/search_students.html", context)
     else:
-
         return render(request, "photom/search_students.html", context)
 
 ########################## HELPER FUNCTION ##########################
@@ -263,6 +270,7 @@ def account_settings(request):
     
     #school = SchoolAccount.objects.get(user=request.user)
     school = SchoolAccount.objects.get(user=request.user)
+    notifications = Notification.objects.filter(school=school, hidden=False)
 
     if request.method == "POST":
 
@@ -295,7 +303,8 @@ def account_settings(request):
 
     context = {
         "account_form": account_form,
-        "school": school
+        "school": school,
+        "notifications": notifications
     }
 
     return render(request, "photom/account_settings.html", context)

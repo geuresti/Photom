@@ -146,7 +146,7 @@ if (classes.length !== 0) {
 
             // Add each student from the sorted student list into a <div> tag
             new_element.innerHTML = sorted_class[i].innerHTML;
-            new_element.classList.add("student-card");
+            new_element.classList.add("index-student-card");
 
             // Update HTML with each new student card
             class_to_update.appendChild(new_element);

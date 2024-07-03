@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.shortcuts import render
-from photom.models import Student, Class, Photo, SchoolAccount
+from photom.models import Student, Class, Photo, SchoolAccount, Notification
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
@@ -12,9 +12,7 @@ from photomanager import settings
 from django.contrib.auth.decorators import login_required
 import os
 import csv
-
 from django.views.generic.edit import FormView
-
 from csv import DictReader
 from io import TextIOWrapper
 
@@ -142,6 +140,11 @@ def upload_csv(request):
 
     csv_form = CSVUploadForm()
 
+    all_schools = SchoolAccount.objects.all()
+    school_options = [(-1, 'Select a School')] + [(school.pk, school.school_name) for school in all_schools]
+    
+    csv_form.fields['school'].choices = school_options
+    
     context = {
         "school": school,
         "csv_form": csv_form,
@@ -263,6 +266,7 @@ def student_settings(request, student_id):
     
     student_instance = get_object_or_404(Student, pk=student_id)
     school = SchoolAccount.objects.get(user=request.user)
+    notifications = Notification.objects.filter(school=school, hidden=False)
 
     # Student information is being updated
     if request.method == "POST":
@@ -284,11 +288,11 @@ def student_settings(request, student_id):
                 "student_id":student_id,
                 "student":student_instance,
                 "student_form": render_form,
-                "school": school
+                "school": school,
+                "notifications": notifications
             }
 
             return render(request, "photom/view_student.html", context)
-    
     else:
         student_form = StudentForm(instance=student_instance, user=request.user)
 
@@ -296,7 +300,8 @@ def student_settings(request, student_id):
             "student_id":student_id,
             "student":student_instance,
             "student_form": student_form,
-            "school": school
+            "school": school,
+            "notifications": notifications
         }
 
         return render(request, "photom/student_settings.html", context)
@@ -306,7 +311,8 @@ def student_settings(request, student_id):
 def view_student(request, student_id):
     student_instance = get_object_or_404(Student, pk=student_id)
     school = SchoolAccount.objects.get(user=request.user)
-    
+    notifications = Notification.objects.filter(school=school, hidden=False)
+
     # Redirect if user attempting to view a student that isn't theirs
     if not belongs_to_authenticated_user(request.user, student_id, 'student'):
         return HttpResponseRedirect(reverse("index"))
@@ -332,7 +338,8 @@ def view_student(request, student_id):
                 "student_id":student_id,
                 "student":student_instance,
                 "photo_form": blank_form,
-                "school": school
+                "school": school,
+                "notifications": notifications
             }
 
             return render(request, "photom/view_student.html", context)
@@ -346,7 +353,8 @@ def view_student(request, student_id):
             "student_id":student_id,
             "student":student_instance,
             "photo_form": photo_form,
-            "school": school
+            "school": school,
+            "notifications": notifications
         }
 
         return render(request, "photom/view_student.html", context)

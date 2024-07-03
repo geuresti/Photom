@@ -14,7 +14,7 @@
         <div class="form-wrapper">
 
             <div id="form-header">
-                <h1 class="form-title"><i>{{ student }}</i></h1>
+                <h1 class="form-title"><i><a class="form-title-link" href="{% url 'view_student' student.pk %}">{{ student }}</a></i></h1>
             </div>
             
             <form class="form" enctype="multipart/form-data" action="{% url 'student_settings' student.pk %}" method="post">

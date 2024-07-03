@@ -44,14 +44,12 @@ class Class(models.Model):
 class Student(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
-    #student_age = models.IntegerField()
     student_class = models.ForeignKey("Class", on_delete=models.CASCADE)
     student_ID = models.IntegerField()
     student_photo_ID = models.ImageField(default="photo-ids/default-photo-id.PNG", upload_to="photo-ids")
 
     def __str__(self):
         return self.first_name + " " + self.last_name  + " #" + str(self.student_ID)
-
 
 class Photo(models.Model):
     photo = models.ImageField(upload_to="student-pictures")
