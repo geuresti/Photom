@@ -29,7 +29,7 @@ class MultipleFileField(forms.FileField):
 class ImagesForm(forms.Form):
     photos = MultipleFileField()
     schools = SchoolAccount.objects.all()
-    school_options = [(-1, 'Select a School')] + [(school.pk, school.school_name) for school in schools]
+    school_options = [(-1, 'Select a School')] + [(school.pk, school.school_name) for school in schools if school.user.is_active]
     
     school = forms.ChoiceField(
         #choices = [(-1, 'Select a School')],

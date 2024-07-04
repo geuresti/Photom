@@ -151,7 +151,7 @@ def upload_csv(request):
     csv_form = CSVUploadForm()
 
     all_schools = SchoolAccount.objects.all()
-    school_options = [(-1, 'Select a School')] + [(school.pk, school.school_name) for school in all_schools]
+    school_options = [(-1, 'Select a School')] + [(school.pk, school.school_name) for school in all_schools if school.user.is_active]
     
     csv_form.fields['school'].choices = school_options
     

@@ -16,9 +16,13 @@ class UserAdmin(BaseUserAdmin):
 
 class SchoolAccountAdmin(admin.ModelAdmin):
     actions = None
-    list_display = ['__str__', 'user', 'school_phone']
+    list_display = ['__str__', 'user', 'school_phone', 'get_active_status']
     exclude = ['school_position']
-    readonly_fields = ['user']
+    readonly_fields = ['user', 'get_active_status']
+
+    @admin.display(description="Active Account")
+    def get_active_status(self, obj):
+        return obj.user.is_active
 
     def has_add_permission(self, request, obj=None):
         return False
