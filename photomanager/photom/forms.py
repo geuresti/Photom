@@ -24,31 +24,24 @@ class MultipleFileField(forms.FileField):
             result = [single_file_clean(data, initial)]
         return result
 
+# DB accessed at runtime
+# Ideally query from FileFieldFormView *
 class ImagesForm(forms.Form):
     photos = MultipleFileField()
-
-    """schools = SchoolAccount.objects.all()
-
+    schools = SchoolAccount.objects.all()
     school_options = [(-1, 'Select a School')] + [(school.pk, school.school_name) for school in schools]
     
     school = forms.ChoiceField(
-        choices = school_options,
-    )"""
+        #choices = [(-1, 'Select a School')],
+        choices = school_options
+    )
 
 class CSVUploadForm(forms.Form):
-
-   # schools = SchoolAccount.objects.all()
-
-   # school_options = [(-1, 'Select a School')] + [(school.pk, school.school_name) for school in schools]
-    
     csv_file = forms.FileField()
 
     school = forms.ChoiceField(
-        #choices = school_options,
        choices = [(-1, 'Select a School')]
     )
-
-
 
 class CustomPasswordResetForm(SetPasswordForm):
 

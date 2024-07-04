@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from phonenumber_field.modelfields import PhoneNumberField
 from django.utils.html import format_html
+import os
+from photomanager import settings
 
 class SchoolAccount(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -50,6 +52,22 @@ class Student(models.Model):
 
     def __str__(self):
         return self.first_name + " " + self.last_name  + " #" + str(self.student_ID)
+    
+    def delete(self, *args, **kwargs):
+    
+        # Delete student's photo ID
+        if self.student_photo_ID and str(self.student_photo_ID) != 'photo-ids/default-photo-id.PNG':
+            os.remove(os.path.join(settings.MEDIA_ROOT, str(self.student_photo_ID)))
+            self.student_photo_ID = ""
+            self.save()
+
+        # Delete all of this student's photos
+        photos = Photo.objects.filter(student=self)
+        for photo in photos:
+            os.remove(os.path.join(settings.MEDIA_ROOT, str(photo.photo)))
+            photo.delete()
+
+        super(Student, self).delete(*args,**kwargs)
 
 class Photo(models.Model):
     photo = models.ImageField(upload_to="student-pictures")

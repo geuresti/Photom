@@ -26,11 +26,10 @@ class SchoolAccountAdmin(admin.ModelAdmin):
     def has_change_permission(self, request, obj=None):
         return False
     
-    def has_delete_permission(self, request, obj=None):
-        return False
+   # def has_delete_permission(self, request, obj=None):
+   #     return False
 
 class ClassAdmin(admin.ModelAdmin):
-    #actions = None
     list_display = ['class_name', 'class_school', 'class_grade', 'class_teacher']
     list_display_links = ['class_name']
     ordering = ['class_school']

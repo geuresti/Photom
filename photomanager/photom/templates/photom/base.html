@@ -23,9 +23,15 @@
                 <div class="right-header-row">
                     {% if school %}
                     <div id="logged-in">
+                        {% if request.user.is_superuser %}
+                        <p>
+                            Logged in as: <b style="margin-left: 10px;"> Administrator </b>
+                        </p>
+                        {% else %}
                         <p>
                             Logged in as: <b style="margin-left: 10px;"> {{ school.school_name }} </b>
                         </p>
+                        {% endif %}
                     </div>
 
                     <!-- INBOX DROPDOWN -->
@@ -72,7 +78,7 @@
                                 <div class="dropdown-content">
                                     <a href="{% url 'index' %}"> Home </a>
                                     {% if request.user.is_superuser %}
-                                    <a href="{% url 'admin:index' %}"> Admin </a>
+                                    <a href="{% url 'admin:index' %}"> Admin Dashboard </a>
                                     <a href="{% url 'upload_csv' %}"> Upload Students </a>
                                     <a href="{% url 'upload_photos' %}"> Upload Photos </a>
                                     {% else %}

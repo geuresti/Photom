@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from photom.models import Class, SchoolAccount, Notification
+from photom.models import Class, SchoolAccount, Student, Notification
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -130,15 +130,19 @@ def class_settings(request, class_id):
 @login_required
 def delete_class(request, class_id):
     
-    print("\n DELETE CLASS CALELD \n")
-
     class_instance = get_object_or_404(Class, pk=class_id)
 
     # Redirect if user attempting to delete class that isn't theirs
     if not belongs_to_authenticated_user(request.user, class_id, 'class'):
         return HttpResponseRedirect(reverse("index"))
 
-    print("\n CLASS ID", class_id, "HAS BEING DELETED \n")
+    print("\n CLASS ID", class_id, "HAS BEEN DELETED \n")
+
+    students = Student.objects.filter(student_class=class_instance)
+
+    for student in students:
+        student.delete()
+
     class_instance.delete()
 
     return HttpResponseRedirect(reverse("manage_classes"))

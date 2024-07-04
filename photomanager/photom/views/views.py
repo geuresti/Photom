@@ -247,7 +247,8 @@ def create_account(request):
 
             print("\n USER SUCCESSFULLY CREATED \n")
             account_form.save()
-            return HttpResponseRedirect("/accounts/login/")
+        
+            return HttpResponseRedirect(reverse("login"))
         else:
             print("\n USER FORM INVALID \n")
 
@@ -257,7 +258,6 @@ def create_account(request):
 
             return render(request, "registration/create_account.html", context)
     else:
-
         account_form = AccountForm()
         context = {
             "account_form":account_form,
@@ -312,13 +312,13 @@ def account_settings(request):
 @login_required
 def delete_account(request):
     school_account = get_object_or_404(SchoolAccount, user=request.user)
-    #school_account.delete()
+   # school_account.delete()
 
     # Note: users might still be able to log in.
-    #school_account.user.is_active = False
-   # school_account.user.save()
+    school_account.user.is_active = False
+    school_account.user.save()
     
-    print("\n ACCOUNT SUCCESSFULLY DEACTIVATED (DISABLED) \n")
+    print("\n ACCOUNT SUCCESSFULLY DEACTIVATED \n")
 
     return HttpResponseRedirect(reverse("login"))
 

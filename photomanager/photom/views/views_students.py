@@ -18,6 +18,16 @@ from io import TextIOWrapper
 
 class FileFieldFormView(FormView):
     form_class = ImagesForm
+
+    """form = ImagesForm()
+
+    all_schools = SchoolAccount.objects.all()
+    school_options = [(-1, 'Select a School')] + [(school.pk, school.school_name) for school in all_schools]
+    
+    form.fields['school'].choices = school_options
+
+    form_class = form"""
+
     template_name = "photom/upload_photos.html"
     success_url = "success"
 
@@ -250,6 +260,7 @@ def read_students_csv(request, file, school):
         print("\nERR:", error)
 
     context = {
+        "school": school,
         "csv_form": csv_form,
         "success": "Successfully uploaded csv"
     }
@@ -277,8 +288,8 @@ def student_settings(request, student_id):
         if student_form.is_valid():
 
             # Delete old photo ID before uploading new one
-            if 'student_photo_ID' in request.FILES.keys():
-                os.remove(os.path.join(settings.MEDIA_ROOT, old_photo_id))
+          #  if 'student_photo_ID' in request.FILES.keys():
+          #      os.remove(os.path.join(settings.MEDIA_ROOT, old_photo_id))
             
             student_form.save()
 
@@ -388,7 +399,7 @@ def delete_student(request, student_id):
         return HttpResponseRedirect(reverse("index"))
     
     student_instance = get_object_or_404(Student, pk=student_id)
-   # student_instance.delete()
-    print("\n STUDENT SUCCESSFULLY DELETED (DISABLED) \n")
+    student_instance.delete()
+    print("\n STUDENT SUCCESSFULLY DELETED (ENABLED) \n")
 
     return HttpResponseRedirect(reverse("manage_classes"))
