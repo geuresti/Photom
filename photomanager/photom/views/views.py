@@ -110,7 +110,7 @@ def organize_classes(school):
     organized_classes = num_grades + let_grades
     return organized_classes
 
-# Index view
+# Home page
 @login_required
 def index(request):
     school = SchoolAccount.objects.get(user=request.user)

@@ -32,9 +32,11 @@
                 <div class="form-row">
                     {{ csv_form.csv_file }}
                 </div>
+                {% if request.user.is_superuser %}
                 <div class="form-row">
                     {{ csv_form.school }}
                 </div>
+                {% endif %}
                 <input class="form-submit" type="submit" name="upload-csv" value="Upload" onclick="return confirm('Upload csv? This action cannot be undone.');">
             </form>
         </div>

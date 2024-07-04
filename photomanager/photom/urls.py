@@ -55,7 +55,7 @@ urlpatterns = [
     path("read_student_data/", views_students.read_students_csv, name="read_students_csv"),
     path("upload_student_data/", views_students.upload_csv, name="upload_csv"),
     path("upload_photos/", views_students.FileFieldFormView.as_view(), name="upload_photos"),
-    path("upload_photos/success", views_students.FileFieldFormView.as_view(), name="upload_photos_success"),
+    path("upload_photos/success", views_students.FileFieldFormViewSuccess.as_view(), name="upload_photos_success"),
 
     path("view_student/<int:student_id>/", views_students.view_student, name="view_student"),
     path("student_settings/<int:student_id>/", views_students.student_settings, name="student_settings"),
