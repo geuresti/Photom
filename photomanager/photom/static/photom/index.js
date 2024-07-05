@@ -1,17 +1,35 @@
 let classes = document.getElementsByClassName("class-students");
 
+//localStorage.clear();
+
 if (classes.length !== 0) {
 
     let class_links = document.getElementsByClassName("class-link"); 
     let class_display = document.getElementById("class-display"); 
 
-    // The first class will be active by default
-    var active_class = classes[0];
-    var active_class_index = 0;
-    active_class.style.display = "flex";
-    class_display.innerHTML = class_links[0].innerHTML;
+    var active_class; 
+    var active_class_index;
+    let selected_class;
 
-    class_links[0].style.borderBottom = "1px solid black";
+    // Check if there was a previously selected class in local storage
+    switch(localStorage.getItem("selected-class")) {
+        case null:
+            selected_class = 0;
+            console.log("no pre selected class");
+            break;
+        default:
+            selected_class = localStorage.getItem("selected-class");
+            console.log("pre selected class: ", selected_class);
+    }
+
+    // Set the active class to the selected-class from local storage
+    // or select the first class by default if there was no selected-class
+    active_class = classes[selected_class];
+    active_class_index = selected_class;
+    class_display.innerHTML = class_links[selected_class].innerHTML;
+    class_links[selected_class].style.borderBottom = "1px solid black";
+
+    active_class.style.display = "flex";
 
     var sort_by = document.getElementById("sort-by");
 
@@ -27,6 +45,7 @@ if (classes.length !== 0) {
 
         class_links[i].addEventListener("click", function() {
             let selected_class = classes[class_index];
+            localStorage.setItem("selected-class", class_index);
 
             // If the display is none, switch it and change active_class
             if (window.getComputedStyle(selected_class, null).getPropertyValue("display") === "none") {
@@ -53,6 +72,7 @@ if (classes.length !== 0) {
                 // Set the students to be in the order they were added
                 let classes_as_array = Array.from(classes[active_class_index].children);
                 console.log("\nby order added (active class change)");
+                localStorage.setItem("order-style", "order-added")
                 let class_by_order_added = classes_as_array.toSorted(sort_by_order_added);
                 sort_students(active_class_index, class_by_order_added);
             }
@@ -98,8 +118,36 @@ if (classes.length !== 0) {
     // On document load, set the order of the students to "Order Added"
     document.addEventListener("DOMContentLoaded", (event) => {
         let classes_as_array = Array.from(classes[active_class_index].children);
-        let class_by_order_added = classes_as_array.toSorted(sort_by_order_added);
-        sort_students(active_class_index, class_by_order_added);
+
+        // Get the most recently selected order style from local storage
+        let order_style = localStorage.getItem("order-style");
+        let class_by_order_style;
+
+        let dropdown = document.getElementById("sort-by");
+        
+        // Set the class_by_order_style based on the order_style
+        switch(order_style) {
+            case "most-recent":
+                class_by_order_style = classes_as_array.toSorted(sort_by_most_recent);
+                dropdown.selectedIndex = 1;
+                break;
+            case "last-name":
+                class_by_order_style = classes_as_array.toSorted(sort_by_last_name);
+                dropdown.selectedIndex = 2;
+                break;
+            case "first-name":
+                class_by_order_style = classes_as_array.toSorted(sort_by_first_name);
+                dropdown.selectedIndex = 3;
+                break;
+            default:
+                dropdown.selectedIndex = 0;
+                class_by_order_style = classes_as_array.toSorted(sort_by_order_added);
+        }
+
+        console.log("order style: ", order_style)
+
+        // Organize the students being displayed
+        sort_students(active_class_index, class_by_order_style);
     });
 
     // When the Sort Students dropdown is updated, set the order to the selected value
@@ -112,21 +160,25 @@ if (classes.length !== 0) {
             case "order-added":
                 let class_by_order_added = classes_as_array.toSorted(sort_by_order_added);
                 console.log("\nby order added");
+                localStorage.setItem("order-style", "order-added")
                 sort_students(active_class_index, class_by_order_added);
                 break;
             case "most-recent":
                 let class_by_most_recent = classes_as_array.toSorted(sort_by_most_recent);
                 console.log("\nby most recent");
+                localStorage.setItem("order-style", "most-recent")
                 sort_students(active_class_index, class_by_most_recent);
                 break;
             case "last-name":
                 console.log("\nby last name");
                 let class_by_last_name = classes_as_array.toSorted(sort_by_last_name);
+                localStorage.setItem("order-style", "last-name")
                 sort_students(active_class_index, class_by_last_name);
                 break;
             case "first-name":
                 console.log("\nby first name");
                 let class_by_first_name = classes_as_array.toSorted(sort_by_first_name);
+                localStorage.setItem("order-style", "first-name")
                 sort_students(active_class_index, class_by_first_name);
                 break;
             default:
