@@ -3,14 +3,14 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
 from photom.models import SchoolAccount, Class, Student, SchoolAccount, Photo, Notification
-from photom.forms import AccountForm, AccountSettingsForm
+from photom.forms import AccountForm, AccountSettingsForm, ImagesForm
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 
 from photomanager import settings
 from django.http import FileResponse
-import zipfile, pathlib, io
+import zipfile, pathlib, io, os
 
 ########################## GENERAL ##########################
 """
@@ -175,6 +175,8 @@ def reset_notifications(request):
     return HttpResponseRedirect(reverse("index"))
 
 # WHAT THE FUCK?????????????
+
+"""
 @login_required
 def account_settings(request):
     school = SchoolAccount.objects.get(user=request.user)
@@ -188,6 +190,8 @@ def account_settings(request):
     }
 
     return render(request, "photom/account_settings.html", context)
+
+"""
 
 @login_required
 def about(request):
@@ -208,6 +212,35 @@ def contact(request):
         "notifications": notifications
     }
     return render(request, "photom/contact.html", context)
+
+@login_required
+def schools_dashboard(request):
+    school = SchoolAccount.objects.get(user=request.user)
+    notifications = Notification.objects.filter(school=school, hidden=False)
+    all_schools = SchoolAccount.objects.all()
+    images_form = ImagesForm()
+
+    context = {
+        "school": school,
+        "notifications": notifications,
+        "all_schools": all_schools,
+        "form": images_form
+    }
+
+    return render(request, "photom/schools_dashboard.html", context)
+
+@login_required
+def download_school_csv(request, pk):
+    school = SchoolAccount.objects.get(pk=pk)
+
+    if school.has_csv:
+        file_name = school.school_name + ".csv"
+        file_path = os.path.join(settings.MEDIA_ROOT, "/student_data/" + school.school_name + "/" + file_name)
+
+        print("FP:", file_path, "\n")
+        print("FN:", file_name, "\n")
+        print(os.path.isfile(file_path))
+        return FileResponse(file_path, as_attachment=True, filename=file_name)
 
 @login_required
 def search_students(request):

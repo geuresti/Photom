@@ -1,0 +1,54 @@
+
+
+{% extends "photom/base.html" %}
+
+{% load static %}
+
+{% block title %} Create Account {% endblock %}
+
+{% block style %} 
+    <link rel="stylesheet" href="{% static 'photom/schools_dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+
+    <div class="schools-dashboard-wrapper">
+
+        <h1 class="sd-title"> Schools Dashboard </h1>
+
+        <div class="sd-menu">
+            {% for school in all_schools %}
+            <div class="sd-card">
+                <p> {{ school.school_name }} </p>
+               <!--<p> {{ school.school_phone }} </p>-->
+
+                <p> Upload Images </p>
+                <!--
+                <form class="form" enctype="multipart/form-data" action="{% url 'upload_photos' %}" method="post">
+                    {% csrf_token %}
+
+                    <div class="form-row">
+                        {{ form.photos }}
+                    </div>
+                    <div class="form-row">
+                        {{ form.school }}
+                    </div>
+                    <input class="form-submit" type="submit" name="upload-photos" value="Upload" onclick="return confirm('Upload photos? This action cannot be undone.');">
+                </form>
+                -->
+
+                {% if school.has_csv %}
+                <input type="button" class="download-csv" onclick="location.href='{% url 'download_school_csv' school.pk %}'"> Download CSV </button>
+                {% else %}
+                <p class="download-csv-null"> No CSV Available </p>
+                {% endif %}
+
+            </div>
+            {% endfor %}
+
+        </div>
+        
+    </div>
+    
+
+{% endblock %}

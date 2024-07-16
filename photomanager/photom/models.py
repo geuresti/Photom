@@ -10,6 +10,7 @@ class SchoolAccount(models.Model):
     school_phone = PhoneNumberField(region="US")
     school_name = models.CharField(max_length=100)
     school_position = models.CharField(max_length=100)
+    has_csv = models.BooleanField(default=False)
 
     def __str__(self):
         return self.school_name

@@ -10,7 +10,7 @@
 
 {% block content %}
     <div class="form-outer-wrapper">
-        <div class="form-wrapper">
+        <div class="form-wrapper" style="margin-bottom: 30px;">
             <div id="form-header">
                 <h1 class="form-title"><i> Upload CSV File </i></h1>
             </div>
@@ -39,6 +39,25 @@
                 {% endif %}
                 <input class="form-submit" type="submit" name="upload-csv" value="Upload" onclick="return confirm('Upload csv? This action cannot be undone.');">
             </form>
+        </div>
+        <div class="form-wrapper">
+            <div id="form-header">
+                <h1 class="form-title"><i> Note </i></h1>
+            </div>
+
+            <div class="form-row" style="text-align: center; color: black;">
+                <p style="margin-bottom: 15px;">
+                    The file MUST be a csv (.csv) file NOT an excel (.xlsx). If you 
+                    have an excel file you can convert it into the csv format by
+                    clicking on "save as" and then changing the file type to ".csv".
+                </p>
+                <p style="margin-bottom: 15px;">
+                    The csv file must adhere to the following format: 
+                </p>
+                <p style="margin-bottom: 15px;">
+                    Student Last Name, Student First Name, Grade, Teacher, Id Number
+                </p>
+            </div>
         </div>
     </div>
 {% endblock %}

@@ -12,6 +12,8 @@ urlpatterns = [
 
     path("about/", views.about, name="about"),
     path("contact/", views.contact, name="contact"),
+    path("schools_dashboard/", views.schools_dashboard, name="schools_dashboard"),
+    path("download_school_csv/<int:pk>/", views.download_school_csv, name="download_school_csv"),
     path("search_students/", views.search_students, name="search_students"),
     
     path('password_reset/', 

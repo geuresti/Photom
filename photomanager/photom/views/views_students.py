@@ -357,6 +357,9 @@ def read_students_csv(request, file, school):
     for error in errors:
         print("\nERR:", error)
 
+    school.has_csv = True
+    school.save()
+
     context = {
         "school": school,
         "csv_form": csv_form,
