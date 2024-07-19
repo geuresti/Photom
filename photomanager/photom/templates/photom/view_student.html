@@ -41,67 +41,21 @@
                 <li><b>Student ID:</b> {{ student.student_ID }} </li>
                 <!--<li><b>Total Photos:</b> {{ student.photo_set.all | length }} </li>-->
             </ul>
-
-            <!--
-            <form id="photo-upload-form" enctype="multipart/form-data" action="{% url 'view_student' student_id %}" method="post">
-                {% csrf_token %}
-
-                <label id="sv-form-label"><b>Upload Photos</b></label>
-                {{ photo_form.photo }}
-
-                <input id="sv-form-submit" type="submit" name="upload-photo" value="Upload">
-
-            </form>
-            -->
             
         </div>
     
         <div id="student-pictures-wrapper">
-
             {% for student in student.photo_set.all %}
                 <div class="student-photo-wrapper">
                     <img class="student-photo" src="{% get_media_prefix %}{{ student.photo }}" loading="lazy" alt="student-photo">
                     <a href="{% url 'download_photo' student.pk %}"> Download </a>
-
                     <div class="modal">
-        
                         <div class="close-button">&times;</div>
-        
                         <img class="modal-image">
-        
                     </div>
                 </div>
             {% endfor %}
-        
-        <!-- DUMMY PHOTO CARDS FOR TESTING
-            <div class="student-photo-wrapper">
-                <div class="student-photo">
-                    <img src="{% get_media_prefix %}photo-ids/default-photo-id.PNG" loading="lazy" alt="student-photo">
-                    <a> Download </a>
-                </div>
-            </div>
-            <div class="student-photo-wrapper">
-                <div class="student-photo">
-                    <img src="{% get_media_prefix %}photo-ids/default-photo-id.PNG" loading="lazy" alt="student-photo">
-                    <a> Download </a>
-                </div>
-            </div>
-            <div class="student-photo-wrapper">
-                <div class="student-photo">
-                    <img src="{% get_media_prefix %}photo-ids/default-photo-id.PNG" loading="lazy" alt="student-photo">
-                    <a> Download </a>
-                </div>
-            </div>
-            <div class="student-photo-wrapper">
-                <div class="student-photo">
-                    <img src="{% get_media_prefix %}photo-ids/default-photo-id.PNG" loading="lazy" alt="student-photo">
-                    <a> Download </a>
-                </div>
-            </div>
-        -->
-
         </div>
-
     </div>
 
     <script src="{% static 'photom/view_student.js' %}"></script>

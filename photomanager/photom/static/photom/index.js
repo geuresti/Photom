@@ -1,5 +1,9 @@
 let classes = document.getElementsByClassName("class-students");
 
+// TESTING
+
+let buttons = document.getElementsByClassName("class-button");
+
 //localStorage.clear();
 
 if (classes.length !== 0) {
@@ -31,6 +35,10 @@ if (classes.length !== 0) {
 
     active_class.style.display = "flex";
 
+    // TESTING (selection seems accurate)
+    buttons[selected_class].style.display = "inline";
+    console.log("og swag: ", buttons[selected_class]);
+
     var sort_by = document.getElementById("sort-by");
 
     /* 
@@ -54,6 +62,10 @@ if (classes.length !== 0) {
                 // change the display of the clicked class to flex
                 active_class.style.display = "none";
                 selected_class.style.display = "flex";
+
+                // TESTING
+                buttons[active_class_index].style.display = "none";
+
                 active_class = selected_class;
                 active_class_index = class_index;
 
@@ -66,6 +78,10 @@ if (classes.length !== 0) {
                 class_links[class_index].style.borderBottom = "1px solid black";
                 class_display.innerHTML = class_links[class_index].innerHTML;
                 
+                // TESTING (selection seems accurate)
+                buttons[active_class_index].style.display = "inline";
+                console.log("SWAGGAH: ", buttons[active_class_index]);
+
                 // Reset the order option dropdown
                 sort_by.value = "order-added";
 

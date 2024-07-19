@@ -8,7 +8,7 @@ urlpatterns = [
     path("", views.index, name="index"),
 
     path("download_school_photos/<int:pk>/", views.download_school_photos, name="download_school_photos"),
-    path("download_class_photos/<int:pk>/", views.download_class_photos, name="test_zip"),
+    path("download_class_photos/<int:pk>/", views.download_class_photos, name="download_class_photos"),
 
     path("about/", views.about, name="about"),
     path("contact/", views.contact, name="contact"),

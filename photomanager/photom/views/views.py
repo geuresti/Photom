@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
 from photom.models import SchoolAccount, Class, Student, SchoolAccount, Photo, Notification
-from photom.forms import AccountForm, AccountSettingsForm, ImagesForm
+from photom.forms import AccountForm, AccountSettingsForm
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
@@ -174,8 +174,7 @@ def reset_notifications(request):
 
     return HttpResponseRedirect(reverse("index"))
 
-# WHAT THE FUCK?????????????
-
+# Already a view with the same name
 """
 @login_required
 def account_settings(request):
@@ -218,13 +217,11 @@ def schools_dashboard(request):
     school = SchoolAccount.objects.get(user=request.user)
     notifications = Notification.objects.filter(school=school, hidden=False)
     all_schools = SchoolAccount.objects.all()
-    images_form = ImagesForm()
 
     context = {
         "school": school,
         "notifications": notifications,
         "all_schools": all_schools,
-        "form": images_form
     }
 
     return render(request, "photom/schools_dashboard.html", context)
@@ -235,12 +232,26 @@ def download_school_csv(request, pk):
 
     if school.has_csv:
         file_name = school.school_name + ".csv"
-        file_path = os.path.join(settings.MEDIA_ROOT, "/student_data/" + school.school_name + "/" + file_name)
+        directory = 'student_data\\' + school.school_name + "\\" + file_name
+        file_path = os.path.join(settings.BASE_DIR, directory)
 
-        print("FP:", file_path, "\n")
-        print("FN:", file_name, "\n")
-        print(os.path.isfile(file_path))
-        return FileResponse(file_path, as_attachment=True, filename=file_name)
+        if os.path.exists(file_path):
+            response = FileResponse(open(file_path, 'rb'))
+            response['Content-Type'] = 'application/octet-stream'
+            response['Content-Disposition'] = f'attachment; filename="{file_name}"'
+            return response
+    
+# Untested
+@login_required
+def delete_school_csv(request, pk):
+    school = SchoolAccount.objects.get(pk=pk)
+
+    if school.has_csv:
+        file_name = school.school_name + ".csv"
+        directory = 'student_data\\' + school.school_name + "\\" + file_name
+        file_path = os.path.join(settings.BASE_DIR, directory)
+        if os.path.exists(file_path):
+            os.remove(file_path)
 
 @login_required
 def search_students(request):

@@ -1,14 +1,13 @@
+.schools-dashboard-outer-wrapper {
+    padding-top: 60px;
+    padding-bottom: 80px;
+}
+
 .schools-dashboard-wrapper {
-    background-color: aliceblue;
-
-    width: 50%;
-    min-width: 850px;
-    max-width: 1100px;
-
-    height: 500px;
-
+    width: 40%;
+    min-width: 550px;
+    max-width: 850px;
     margin: auto;
-    margin-top: 50px;
 }
 
 .sd-title {
@@ -23,38 +22,30 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
-
-    height: 450px;
-
-    overflow-y: auto;
 }
 
 .sd-card {
-    background-color: blanchedalmond;
-
+    background-color: #cce2f5;
     height: 50px;
     width: 100%;
 
     padding: 0 15px;
 
-    display: grid;
-
-    grid-template-columns: 50% 25% 25%;
-    grid-template-rows: 1fr;
+    display: flex;
 
     align-items: center;
-
+    justify-content: space-between;
 }
 
 .download-csv {
-    padding: 3px;
+    padding: 5px 3px;
     width: 100%;
     max-width: 170px;
 
+    border: none;
     border-radius: 8px;
     background-color: black;
     color: white;
-    border: none;
 
     font-size: 16px;
     transition: all 0.25s;
@@ -68,7 +59,7 @@
 
 .download-csv-null {
     border: 1px solid black;
-    padding: 3px;
+    padding: 5px 3px;
     width: 100%;
     max-width: 170px;
     border-radius: 8px;
