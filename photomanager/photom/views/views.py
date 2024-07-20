@@ -13,26 +13,19 @@ from django.http import FileResponse
 import zipfile, pathlib, io, os
 
 ########################## GENERAL ##########################
-"""
-photo = Photo.objects.get(pk=photo_id)
-
-filename = photo.student.first_name + "_" + photo.student.last_name + "_" + str(index) + ".png"
-return FileResponse(photo.photo, as_attachment=True, filename=filename)
-"""
 def get_school_photos(pk):
-    school = SchoolAccount.objects.get(school_name="Great Hearts Invictus")
+    school = SchoolAccount.objects.get(pk=pk)
     school_classes = school.class_set.all()
-    school_students = [school.student_set.all() for school in school_classes]
 
     photos = []
-    for cls in school_students:
-        for student in cls:
-           # print("\nstudent:", student, "\n")
-            filtered_pictures = Photo.objects.filter(student=student)
-            if len(filtered_pictures) > 0:
-                for picture in filtered_pictures:
-                    photos.append(str(picture))
 
+    for cls in school_classes:
+        class_photos = get_class_photos(cls.pk)
+
+        if len(class_photos) > 0:
+            class_photos.append(cls.class_name)
+            photos.append(class_photos)
+    
     print("\n photos:", photos, "\n")
 
     return photos
@@ -49,22 +42,32 @@ def download_school_photos(request, pk):
     zip_buffer = io.BytesIO()
 
     with zipfile.ZipFile(zip_buffer, "a", zipfile.ZIP_DEFLATED, False) as zip_file:
-        for file_path in media_directory.iterdir():
-            file_name = str(file_path).split('\\')[-1]               
-            if file_name in photos:
-                zip_file.write(file_path, arcname = school_name + "/" + file_path.name)
+
+        for subset in photos:
+
+            for file_path in media_directory.iterdir():
+                file_name = str(file_path).split('\\')[-1]               
+                if file_name in subset:
+                    #zip_file.write(file_path, arcname = school_name + "/" + file_path.name)
+                    zip_file.write(file_path, arcname = school_name + "/" + subset[-1] + "/" + file_path.name)
 
     zip_buffer.seek(0)
     response = HttpResponse(zip_buffer, content_type='application/zip')
     response['Content-Disposition'] = 'attachment; filename = %s' % zip_file_name
     return response
-    #return HttpResponse("Zippin")
+   # return HttpResponse("zippin")
 
 def get_class_photos(pk):
 
+    # Get class by id
     clss = Class.objects.get(pk=pk)
+
+    # Get all students that belong to that class
     class_students = clss.student_set.all()
 
+    # Look at every student in the class and check if they
+    # have a photo associated with them. If so, add those
+    # photos to the array of photo objects 
     photos = []
     for student in class_students:
         print("\nstudent:", student, "\n")
@@ -80,13 +83,19 @@ def get_class_photos(pk):
 def download_class_photos(request, pk):
     clss = Class.objects.get(pk=pk)
 
+    # Get a list of all photos to download
     photos = get_class_photos(pk)
 
+    # Go to media directory
     media_directory = pathlib.Path(str(settings.MEDIA_ROOT) + "\\student-pictures\\")
-                    
+
+    # Set up zip file
     zip_file_name = clss.class_name + " Photos.zip"
     zip_buffer = io.BytesIO()
 
+    # Open zip file and read through the contents of the media
+    # directory. If the photo is in the 'photos' array then
+    # add it to the zip file.
     with zipfile.ZipFile(zip_buffer, "a", zipfile.ZIP_DEFLATED, False) as zip_file:
         for file_path in media_directory.iterdir():
             file_name = str(file_path).split('\\')[-1]               
@@ -97,8 +106,6 @@ def download_class_photos(request, pk):
     response = HttpResponse(zip_buffer, content_type='application/zip')
     response['Content-Disposition'] = 'attachment; filename = %s' % zip_file_name
     return response
-    #return HttpResponse("Zippin")
-
 
 # This function organizes the classes by grade descending
 def organize_classes(school):
