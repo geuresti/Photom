@@ -211,9 +211,7 @@ class FileFieldFormViewSuccess(FormView):
 def upload_csv(request):
 
     errs = None
-    #if request.user.is_superuser == False:
-    #    return HttpResponseRedirect(reverse("index"))
-    
+
     school = SchoolAccount.objects.get(user=request.user)
 
     if request.method == "POST":
@@ -236,7 +234,10 @@ def upload_csv(request):
                 file_name = "/" + school.school_name + ".csv"
 
                 if os.path.exists("student_data/" + school.school_name) == False:
+                    print("\nDirectory doesn't exist\n")
                     os.mkdir("student_data/" + school.school_name)
+                else:
+                    print("\nDirectory DOES exist\n")
 
                 with open("student_data/" + school.school_name + file_name, "wb+") as destination:
                     for chunk in f.chunks():
@@ -269,29 +270,41 @@ def read_students_csv(request, file, school):
     errors = []
     new_classes = []
 
-   # print("\nSCHOOL:", school)
+    print("\nSCHOOL:", school, "\n")
 
     rows = TextIOWrapper(file, encoding="utf-8", newline="")
 
-    csv_file_content = list(csv.DictReader(rows))
+    #with open(rows, mode ='r') as csv_f:    
+     #  csvFile = csv.DictReader(csv_f)
+      # for lines in csvFile:
+       #     print(lines)
 
-    school_classes = school.class_set.all()
+    #print("\n", rows, "\n")
+
+    # STOPPED WORKING !!!!!!!!
+    csv_file_content = list(csv.DictReader(rows))
 
     correct_keys = ['Student Last Name', 'Student First Name', 'Grade', 'Teacher', 'Id Number']
 
+    print("\n", csv_file_content, "\n")
+
     for row in csv_file_content:
+        print("checking row format...")
         for key in correct_keys:
             if key not in row.keys():
-               # print("\n ERROR: Incorrectly formatted csv file \n")
+                print("\n ERROR: Incorrectly formatted csv file \n")
                 context = {
                     "csv_form": csv_form,
                     "errs": "Incorrectly formatted file was given"
                 }
 
                 return render(request, "photom/upload_csv.html", context)
+    
+    school_classes = school.class_set.all()
 
     # Create classes from csv file
     for row in csv_file_content:
+        print("read row content...")
 
         class_already_exists = False
        # print("\n", row, "\n")

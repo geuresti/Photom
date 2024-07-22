@@ -30,7 +30,6 @@ def get_school_photos(pk):
 
     return photos
 
-# Great Hearts Invictus is 13
 def download_school_photos(request, pk):
     school_name = SchoolAccount.objects.get(pk=pk).school_name
 
@@ -180,24 +179,6 @@ def reset_notifications(request):
         notif.save()
 
     return HttpResponseRedirect(reverse("index"))
-
-# Already a view with the same name
-"""
-@login_required
-def account_settings(request):
-    school = SchoolAccount.objects.get(user=request.user)
-    notifications = Notification.objects.filter(school=school, hidden=False)
-    account_form = AccountForm()
-
-    context = {
-        "school":school,
-        "notifications":notifications,
-        "account_form":account_form
-    }
-
-    return render(request, "photom/account_settings.html", context)
-
-"""
 
 @login_required
 def about(request):

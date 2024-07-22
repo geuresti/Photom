@@ -21,7 +21,7 @@
                 {% endfor %}
             </ul>
 
-            <div id="dap-button-wrapper">
+            <div class="dp-button-wrapper">
                 <button type="button" id="download-all-photos" class="download-button" onclick="location.href='{% url 'download_school_photos' school.pk %}'"> Download ALL Photos </button>
             </div>            
 
@@ -52,8 +52,6 @@
                     </div>
                     {% endfor %}
                 </div>
-
-               <!--<div class="download-photos-wrapper">-->
 
                 <button type="button" id="download-photos-{{class.pk}}" class="download-button class-button" onclick="location.href='{% url 'download_class_photos' class.pk %}'"> Download Class Photos </button>
 

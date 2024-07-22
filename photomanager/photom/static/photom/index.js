@@ -1,7 +1,4 @@
 let classes = document.getElementsByClassName("class-students");
-
-// TESTING
-
 let buttons = document.getElementsByClassName("class-button");
 
 //localStorage.clear();
@@ -35,7 +32,7 @@ if (classes.length !== 0) {
 
     active_class.style.display = "flex";
 
-    // TESTING (selection seems accurate)
+    // Set the active button to the selected-class index
     buttons[selected_class].style.display = "inline";
     console.log("og swag: ", buttons[selected_class]);
 
@@ -63,7 +60,7 @@ if (classes.length !== 0) {
                 active_class.style.display = "none";
                 selected_class.style.display = "flex";
 
-                // TESTING
+                // Change active download button display to none
                 buttons[active_class_index].style.display = "none";
 
                 active_class = selected_class;
@@ -78,9 +75,8 @@ if (classes.length !== 0) {
                 class_links[class_index].style.borderBottom = "1px solid black";
                 class_display.innerHTML = class_links[class_index].innerHTML;
                 
-                // TESTING (selection seems accurate)
+                // Display new download button
                 buttons[active_class_index].style.display = "inline";
-                console.log("SWAGGAH: ", buttons[active_class_index]);
 
                 // Reset the order option dropdown
                 sort_by.value = "order-added";
