@@ -43,6 +43,7 @@ urlpatterns = [
         ),
         name="photom_password_reset_complete"),
 
+    path("notifications", views.notifications, name="notifications"),
     path("hide_notification/<int:notif_id>/", views.hide_notification, name="hide_notification"),
     path("read_notification/<int:notif_id>/", views.read_notification, name="read_notification"),
     path("reset_notifications/", views.reset_notifications, name="reset_notifications"),

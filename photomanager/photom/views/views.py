@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
 from photom.models import SchoolAccount, Class, Student, SchoolAccount, Photo, Notification
-from photom.forms import AccountForm, AccountSettingsForm
+from photom.forms import AccountForm, AccountSettingsForm, NotificationForm
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
@@ -132,6 +132,61 @@ def index(request):
     }
 
     return render(request, "photom/index.html", context)
+
+@login_required
+def notifications(request):
+
+    school = SchoolAccount.objects.get(user=request.user)
+    
+    context = {
+        "school": school,
+        "notifications": [],
+    }
+
+    if request.user.is_superuser is False:
+        return HttpResponseRedirect(reverse("index"))
+    
+    if request.method == "POST":
+
+        submitted_notification_form = NotificationForm(request.POST)
+
+        if submitted_notification_form.is_valid():
+            print("\n NOTIFICATION SUCCESSFULLY CREATED \n")
+            submitted_notification_form.save()
+        
+            context["success"] = "Notification successfully created"
+
+        else:
+            print("\n NOTIFICATION FORM INVALID \n")
+
+            print("\n", submitted_notification_form.errors, "\n")
+
+            context["errs"] = "Please select a school"
+
+        print("\ntrying\n")
+        notification_form = NotificationForm()
+
+        all_schools = SchoolAccount.objects.all()
+        school_options = [(-1, 'Select a School')] + [(school.pk, school.school_name) for school in all_schools if school.user.is_active]
+        
+        notification_form.fields['school'].choices = school_options
+
+        context["form"] = notification_form
+        print("\n", context, "\n")
+        return render(request, "photom/notifications.html", context)
+
+    else:
+        notification_form = NotificationForm()
+
+        all_schools = SchoolAccount.objects.all()
+        school_options = [(-1, 'Select a School')] + [(school.pk, school.school_name) for school in all_schools if school.user.is_active]
+        
+        notification_form.fields['school'].choices = school_options
+
+        context["form"] = notification_form
+
+        return render(request, "photom/notifications.html", context)
+
 
 # This view sets the specified notifcation to be hidden
 @login_required

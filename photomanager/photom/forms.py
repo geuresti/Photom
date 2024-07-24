@@ -93,9 +93,21 @@ class NotificationForm(forms.ModelForm):
 
     message = forms.CharField(
         widget = forms.Textarea(
-            attrs = {'style':'resize:none;'}
+            attrs = {
+                'style':'resize:none;',
+                'placeholder':'Message',
+                'maxlength':150
+            }
         )
-    )                                        
+    )    
+
+    title = forms.CharField(
+        widget = TextInput(
+            attrs = {
+                'placeholder': 'Title'
+            }
+        )
+    )                                  
 
     class Meta:
         model = Notification
@@ -191,7 +203,6 @@ class AccountForm(UserCreationForm):
         ),
     )  
 
-    # INACTIVE
     def username_clean(self):  
         username = self.cleaned_data['username'].lower()  
         already_exists = User.objects.filter(username=username)  
@@ -200,7 +211,6 @@ class AccountForm(UserCreationForm):
           
         return username  
     
-    # INACTIVE
     def email_clean(self):  
         email = self.cleaned_data['email'].lower()  
         new = User.objects.filter(email=email)  
@@ -209,7 +219,6 @@ class AccountForm(UserCreationForm):
           
         return email  
   
-  # INACTIVE
     def password_clean(self):  
         password1 = self.cleaned_data['password1']  
         password2 = self.cleaned_data['password2']  

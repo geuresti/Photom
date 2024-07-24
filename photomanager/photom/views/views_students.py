@@ -233,17 +233,22 @@ def upload_csv(request):
                 f = request.FILES["csv_file"]
                 file_name = "/" + school.school_name + ".csv"
 
+                # Check if the school's file exists
+                # If not, make a new directory using the school's name
                 if os.path.exists("student_data/" + school.school_name) == False:
                     print("\nDirectory doesn't exist\n")
                     os.mkdir("student_data/" + school.school_name)
                 else:
                     print("\nDirectory DOES exist\n")
 
-                with open("student_data/" + school.school_name + file_name, "wb+") as destination:
+                file_path = "student_data/" + school.school_name + file_name
+
+                # Add .csv file to the student data folder
+                with open(file_path, "wb+") as destination:
                     for chunk in f.chunks():
                         destination.write(chunk)
 
-                return read_students_csv(request, request.FILES["csv_file"], school)
+                return read_students_csv(request, file_path, school)
         else:
             print("\nERROR: Received non csv file\n")
 
@@ -263,7 +268,7 @@ def upload_csv(request):
     return render(request, "photom/upload_csv.html", context)
 
 @login_required
-def read_students_csv(request, file, school):
+def read_students_csv(request, file_path, school):
     print("\n READ CSV CALLED \n")
     csv_form = CSVUploadForm()
 
@@ -272,18 +277,16 @@ def read_students_csv(request, file, school):
 
     print("\nSCHOOL:", school, "\n")
 
-    rows = TextIOWrapper(file, encoding="utf-8", newline="")
+   # rows = TextIOWrapper(file, encoding="utf-8", newline="")
+  #  csv_file_content = list(csv.DictReader(rows))
 
-    #with open(rows, mode ='r') as csv_f:    
-     #  csvFile = csv.DictReader(csv_f)
-      # for lines in csvFile:
-       #     print(lines)
+    csv_file_content = []
 
-    #print("\n", rows, "\n")
-
-    # STOPPED WORKING !!!!!!!!
-    csv_file_content = list(csv.DictReader(rows))
-
+    with open(file_path, mode ='r') as f:    
+        csvFile = csv.DictReader(f)
+        for lines in csvFile:
+            csv_file_content.append(lines)
+    
     correct_keys = ['Student Last Name', 'Student First Name', 'Grade', 'Teacher', 'Id Number']
 
     print("\n", csv_file_content, "\n")
@@ -372,7 +375,7 @@ def read_students_csv(request, file, school):
 
     school.has_csv = True
     school.save()
-
+    
     context = {
         "school": school,
         "csv_form": csv_form,

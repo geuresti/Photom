@@ -1,0 +1,46 @@
+{% extends "photom/base.html" %}
+
+{% load static %}
+
+{% block title %} Home {% endblock %}
+
+{% block style %} 
+    <link rel="stylesheet" href="{% static 'photom/form.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="form-outer-wrapper">
+        <div class="form-wrapper">
+            <div id="form-header">
+                <h1 class="form-title"><i> Create Notification </i></h1>
+            </div>
+
+            {% if errs %}
+            <div class="form-row">
+                <p style="text-align: center; color: red;"> {{ errs }} </p>
+            </div>
+            {% endif %}
+
+            {% if success %}
+            <div class="form-row">
+                <p style="text-align: center; color: green;"> {{ success }} </p>
+            </div>
+            {% endif %}
+
+            <form class="form" action="{% url 'notifications' %}" method="post">
+                {% csrf_token %}
+                <div class="form-row">
+                    {{ form.school }}
+                </div>
+                <div class="form-row">
+                    {{ form.title }}
+                </div>
+                <div id="notif-message" class="form-row">
+                    {{ form.message }}
+                </div>
+                <input class="form-submit" type="submit" name="upload-photos" value="Send" onclick="return confirm('Upload photos? This action cannot be undone.');">
+            </form>
+
+        </div>
+    </div>
+{% endblock %}
