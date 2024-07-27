@@ -15,27 +15,21 @@
                 <h1 class="form-title"><i> Upload Photos </i></h1>
             </div>
 
-            {% if errs %}
+            {% if messages %}
             <div class="form-row">
-                <p style="text-align: center; color: red;"> {{ errs }} </p>
-            </div>
-            {% endif %}
-
-            {% if success %}
-            <div class="form-row">
-                <p style="text-align: center; color: green;"> {{ success }} </p>
+                {% for message in messages %}
+                <p class="{{ message.tags }}" style="text-align: center;"> {{ message }} </p>
+                {% endfor %}
             </div>
             {% endif %}
 
             <form class="form" enctype="multipart/form-data" action="{% url 'upload_photos' %}" method="post">
                 {% csrf_token %}
                 <div class="form-row">
-                    <!-- {{ imgs_form.photos }} -->
                     {{ form.photos }}
                 </div>
                 <div class="form-row">
                     {{ form.school }}
-                    <!-- {{ imgs_form.school }} -->
                 </div>
                 <input class="form-submit" type="submit" name="upload-photos" value="Upload" onclick="return confirm('Upload photos? This action cannot be undone.');">
             </form>

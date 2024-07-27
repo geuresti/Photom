@@ -29,6 +29,7 @@ if (classes.length !== 0) {
     active_class_index = selected_class;
     class_display.innerHTML = class_links[selected_class].innerHTML;
     class_links[selected_class].style.borderBottom = "1px solid black";
+    //class_links[selected_class].style.background = "rgb(255, 255, 255)";
 
     active_class.style.display = "flex";
 
@@ -69,10 +70,12 @@ if (classes.length !== 0) {
                 // Remove underline for other class links
                 for (var j = 0; j < class_links.length; j++) {
                     class_links[j].style.borderBottom = "none";
+                    //class_links[selected_class].style.background = "none";
                 }
 
                 // Add underline for active class link
                 class_links[class_index].style.borderBottom = "1px solid black";
+              //  class_links[selected_class].style.background = "rgb(255, 255, 255)";
                 class_display.innerHTML = class_links[class_index].innerHTML;
                 
                 // Display new download button

@@ -48,9 +48,15 @@
 
                                 {% if notif.read %}
                                 <div id="notification-{{notif.pk}}" class="notif" data-notifid="{{notif.pk}}" onclick="updateFlasher()">
+                                    <h2> {{ notif.title }} </h2>
+                                    <p> {{ notif.message }} </p>
+                                    <div class="notif-footer">
+                                        <p><i>{{ notif.send_date }}</i></p>
+                                        <p id="remove-notification-{{notif.pk}}" class="remove-notification fa-solid fa-trash" data-notifid="{{notif.pk}}"></p>
+                                    </div>
+                                </div>
                                 {% else %}
                                 <div id="notification-{{notif.pk}}" class="notif unread" data-notifid="{{notif.pk}}" onclick="updateFlasher()">
-                                {% endif %}
                                     <h2> {{ notif.title }} </h2>
                                     <p> {{ notif.message }} </p>
                                     <div class="notif-footer">
@@ -59,6 +65,7 @@
                                         <p id="remove-notification-{{notif.pk}}" class="remove-notification fa-solid fa-trash" data-notifid="{{notif.pk}}"></p>
                                     </div>
                                 </div>
+                                {% endif %}
 
                             {% endfor %}
 
@@ -156,7 +163,6 @@
         });
 
         // Whenever the notification is clicked mark it as read
-     //   $('.notif').click(function() {
         $('.read-notification').click(function() {
 
             var notif_id;

@@ -8,6 +8,12 @@ from phonenumber_field.formfields import PhoneNumberField
 from django.contrib.auth.forms import AuthenticationForm
 from django.forms.widgets import PasswordInput, TextInput
 
+def get_select_options():
+    all_schools = SchoolAccount.objects.all()
+    school_options = [(-1, 'Select a School')] + [(school.pk, school.school_name) for school in all_schools if school.user.is_active]   
+ 
+    return school_options
+
 class MultipleFileInput(forms.ClearableFileInput):
     allow_multiple_selected = True
 
@@ -28,13 +34,7 @@ class MultipleFileField(forms.FileField):
 # Ideally query from FileFieldFormView *
 class ImagesForm(forms.Form):
     photos = MultipleFileField()
-    schools = SchoolAccount.objects.all()
-    school_options = [(-1, 'Select a School')] + [(school.pk, school.school_name) for school in schools if school.user.is_active]
-    
-    school = forms.ChoiceField(
-        #choices = [(-1, 'Select a School')],
-        choices = school_options
-    )
+    school = forms.ChoiceField(choices=get_select_options)
 
 class CSVUploadForm(forms.Form):
     csv_file = forms.FileField()

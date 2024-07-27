@@ -121,7 +121,7 @@ def organize_classes(school):
 def index(request):
     school = SchoolAccount.objects.get(user=request.user)
     classes = organize_classes(school)
-    notifications = Notification.objects.filter(school=school, hidden=False)
+    notifications = Notification.objects.filter(school=school, hidden=False).order_by('-date_sent')
 
     # classes are needed for main display
     # school and notifications are needed for most views for the header
@@ -133,6 +133,7 @@ def index(request):
 
     return render(request, "photom/index.html", context)
 
+# The view for creating notifications on the main site.
 @login_required
 def notifications(request):
 

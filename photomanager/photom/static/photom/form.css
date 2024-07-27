@@ -196,6 +196,16 @@
     font-family: 'Arial', 'Helvetica', 'sans-serif';
 }
 
+/**************** MESSAGES ****************/
+
+.error {
+    color: red;
+}
+
+.success {
+    color: green;
+}
+
 /**************** FORM LINKS ****************/
 
 .link-wrapper {

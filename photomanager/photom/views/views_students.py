@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from photom.forms import StudentForm, PhotoForm, CSVUploadForm, ImagesForm
+from photom.forms import StudentForm, PhotoForm, CSVUploadForm, ImagesForm, ValidationError
 from django.http import FileResponse
 from .views import belongs_to_authenticated_user
 from photomanager import settings
@@ -16,6 +16,8 @@ from django.views.generic.edit import FormView
 from csv import DictReader
 from io import TextIOWrapper
 
+from django.contrib import messages
+
 class FileFieldFormView(FormView):
     form_class = ImagesForm
     template_name = "photom/upload_photos.html"
@@ -23,7 +25,6 @@ class FileFieldFormView(FormView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(FileFieldFormView, self).get_context_data(*args,**kwargs)
-
         users = User.objects.filter(is_superuser=True)
         if len(users) > 0:
             admin = users[0]
@@ -36,15 +37,20 @@ class FileFieldFormView(FormView):
 
         if school_id == '-1':
             print("\n ERROR: please select a school \n")
+            messages.add_message(self.request, messages.ERROR, "Please select a school.")
+            return HttpResponseRedirect(self.request.path_info)
             #errs = ('You must select a school')
         else:
             school = SchoolAccount.objects.get(pk=school_id)
+
            # print("\nGOT:", school, "\n")
             files = form.cleaned_data["photos"]
+            print("\n SCHOOL SELECTED: ", school)
+
+        classes = school.class_set.all()
 
         # Create a list of all students from all classes of 
         # the given school in order to check their ID numbers
-        classes = school.class_set.all()
         filtered_students = []
         for cls in classes:
             students = cls.student_set.all()
@@ -111,101 +117,9 @@ class FileFieldFormView(FormView):
                 print("\nERROR: WRONG FILE NAME\n")
         return super().form_valid(form)
     
-class FileFieldFormViewSuccess(FormView):
-    form_class = ImagesForm
-    template_name = "photom/upload_photos.html"
-
-    def get_context_data(self, *args, **kwargs):
-        context = super(FileFieldFormViewSuccess, self).get_context_data(*args,**kwargs)
-        users = User.objects.filter(is_superuser=True)
-        if len(users) > 0:
-            admin = users[0]
-            school = SchoolAccount.objects.get(user=admin)
-            context['school'] = school
-
-        context['success'] = "Successfully uploaded photos"
-        return context
-
-    def form_valid(self, form):
-        school_id = form.cleaned_data['school']
-
-        if school_id == '-1':
-            print("\n ERROR: please select a school \n")
-            #errs = ('You must select a school')
-        else:
-            school = SchoolAccount.objects.get(pk=school_id)
-           # print("\nGOT:", school, "\n")
-            files = form.cleaned_data["photos"]
-
-        # Create a list of all students from all classes of 
-        # the given school in order to check their ID numbers
-        classes = school.class_set.all()
-        filtered_students = []
-        for cls in classes:
-            students = cls.student_set.all()
-            for s in students:
-                filtered_students.append(s)
-        
-        #print("\n STUDENTS:", filtered_students, "\n")
-
-        # Iterate over photos
-        for f in files:
-
-            # Extract id from filename
-            if "_" in f.name:
-                delim = '_'
-            else:
-                delim = '.'
-
-            photo_student_id = f.name[:f.name.index(delim)]
-
-            #print("\nFILE NAME:", photo_student_id, "\n")
-
-            # Check that it's numeric
-            if photo_student_id.isnumeric():
-
-                # Iterate over students and match the id    
-                for student in filtered_students:
-
-                    # Create a new photo
-                    if student.student_ID == int(photo_student_id):
-
-                        # Check if student already has a photo with that ID
-                        photos = student.photo_set.all()
-
-                        #print("\nPHOTOS:", photos, "\n")
-
-                        for p in photos:
-                            p_name = str(p)
-
-                            if "_" in p_name:
-                                delimiter = '_'
-                            else:
-                                delimiter = '.'
-
-                            photo_id = p_name[:p_name.index(delimiter)]
-                            #print("\n extracted ID:", photo_id, "\n")
-
-                            if photo_id == photo_student_id:
-                                print("\n removing old photo:", str(p))
-                                os.remove(os.path.join(settings.MEDIA_ROOT, "student-pictures\\" + str(p)))
-                                p.delete()
-
-                        #print("\nSTUDENT ID FOUND")
-                        photo = Photo(
-                          photo=f,
-                          student=student
-                        )
-
-                        photo.save()
-                        print("\n PHOTO SAVED TO STUDENT (enabled)")
-                        break
-                else:
-                    print("\nERROR: STUDENT ID", photo_student_id, "NOT FOUND")  
-            else:
-                print("\nERROR: WRONG FILE NAME\n")
-
-        return super().form_valid(form)
+def reset_image_upload(request):
+    messages.add_message(request, messages.SUCCESS, "Image(s) successfully uploaded.")
+    return HttpResponseRedirect(reverse("upload_photos"))
     
 @login_required
 def upload_csv(request):
