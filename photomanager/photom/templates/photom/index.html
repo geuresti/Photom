@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="{% static 'photom/index.css' %}">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-
 {% endblock %}
 
 {% block content %}
@@ -24,7 +23,6 @@
             <div class="dp-button-wrapper">
                 <button type="button" id="download-all-photos" class="download-button" onclick="location.href='{% url 'download_school_photos' school.pk %}'"> Download ALL Photos </button>
             </div>            
-
         </div>
         <div id="title-students-wrapper">
             <div id="class-display-wrapper">

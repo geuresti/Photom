@@ -9,7 +9,7 @@
     width: 400px;
     margin: auto;
 
-    background-color: var(--light-gray);
+    background-color: var(--light-green);
     border-radius: 10px;
     padding: 20px 30px;
 
@@ -17,16 +17,6 @@
     flex-direction: column;
     gap: 20px;
 }
-
-/*
-#form-header {
-    border: 1px solid green;
-    position: absolute;
-    
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-}*/
 
 .form-title {
     text-align: center;
@@ -122,6 +112,7 @@
     cursor: pointer;
     background-color: white;
     color: black;
+    border: 1px solid black;
 }
 
 .button-link {
@@ -141,6 +132,7 @@
     cursor: pointer;
     background-color: white;
     color: black;
+    border: 1px solid black;
 }
 
 /**************** EDIT / DELETE ICONS ****************/

@@ -46,7 +46,7 @@ urlpatterns = [
     path("notifications", views.notifications, name="notifications"),
     path("hide_notification/<int:notif_id>/", views.hide_notification, name="hide_notification"),
     path("read_notification/<int:notif_id>/", views.read_notification, name="read_notification"),
-    path("reset_notifications/", views.reset_notifications, name="reset_notifications"),
+   # path("reset_notifications/", views.reset_notifications, name="reset_notifications"),
 
     path("account_settings/", views.account_settings, name="account_settings"),
     path("delete_account/", views.delete_account, name="delete_account"),
@@ -58,7 +58,6 @@ urlpatterns = [
     path("read_student_data/", views_students.read_students_csv, name="read_students_csv"),
     path("upload_student_data/", views_students.upload_csv, name="upload_csv"),
     path("upload_photos/", views_students.FileFieldFormView.as_view(), name="upload_photos"),
-    #path("upload_photos/success", views_students.FileFieldFormViewSuccess.as_view(), name="upload_photos_success"),
     path("upload_photos/success", views_students.reset_image_upload, name="upload_photos_success"),
 
     path("view_student/<int:student_id>/", views_students.view_student, name="view_student"),

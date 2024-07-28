@@ -1,35 +1,36 @@
 from django.shortcuts import render
-from django.http import HttpResponse
-from django.shortcuts import render
+from django.http import HttpResponse, HttpResponseRedirect, FileResponse
 from django.urls import reverse
-from photom.models import SchoolAccount, Class, Student, SchoolAccount, Photo, Notification
-from photom.forms import AccountForm, AccountSettingsForm, NotificationForm
-from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
-
+from photom.models import SchoolAccount, Class, Student, SchoolAccount, Photo, Notification
+from photom.forms import AccountForm, AccountSettingsForm, NotificationForm
 from photomanager import settings
-from django.http import FileResponse
 import zipfile, pathlib, io, os
 
 ########################## GENERAL ##########################
+
+# Helper function for download_school_photos()
 def get_school_photos(pk):
     school = SchoolAccount.objects.get(pk=pk)
     school_classes = school.class_set.all()
 
     photos = []
 
+    # Iterate over all classes from the specified school
     for cls in school_classes:
+
+        # Get photos for the current class
         class_photos = get_class_photos(cls.pk)
 
+        # If there are more than zero portraits, add subset to photos array
         if len(class_photos) > 0:
             class_photos.append(cls.class_name)
             photos.append(class_photos)
     
-    print("\n photos:", photos, "\n")
-
     return photos
 
+# Download all portraits of a school into a zip file
 def download_school_photos(request, pk):
     school_name = SchoolAccount.objects.get(pk=pk).school_name
 
@@ -40,21 +41,19 @@ def download_school_photos(request, pk):
     zip_file_name = school_name + " Photos.zip"
     zip_buffer = io.BytesIO()
 
+    # Open zip file
     with zipfile.ZipFile(zip_buffer, "a", zipfile.ZIP_DEFLATED, False) as zip_file:
-
+        # Go through each class subset of photos
         for subset in photos:
-
             for file_path in media_directory.iterdir():
                 file_name = str(file_path).split('\\')[-1]               
                 if file_name in subset:
-                    #zip_file.write(file_path, arcname = school_name + "/" + file_path.name)
                     zip_file.write(file_path, arcname = school_name + "/" + subset[-1] + "/" + file_path.name)
 
     zip_buffer.seek(0)
     response = HttpResponse(zip_buffer, content_type='application/zip')
     response['Content-Disposition'] = 'attachment; filename = %s' % zip_file_name
     return response
-   # return HttpResponse("zippin")
 
 def get_class_photos(pk):
 
