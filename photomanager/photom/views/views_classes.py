@@ -1,12 +1,10 @@
-from django.shortcuts import render
 from photom.models import Class, SchoolAccount, Student, Notification
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from photom.forms import ClassForm, StudentForm
 from django.contrib.auth.decorators import login_required
 from .views import belongs_to_authenticated_user, organize_classes
-
 
 # This view allows users to create students, create classes,
 # and view a list of all their classes and the students within
@@ -126,7 +124,7 @@ def class_settings(request, class_id):
 
         return render(request, "photom/class_settings.html", context)
 
-# This view deletes the class using the given id  
+# This view deletes the class using the given class id  
 @login_required
 def delete_class(request, class_id):
     
@@ -138,11 +136,10 @@ def delete_class(request, class_id):
 
     print("\n CLASS ID", class_id, "HAS BEEN DELETED \n")
 
+    # Delete all students associated with that class
     students = Student.objects.filter(student_class=class_instance)
-
     for student in students:
         student.delete()
 
     class_instance.delete()
-
     return HttpResponseRedirect(reverse("manage_classes"))

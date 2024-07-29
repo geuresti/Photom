@@ -45,18 +45,20 @@ def download_school_photos(request, pk):
     with zipfile.ZipFile(zip_buffer, "a", zipfile.ZIP_DEFLATED, False) as zip_file:
         # Go through each class subset of photos
         for subset in photos:
+            # Look through media folder and see if the photo from the subset exists
             for file_path in media_directory.iterdir():
-                file_name = str(file_path).split('\\')[-1]               
+                file_name = str(file_path).split('\\')[-1]
+                # Add image to zip file and add it to a folder named after the class it belongs to             
                 if file_name in subset:
                     zip_file.write(file_path, arcname = school_name + "/" + subset[-1] + "/" + file_path.name)
 
+    # Add file to response and return it
     zip_buffer.seek(0)
     response = HttpResponse(zip_buffer, content_type='application/zip')
     response['Content-Disposition'] = 'attachment; filename = %s' % zip_file_name
     return response
 
 def get_class_photos(pk):
-
     # Get class by id
     clss = Class.objects.get(pk=pk)
 
@@ -68,14 +70,13 @@ def get_class_photos(pk):
     # photos to the array of photo objects 
     photos = []
     for student in class_students:
-        print("\nstudent:", student, "\n")
+        #print("\nstudent:", student, "\n")
         filtered_pictures = Photo.objects.filter(student=student)
         if len(filtered_pictures) > 0:
             for picture in filtered_pictures:
                 photos.append(str(picture))
 
-    print("\n photos:", photos, "\n")
-
+    #print("\n photos:", photos, "\n")
     return photos
 
 def download_class_photos(request, pk):
@@ -143,6 +144,7 @@ def notifications(request):
         "notifications": [],
     }
 
+    # The requesting user must be an admin
     if request.user.is_superuser is False:
         return HttpResponseRedirect(reverse("index"))
     
@@ -153,40 +155,31 @@ def notifications(request):
         if submitted_notification_form.is_valid():
             print("\n NOTIFICATION SUCCESSFULLY CREATED \n")
             submitted_notification_form.save()
-        
             context["success"] = "Notification successfully created"
-
         else:
             print("\n NOTIFICATION FORM INVALID \n")
-
-            print("\n", submitted_notification_form.errors, "\n")
-
             context["errs"] = "Please select a school"
 
-        print("\ntrying\n")
         notification_form = NotificationForm()
 
+        # Manually set the choices of the notifications.school select
         all_schools = SchoolAccount.objects.all()
         school_options = [(-1, 'Select a School')] + [(school.pk, school.school_name) for school in all_schools if school.user.is_active]
-        
         notification_form.fields['school'].choices = school_options
 
         context["form"] = notification_form
-        print("\n", context, "\n")
         return render(request, "photom/notifications.html", context)
 
+    # This branch doesn't do anything unique but the page was not working without it
     else:
         notification_form = NotificationForm()
 
         all_schools = SchoolAccount.objects.all()
         school_options = [(-1, 'Select a School')] + [(school.pk, school.school_name) for school in all_schools if school.user.is_active]
-        
         notification_form.fields['school'].choices = school_options
 
         context["form"] = notification_form
-
         return render(request, "photom/notifications.html", context)
-
 
 # This view sets the specified notifcation to be hidden
 @login_required
@@ -201,9 +194,7 @@ def hide_notification(request, notif_id):
     notif.hidden = True
     notif.read = True
     notif.save()
-
-    print("\n HIDING NOTIFICATION #", notif_id, "\n")
-
+    #print("\n HIDING NOTIFICATION #", notif_id, "\n")
     return HttpResponse(notif)
 
 # This view sets the specified notifcation to be hidden
@@ -218,21 +209,16 @@ def read_notification(request, notif_id):
     
     notif.read = True
     notif.save()
-
-    print("\n NOTIFICATION #", notif_id, "MARKED AS READ \n")
-
+    #print("\n NOTIFICATION #", notif_id, "MARKED AS READ \n")
     return HttpResponse(notif)
 
-# This view is for testing only. It resets the 'hidden' and
-# 'read' flags on all notifications
+# This view is for testing. It resets the 'hidden' and 'read' flags on all notifications
 def reset_notifications(request):
     notifs = Notification.objects.all()
-
     for notif in notifs:
         notif.hidden = False
         notif.read = False
         notif.save()
-
     return HttpResponseRedirect(reverse("index"))
 
 @login_required
@@ -273,18 +259,20 @@ def schools_dashboard(request):
 def download_school_csv(request, pk):
     school = SchoolAccount.objects.get(pk=pk)
 
+    # Check that there is a csv to download
     if school.has_csv:
         file_name = school.school_name + ".csv"
         directory = 'student_data\\' + school.school_name + "\\" + file_name
         file_path = os.path.join(settings.BASE_DIR, directory)
 
+        # Check that the file path exists and return file in response
         if os.path.exists(file_path):
             response = FileResponse(open(file_path, 'rb'))
             response['Content-Type'] = 'application/octet-stream'
             response['Content-Disposition'] = f'attachment; filename="{file_name}"'
             return response
     
-# Untested
+# An untested function for deleting school csv files
 @login_required
 def delete_school_csv(request, pk):
     school = SchoolAccount.objects.get(pk=pk)
@@ -296,54 +284,47 @@ def delete_school_csv(request, pk):
         if os.path.exists(file_path):
             os.remove(file_path)
 
+# The view for the search bar results page
 @login_required
 def search_students(request):
 
     school = SchoolAccount.objects.get(user=request.user)
     notifications = Notification.objects.filter(school=school, hidden=False)
-
     context = {
         "school": school,
         "notifications": notifications
     }
 
     if request.method == "POST":
-
         searched = request.POST['searched']
         context['searched'] = searched
-
         search_results = []
-
         classes = school.class_set.all()
 
+        # If the search is by ID
         if searched.isnumeric():
-            #print("\n ID SEARCHED \n")
-
+            # Filter students from the user's school by the searched number
             for cls in classes:
                 students_by_id = cls.student_set.filter(student_ID__contains=searched)
-
+                # Add matching students to search results
                 for student in students_by_id:
                     search_results.append(student)
-
             context['search_results'] = search_results
-
             return render(request, "photom/search_students.html", context)
-
+        # The search is by first or last name
         else:
             searched = searched.capitalize()
 
             # Filter each student of each class by the searched word
             for cls in classes:
                 students_by_name = cls.student_set.filter(first_name__contains=searched) | cls.student_set.filter(last_name__contains=searched)
-
+                # Add matching students to search results
                 for student in students_by_name:
                     if student not in search_results:
                         search_results.append(student)
 
             #print("\n search results:", search_results, "\n")
-
             context['search_results'] = search_results
-
             return render(request, "photom/search_students.html", context)
     else:
         return render(request, "photom/search_students.html", context)
@@ -415,58 +396,40 @@ def belongs_to_authenticated_user(user, pk, association):
 
 ########################## CREATE USER ##########################
 
+# Create an account using the AccountForm
 def create_account(request):
     if request.method == "POST":
-
         account_form = AccountForm(request.POST)
-
         if account_form.is_valid():
-
             print("\n USER SUCCESSFULLY CREATED \n")
             account_form.save()
-        
             return HttpResponseRedirect(reverse("login"))
         else:
             print("\n USER FORM INVALID \n")
-
-            context = {
-                "account_form":account_form,
-            }
-
+            context = {"account_form":account_form}
             return render(request, "registration/create_account.html", context)
     else:
         account_form = AccountForm()
-        context = {
-            "account_form":account_form,
-        }
-
+        context = {"account_form":account_form}
         return render(request, "registration/create_account.html", context)
     
 @login_required
 def account_settings(request):
     
-    #school = SchoolAccount.objects.get(user=request.user)
     school = SchoolAccount.objects.get(user=request.user)
     notifications = Notification.objects.filter(school=school, hidden=False)
 
     if request.method == "POST":
-
-        #account_form = AccountForm(request.POST, instance=school)
         account_form = AccountSettingsForm(request.POST)
-
         if account_form.is_valid():
-
             # Update database object
             print("\n ACCOUNT FORM VALID \n")
-
             account_form.save()
-
             return HttpResponseRedirect(reverse("manage_classes"))
-        
         else:
-
             print("\n ACCOUNT FORM INVALID \n")
 
+    # Manually fill out form (due to pk) to display
     account_form = AccountSettingsForm({
         "primary_key": school.pk,
         "first_name": school.user.first_name,
@@ -490,13 +453,11 @@ def account_settings(request):
 def delete_account(request):
     school_account = get_object_or_404(SchoolAccount, user=request.user)
    # school_account.delete()
-
-    # Note: users might still be able to log in.
+    # Deactivate account instead of deleting in case of accidental deletion
     school_account.user.is_active = False
     school_account.user.save()
     
     print("\n ACCOUNT SUCCESSFULLY DEACTIVATED \n")
-
     return HttpResponseRedirect(reverse("login"))
 
 @login_required
@@ -509,5 +470,4 @@ def delete_student(request, student_id):
     student_instance = get_object_or_404(Student, pk=student_id)
     student_instance.delete()
     print("\n STUDENT SUCCESSFULLY DELETED \n")
-
     return HttpResponseRedirect(reverse("manage_classes"))

@@ -1,28 +1,24 @@
 from django.shortcuts import render
-from django.shortcuts import render
-from photom.models import Student, Class, Photo, SchoolAccount, Notification
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, FileResponse
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required
+from django.views.generic.edit import FormView
+from django.contrib import messages
+from photom.models import Student, Class, Photo, SchoolAccount, Notification
 from photom.forms import StudentForm, PhotoForm, CSVUploadForm, ImagesForm, ValidationError
-from django.http import FileResponse
 from .views import belongs_to_authenticated_user
 from photomanager import settings
-from django.contrib.auth.decorators import login_required
-import os
-import csv
-from django.views.generic.edit import FormView
-from csv import DictReader
-from io import TextIOWrapper
+import os, csv
 
-from django.contrib import messages
-
+# Class based view to handle a multi-image file upload
 class FileFieldFormView(FormView):
     form_class = ImagesForm
     template_name = "photom/upload_photos.html"
     success_url = "success"
 
+    # Adjust the context
     def get_context_data(self, *args, **kwargs):
         context = super(FileFieldFormView, self).get_context_data(*args,**kwargs)
         users = User.objects.filter(is_superuser=True)
@@ -34,16 +30,14 @@ class FileFieldFormView(FormView):
 
     def form_valid(self, form):
         school_id = form.cleaned_data['school']
-
+        # This implies the user left the school option blank
         if school_id == '-1':
             print("\n ERROR: please select a school \n")
             messages.add_message(self.request, messages.ERROR, "Please select a school.")
             return HttpResponseRedirect(self.request.path_info)
-            #errs = ('You must select a school')
+        # Set the 'school' to the selected value
         else:
             school = SchoolAccount.objects.get(pk=school_id)
-
-           # print("\nGOT:", school, "\n")
             files = form.cleaned_data["photos"]
             print("\n SCHOOL SELECTED: ", school)
 
@@ -57,8 +51,6 @@ class FileFieldFormView(FormView):
             for s in students:
                 filtered_students.append(s)
         
-        #print("\n STUDENTS:", filtered_students, "\n")
-
         # Iterate over photos
         for f in files:
 
@@ -74,17 +66,12 @@ class FileFieldFormView(FormView):
 
             # Check that it's numeric
             if photo_student_id.isnumeric():
-
                 # Iterate over students and match the id    
                 for student in filtered_students:
-
                     # Create a new photo
                     if student.student_ID == int(photo_student_id):
-
                         # Check if student already has a photo with that ID
                         photos = student.photo_set.all()
-
-                        #print("\nPHOTOS:", photos, "\n")
 
                         for p in photos:
                             p_name = str(p)
@@ -95,14 +82,12 @@ class FileFieldFormView(FormView):
                                 delimiter = '.'
 
                             photo_id = p_name[:p_name.index(delimiter)]
-                            #print("\n extracted ID:", photo_id, "\n")
 
                             if photo_id == photo_student_id:
                                 print("\n removing old photo:", str(p))
                                 os.remove(os.path.join(settings.MEDIA_ROOT, "student-pictures\\" + str(p)))
                                 p.delete()
 
-                        #print("\nSTUDENT ID FOUND")
                         photo = Photo(
                           photo=f,
                           student=student
@@ -116,7 +101,9 @@ class FileFieldFormView(FormView):
             else:
                 print("\nERROR: WRONG FILE NAME\n")
         return super().form_valid(form)
-    
+
+# This is a workaround for the FormView only allowing a 'success_url'
+# This is used when the user successfully uploads images from the FormView   
 def reset_image_upload(request):
     messages.add_message(request, messages.SUCCESS, "Image(s) successfully uploaded.")
     return HttpResponseRedirect(reverse("upload_photos"))
@@ -125,24 +112,24 @@ def reset_image_upload(request):
 def upload_csv(request):
 
     errs = None
-
     school = SchoolAccount.objects.get(user=request.user)
 
     if request.method == "POST":
-        print("\nFILES:", request.FILES, "\n")
-
+        # Check that there is an csv file in the request
         if request.FILES["csv_file"]:
             school_id = request.POST.get('school')
-
+            # Check if the user is an admin
             if request.user.is_superuser:
+                # Check that the admin selected a school to upload the file to
                 if school_id == '-1':
                     print("\n ERROR: please select a school \n")
                     errs = ('You must select a school')
+                # Update the school's classes and students
                 else:
                     school_to_update = SchoolAccount.objects.get(pk=school_id)
-                #  print("\nGOT:", school, "\n")
                     return read_students_csv(request, request.FILES["csv_file"], school_to_update)
             else:
+                # If the user is not an admin, update the user's school
                 print("\nSchool to update:", school, "\n")
                 f = request.FILES["csv_file"]
                 file_name = "/" + school.school_name + ".csv"
@@ -161,16 +148,16 @@ def upload_csv(request):
                 with open(file_path, "wb+") as destination:
                     for chunk in f.chunks():
                         destination.write(chunk)
-
+                # Update the school's classes and students
                 return read_students_csv(request, file_path, school)
         else:
             print("\nERROR: Received non csv file\n")
 
     csv_form = CSVUploadForm()
-
     all_schools = SchoolAccount.objects.all()
+
+    # Set csv form dropdown options
     school_options = [(-1, 'Select a School')] + [(school.pk, school.school_name) for school in all_schools if school.user.is_active]
-    
     csv_form.fields['school'].choices = school_options
     
     context = {
@@ -183,19 +170,12 @@ def upload_csv(request):
 
 @login_required
 def read_students_csv(request, file_path, school):
-    print("\n READ CSV CALLED \n")
     csv_form = CSVUploadForm()
-
     errors = []
     new_classes = []
-
-    print("\nSCHOOL:", school, "\n")
-
-   # rows = TextIOWrapper(file, encoding="utf-8", newline="")
-  #  csv_file_content = list(csv.DictReader(rows))
-
     csv_file_content = []
 
+    # Open the file path provided and add the content to 'csv_file_content'
     with open(file_path, mode ='r') as f:    
         csvFile = csv.DictReader(f)
         for lines in csvFile:
@@ -203,10 +183,8 @@ def read_students_csv(request, file_path, school):
     
     correct_keys = ['Student Last Name', 'Student First Name', 'Grade', 'Teacher', 'Id Number']
 
-    print("\n", csv_file_content, "\n")
-
+    # Check each row to make sure the file is in the correct format
     for row in csv_file_content:
-        print("checking row format...")
         for key in correct_keys:
             if key not in row.keys():
                 print("\n ERROR: Incorrectly formatted csv file \n")
@@ -214,7 +192,6 @@ def read_students_csv(request, file_path, school):
                     "csv_form": csv_form,
                     "errs": "Incorrectly formatted file was given"
                 }
-
                 return render(request, "photom/upload_csv.html", context)
     
     school_classes = school.class_set.all()
@@ -246,8 +223,8 @@ def read_students_csv(request, file_path, school):
             new_classes.append(new_class.class_teacher)
             new_class.save()
             print("\n MADE NEW CLASS (enabled) \n")
-        #else:
-            #print("\n class arleady exists, skipping \n")
+        else:
+            print("\n class arleady exists, skipping \n")
 
     # Add students to classes in csv file
     for row in csv_file_content:
@@ -298,7 +275,6 @@ def read_students_csv(request, file_path, school):
 
     return render(request, "photom/upload_csv.html", context)
 
-# STUDENT MUST BELONG TO THE USER
 @login_required
 def student_settings(request, student_id):
 
@@ -314,7 +290,7 @@ def student_settings(request, student_id):
     if request.method == "POST":
 
         student_form = StudentForm(request.POST, request.FILES, instance=student_instance, user=request.user)
-        old_photo_id = str(student_instance.student_photo_ID)
+        #old_photo_id = str(student_instance.student_photo_ID)
 
         if student_form.is_valid():
 
@@ -336,8 +312,8 @@ def student_settings(request, student_id):
 
             return render(request, "photom/view_student.html", context)
     else:
+        # Display form and update context
         student_form = StudentForm(instance=student_instance, user=request.user)
-
         context = {
             "student_id":student_id,
             "student":student_instance,
@@ -345,12 +321,13 @@ def student_settings(request, student_id):
             "school": school,
             "notifications": notifications
         }
-
         return render(request, "photom/student_settings.html", context)
     
-# Remove PhotoForm
+# Note: This view is currently unused
 @login_required
 def view_student(request, student_id):
+    # Note: PhotomForm likely no longer needed
+
     student_instance = get_object_or_404(Student, pk=student_id)
     school = SchoolAccount.objects.get(user=request.user)
     notifications = Notification.objects.filter(school=school, hidden=False)
@@ -419,6 +396,7 @@ def download_photo(request, photo_id):
         else:
             index += 1
 
+    # Set filename and return response containing the file
     filename = photo.student.first_name + "_" + photo.student.last_name + "_" + str(index) + ".png"
     return FileResponse(photo.photo, as_attachment=True, filename=filename)
 
@@ -432,5 +410,4 @@ def delete_student(request, student_id):
     student_instance = get_object_or_404(Student, pk=student_id)
     student_instance.delete()
     print("\n STUDENT SUCCESSFULLY DELETED (ENABLED) \n")
-
     return HttpResponseRedirect(reverse("manage_classes"))
