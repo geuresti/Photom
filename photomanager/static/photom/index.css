@@ -1,0 +1,168 @@
+/**************** CLASSES MENU ****************/
+
+#home-content-wrapper {  
+  width: 95%;
+  min-width: 900px;
+  height: calc(100vh - var(--header-height));
+  display: grid;
+  grid-template-columns: 20% 80%;
+}
+
+#classes-menu {
+  width: 100%;
+  min-width: 250px;
+  max-width: 350px;
+  background-color: var(--light-green);
+  
+  padding: 60px 20px;
+  text-align: center;
+}
+
+#classes-menu ul {
+  list-style-type: none;
+}
+
+#classes-menu li {
+  font-family: 'Arial', 'Helvetica', 'sans-serif';
+  color: black;
+  font-size: 16px;  
+  padding: 5px;
+  width: 95%;
+  margin: auto;
+  margin-bottom: 5px;
+}
+
+#classes-menu li:hover {
+  border-bottom: 1px solid black;
+  background-color: rgb(255, 255, 255);
+  cursor: pointer;
+}
+
+#classes-menu h2 {
+  margin-bottom: 30px;
+}
+
+#classes-menu-title {
+  text-decoration: underline;
+  font-weight: bold;
+  font-size: 22px;
+}
+
+/**************** CLASS STUDENTS ****************/
+
+#title-students-wrapper {
+  width: 80%;
+  max-width: 1100px;
+  height: 100%;
+  max-height: 800px;
+  margin: auto;
+  display: grid;
+  grid-template-rows: 15% 70%;
+  margin-left: 100px;
+}
+
+#class-display-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#class-display {
+  font-weight: bold;
+}
+
+#class-students-wrapper {
+  width: 100%;
+  height: 95%;
+  margin: auto;
+  border: 3px solid black;
+}
+
+.class-students {
+  display: none;
+  background-color: white;
+
+  gap: 15px;
+  width: 100%;
+
+  height: 100%;
+  padding: 15px;
+
+  align-content: flex-start;
+  flex-wrap: wrap;
+  overflow-y: scroll;
+}
+
+.index-student-card {
+  width: 150px;
+  height: 150px;
+  padding: 10px 5px 5px 5px;
+  /*background-color:rgb(203, 234, 205);*/
+  border: 2px solid var(--light-green);
+  text-align: center;
+}
+
+.index-student-card img {
+  width: 120px;
+  height: 100px;
+  margin: auto;
+  object-fit: cover;
+}
+
+.index-student-card img:hover {
+  /*background-color: #f9f9f9;*/
+  cursor: pointer;
+}
+
+.index-student-card p {
+ /* padding-top: 10px;*/
+  font-size: 15px;
+}
+
+/**************** BUTTONS ****************/
+
+.download-button {
+  padding: 5px 3px;
+  width: 90%;
+
+  max-width: 250px;
+  min-width: 180px;
+
+  border: none;
+  border-radius: 8px;
+  background-color: black;
+  color: white;
+
+  font-size: 16px;
+  transition: all 0.25s;
+}
+
+.class-button {
+  display: none;
+  position: relative;
+  width: fit-content;
+  top: 30px;
+  min-width: 250px;
+}
+
+.download-button:hover {
+  cursor: pointer;
+  background-color: white;
+  color: black;
+  border: 1px solid black;
+}
+
+.dp-button-wrapper {
+  padding-top: 15px;
+}
+
+/**************** RESPONSIVE STYLINGS ****************/
+
+@media screen and (max-width: 1000px) {
+
+  #class-display {
+    font-size: 27px;
+  }
+
+}

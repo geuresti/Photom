@@ -1,0 +1,182 @@
+#back-icon-wrapper svg {
+    position: absolute;
+    top: 130px;
+    left: 40px;
+}
+
+#back-icon-wrapper svg:hover {
+    fill: var(--light-gray);
+}
+
+#mc-content-wrapper {
+    width: 95%;
+    min-width: 1300px;
+    max-width: 2000px;
+    margin: auto;
+    height: 100%;
+    max-height: 800px;
+
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 50px;
+    margin-bottom: 80px;
+}
+
+#mc-content-title {
+    text-align: center;
+    margin-top: 50px;
+}
+
+#mc-content-block-wrapper {
+    height: 65vh;
+    min-height: 500px;
+    max-height: 1000px;
+    width: 95%;
+    min-width: 1200px;
+    margin: auto;
+
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+}
+
+.mc-content-block {
+    width: 28vw;
+    min-width: 400px;
+    max-width: 650px;
+    height: 100%;
+
+    background-color: var(--light-green);
+    border-radius: 10px;
+    padding: 20px 30px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/**************** CLASSES MENU ****************/
+
+#classes-menu {
+    width: 100%;
+    height: 215px;
+    padding: 15px;
+
+    background-color: white;
+    overflow-y: hidden;
+}
+
+#classes-select {
+   height: auto;
+}
+
+.settings-class-link-wrapper {
+    display: flex;
+    gap: 15px;
+}
+
+.settings-class-link-wrapper svg:hover {
+    transition: rotate 0.5s;
+}
+
+.settings-class-link-wrapper svg:hover {
+    fill: gray;
+    rotate: 180deg;
+}
+
+#classes-menu ul {
+    list-style-type: none;
+    height: 100%;
+    overflow-y: scroll;
+}
+
+#classes-menu li {
+    font-size: 18px;
+    width: fit-content;
+    margin-bottom: 10px;
+}
+
+#classes-menu li:hover {
+    border-bottom: 1px solid black;
+    cursor: pointer;
+}
+
+/**************** CLASS STUDENTS ****************/
+
+#class-display {
+    text-align: center;
+    font-weight: bold;
+}
+
+.class-students {
+    display: none;
+    background-color: white;
+
+    gap: 15px;
+    width: 100%;
+    height: 100%;
+    padding: 15px;
+
+    align-content: flex-start;
+    flex-wrap: wrap;
+    overflow-y: scroll;
+}
+
+.student-card {
+    width: 115px;
+    height: 115px;
+    text-align: center;
+    border: 1px solid black;
+}
+
+.student-card:hover {
+    background-color: rgb(231, 231, 231);
+    cursor: pointer;
+}
+
+.student-card img {
+    width: 70%;
+    height: 65%;
+    margin: auto;
+    object-fit: cover;
+}
+
+.student-card p {
+    padding-top: 5px;
+    font-size: 15px;
+}
+
+/**************** RESPONSIVE STYLINGS ****************/
+
+@media screen and (max-width: 1000px) {
+
+    #mc-content-wrapper {
+        width: 800px;
+        min-width: unset;
+        max-height: unset;
+        height: auto;
+        padding-bottom: 60px;
+    }
+
+    #mc-content-block-wrapper {
+        max-height: unset;
+        height: 100%;
+        max-width: unset;
+        min-width: 500px;
+        width: 100%;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .mc-content-block {
+        width: 100%;
+        min-width: 300px;
+        height: auto;
+    }
+
+    .larger {
+        height: 650px;
+    }
+
+}

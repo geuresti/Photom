@@ -1,0 +1,231 @@
+/**************** MAIN ELEMENTS ****************/
+
+#student-view-wrapper {
+    width: 85%;
+    min-width: 900px;
+    max-width: 1500px;
+    height: 700px;
+    margin: auto;
+    padding: 100px 0;
+
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+}
+
+#back-icon-wrapper svg {
+    position: absolute;
+    top: 130px;
+    left: 40px;
+}
+
+#back-icon-wrapper svg:hover {
+    fill: var(--light-gray);
+}
+
+/**************** STUDENT INFORMATION ****************/
+
+#student-info {
+    width: 40%;
+    max-width: 400px;
+    min-width: 250px;
+
+    border: 1px solid black;
+}
+
+#student-id-photo {
+    width: 100%;
+    height: 250px;
+    margin-bottom: 15px;
+
+    background-repeat: no-repeat;
+    background-size: contain; /* "cover" blurs some images */
+    background-position: center;
+
+  /*  border: 1px solid black;*/
+}
+
+#student-id-photo a {
+    float: right;
+}
+
+#student-delete-icon:hover {
+    fill: red;
+}
+
+#student-settings-icon, #student-delete-icon {
+    margin-right: 10px;
+    margin-top: 10px;
+}
+
+#student-settings-icon:hover {
+    fill: green;
+}
+
+#student-info ul {
+    list-style-type: none;
+    padding-left: 15px;
+}
+
+#student-info li {
+    font-size: 18px;
+    width: fit-content;
+    margin-bottom: 15px;
+}
+
+#student-info b {
+    margin-right: 10px;
+}
+
+/**************** PHOTO UPLOAD ****************/
+
+#photo-upload-form {
+    display: grid;
+    grid-template-rows: repeat(3, auto);
+    gap: 15px;
+
+    padding-top: 15px;
+    padding-left: 15px;
+
+    border-top: 1px solid black;
+}
+
+#sv-form-label {
+    font-size: 18px;
+}
+
+#sv-form-submit {
+    width: 90px;
+    margin: auto;
+    margin-bottom: 10px;
+    border: 1px solid black;
+    color: black;
+    font-size: 14px;
+    padding: 3px;
+}
+
+#sv-form-submit:hover {
+    background-color: var(--light-gray);
+    cursor: pointer;
+}
+
+/**************** STUDENT PICTURES / MODAL ****************/
+#student-pictures-wrapper {
+    width: fit-content;
+    min-width: 400px;
+
+    padding: 30px;
+    background-color: var(--light-gray);
+
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    gap: 30px;
+
+    overflow-y: scroll;
+}
+
+.student-photo-wrapper {
+    width: 150px;
+    height: 150px;
+    position: relative;
+}
+
+.student-photo {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+
+    transition: 0.2s;
+}
+  
+.student-photo:hover {
+    cursor: pointer;
+    opacity: 0.6;
+}
+
+.student-photo-wrapper a {
+    background-color: #f0f0f0;
+    border: 1px solid gray;
+    border-radius: 2px;
+    position: absolute;
+    bottom: 10px;
+    left: 33px;
+    width: 85px;
+
+    text-align: center;
+    color: black;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    padding: 3px;
+}
+
+.student-photo-wrapper a:hover {
+    background-color: var(--light-gray);
+    cursor: pointer;
+}
+
+.modal {
+    display: none;
+
+    justify-content: center;
+    align-items: center;
+
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.75);
+}
+  
+.modal-image {
+    display: block;
+    width: 100%;
+    max-width: 500px;
+
+    animation: appear 0.5s;
+}
+  
+@keyframes appear {
+    from {transform:scale(0);}
+    to {transform:scale(1);}
+}
+  
+.close-button {
+    position: absolute;
+    top: 35px;
+    right: 60px;
+
+    color: white;
+    font-size: 60px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+  
+.close-button:hover {
+    color: red;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/**************** RESPONSIVE STYLINGS ****************/
+
+@media screen and (max-width: 1000px) {
+
+    #student-view-wrapper {
+        width: 90%;  
+    }
+
+    #student-id-photo {
+        background-size: cover;
+    }
+
+    #student-pictures-wrapper {
+        width: 65%;
+    }
+}
+

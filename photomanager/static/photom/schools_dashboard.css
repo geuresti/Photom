@@ -1,0 +1,68 @@
+.schools-dashboard-outer-wrapper {
+    padding-top: 60px;
+    padding-bottom: 80px;
+}
+
+.schools-dashboard-wrapper {
+    width: 40%;
+    min-width: 550px;
+    max-width: 850px;
+    margin: auto;
+}
+
+.sd-title {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.sd-menu {
+    border: 3px solid black;
+    padding: 10px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sd-card {
+    background-color: #cce2f5;
+    height: 50px;
+    width: 100%;
+
+    padding: 0 15px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+}
+
+.download-csv {
+    padding: 5px 3px;
+    width: 100%;
+    max-width: 170px;
+
+    border: none;
+    border-radius: 8px;
+    background-color: black;
+    color: white;
+
+    font-size: 16px;
+    transition: all 0.25s;
+}
+
+.download-csv:hover {
+    cursor: pointer;
+    background-color: white;
+    color: black;
+}
+
+.download-csv-null {
+    border: 1px solid black;
+    padding: 5px 3px;
+    width: 100%;
+    max-width: 170px;
+    border-radius: 8px;
+    font-size: 16px;
+    text-align: center;
+}
