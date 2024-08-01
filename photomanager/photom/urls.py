@@ -69,7 +69,7 @@ urlpatterns = [
     path("upload_photos/success", views_students.reset_image_upload, name="upload_photos_success"),
 
     # Manage student
-    path("view_student/<int:student_id>/", views_students.view_student, name="view_student"),
+        #path("view_student/<int:student_id>/", views_students.view_student, name="view_student"),
     path("student_settings/<int:student_id>/", views_students.student_settings, name="student_settings"),
     path("delete_student/<int:student_id>/", views_students.delete_student, name="delete_student"),
 ]

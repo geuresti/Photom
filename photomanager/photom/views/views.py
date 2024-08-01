@@ -452,7 +452,6 @@ def account_settings(request):
 @login_required
 def delete_account(request):
     school_account = get_object_or_404(SchoolAccount, user=request.user)
-   # school_account.delete()
     # Deactivate account instead of deleting in case of accidental deletion
     school_account.user.is_active = False
     school_account.user.save()

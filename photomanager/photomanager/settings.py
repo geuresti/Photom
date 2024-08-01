@@ -1,14 +1,23 @@
 from pathlib import Path
+from dotenv import load_dotenv
+import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-jf03p45+joxwgq@6^ms)uo-y_@_!*#6z#@-@k7fm%%y!zi7k)a'
+env_path = load_dotenv(os.path.join(BASE_DIR, '.env'))
+load_dotenv(env_path)
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
-ALLOWED_HOSTS = []
+DEBUG = False
+
+ALLOWED_HOSTS = ['.localhost', '127.0.0.1']
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+    }
+}
 
 INSTALLED_APPS = [
     'photom.apps.PhotomConfig',
@@ -51,9 +60,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'photomanager.wsgi.application'
 
-# Database
-# https://docs.djangoproject.com/en/4.0/ref/settings/#databases
-
 """
 # PA Hosting *
 DATABASES = {
@@ -67,9 +73,6 @@ DATABASES = {
     }
 }
 """
-
-# Local Postgresql
-#        "PORT": "5432",
 
 DATABASES = {
     "default": {
@@ -100,16 +103,14 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+#EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
-"""
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = '587'
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'spi.photo.manager@gmail.com'
 EMAIL_HOST_PASSWORD = 'ciyx dpma matv tmjt'
-"""
 
 LANGUAGE_CODE = 'en-us'
 
@@ -121,7 +122,9 @@ USE_I18N = True
 
 USE_TZ = True
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 MEDIA_URL = '/media/'
 

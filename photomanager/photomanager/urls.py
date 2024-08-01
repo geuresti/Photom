@@ -1,9 +1,9 @@
-from django.contrib import admin
-from django.urls import include, path
-from photom.views import views, views_students
-from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
+from django.contrib import admin
+from django.conf import settings
+from django.urls import include, path
+from photom.views import views, views_students
 from photom.forms import CustomLoginForm
 
 urlpatterns = [
@@ -21,6 +21,3 @@ urlpatterns = [
         name="login"
     ),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-# I want to exclude some of the auth urls ?
-# overwrite before "include"

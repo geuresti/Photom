@@ -1,9 +1,9 @@
-from django.db import models
-from django.contrib.auth.models import User
 from phonenumber_field.modelfields import PhoneNumberField
+from django.contrib.auth.models import User
 from django.utils.html import format_html
-import os
+from django.db import models
 from photomanager import settings
+import os
 
 class SchoolAccount(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -38,7 +38,6 @@ class Class(models.Model):
 
     def __str__(self):
         return "(" + str(self.class_school) + ") " + self.class_name
-       # return self.class_name        
     
     class Meta:
         verbose_name = "Class"
@@ -75,6 +74,7 @@ class Photo(models.Model):
     student = models.ForeignKey("Student", on_delete=models.CASCADE)
     upload_date = models.DateTimeField(auto_now_add=True, blank=True)
 
+    # Helper functions for admin dashboard
     def preview(self):
         return format_html('<img href="{0}" src="{0}" width="50" height="50" />'.format(self.photo.url))
 

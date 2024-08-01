@@ -1,19 +1,20 @@
-from django import forms
-from .models import Student, Class, Photo, SchoolAccount, Notification
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, SetPasswordForm, PasswordResetForm
+from django.contrib.auth.models import User
 from django.utils.translation import gettext as _
-from django.contrib.auth.models import User  
-from django.contrib.auth.forms import UserCreationForm, SetPasswordForm, PasswordResetForm
 from django.core.exceptions import ValidationError
-from phonenumber_field.formfields import PhoneNumberField
-from django.contrib.auth.forms import AuthenticationForm
 from django.forms.widgets import PasswordInput, TextInput
+from django import forms
+from phonenumber_field.formfields import PhoneNumberField
+from .models import Student, Class, Photo, SchoolAccount, Notification
 
+# Helper function for dropdown options (ImagesForm)
 def get_select_options():
     all_schools = SchoolAccount.objects.all()
     school_options = [(-1, 'Select a School')] + [(school.pk, school.school_name) for school in all_schools if school.user.is_active]   
  
     return school_options
 
+# Helper classes for allowing multiple file input (ImagesForm)
 class MultipleFileInput(forms.ClearableFileInput):
     allow_multiple_selected = True
 
@@ -30,8 +31,6 @@ class MultipleFileField(forms.FileField):
             result = [single_file_clean(data, initial)]
         return result
 
-# DB accessed at runtime
-# Ideally query from FileFieldFormView *
 class ImagesForm(forms.Form):
     photos = MultipleFileField()
     school = forms.ChoiceField(choices=get_select_options)
@@ -401,6 +400,7 @@ class StudentForm(forms.ModelForm):
 
     student_photo_ID = forms.ImageField(required=False, error_messages = {'invalid':_("Image files only")}, widget=forms.FileInput)
 
+    # Set the 'student_class' options to all classes belonging to the user's school
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user')
         super().__init__(*args, **kwargs)
