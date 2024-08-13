@@ -1,3 +1,6 @@
 photomanager/media/
 photomanager/student_data/
+photomanager/views/views_students.py
+photomanager/settings.py
 student_data/
+.env
