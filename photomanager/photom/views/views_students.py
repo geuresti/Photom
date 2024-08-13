@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import FormView
 from django.contrib import messages
 from photom.models import Student, Class, Photo, SchoolAccount, Notification
-from photom.forms import StudentForm, PhotoForm, CSVUploadForm, ImagesForm, ValidationError
+from photom.forms import StudentForm, PhotoForm, CSVUploadForm, ImagesForm
 from .views import belongs_to_authenticated_user
 from photomanager import settings
 import os, csv
