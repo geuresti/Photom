@@ -22,17 +22,11 @@
                 {% for school in all_schools %}
                 <div class="sd-card">
                     <p> {{ school.school_name }} </p>
-
-                    <!--
-                    <p> Upload Images </p>
-                    -->
-
                     {% if school.has_csv %}
                     <button type="button" class="download-csv" onclick="location.href='{% url 'download_school_csv' school.pk %}'"> Download CSV </button>
                     {% else %}
                     <p class="download-csv-null"> No CSV Available </p>
                     {% endif %}
-
                 </div>
                 {% endfor %}
 

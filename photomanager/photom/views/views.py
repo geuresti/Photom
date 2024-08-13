@@ -247,10 +247,12 @@ def schools_dashboard(request):
     notifications = Notification.objects.filter(school=school, hidden=False)
     all_schools = SchoolAccount.objects.all()
 
+    filtered_schools = [s for s in all_schools if s.user.is_superuser == False]
+
     context = {
         "school": school,
         "notifications": notifications,
-        "all_schools": all_schools,
+        "all_schools": filtered_schools,
     }
 
     return render(request, "photom/schools_dashboard.html", context)

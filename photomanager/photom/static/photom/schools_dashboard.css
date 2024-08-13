@@ -25,7 +25,7 @@
 }
 
 .sd-card {
-    background-color: #cce2f5;
+    background-color: var(--light-green);
     height: 50px;
     width: 100%;
 
