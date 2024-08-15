@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect, FileResponse
 from django.urls import reverse
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
-from photom.models import SchoolAccount, Class, Student, SchoolAccount, Photo, Notification
+from photom.models import SchoolAccount, Class, Student, Photo, Notification
 from photom.forms import AccountForm, AccountSettingsForm, NotificationForm
 from photomanager import settings
 import zipfile, pathlib, io, os
@@ -164,7 +164,8 @@ def notifications(request):
 
         # Manually set the choices of the notifications.school select
         all_schools = SchoolAccount.objects.all()
-        school_options = [(-1, 'Select a School')] + [(school.pk, school.school_name) for school in all_schools if school.user.is_active]
+        school_options = [(-1, 'Select a School')] + [(school.pk, school.school_name) for school in all_schools if school.user.is_active and school.user.is_superuser == False]   
+
         notification_form.fields['school'].choices = school_options
 
         context["form"] = notification_form
@@ -175,7 +176,8 @@ def notifications(request):
         notification_form = NotificationForm()
 
         all_schools = SchoolAccount.objects.all()
-        school_options = [(-1, 'Select a School')] + [(school.pk, school.school_name) for school in all_schools if school.user.is_active]
+        school_options = [(-1, 'Select a School')] + [(school.pk, school.school_name) for school in all_schools if school.user.is_active and school.user.is_superuser == False]   
+
         notification_form.fields['school'].choices = school_options
 
         context["form"] = notification_form
@@ -273,6 +275,9 @@ def download_school_csv(request, pk):
             response['Content-Type'] = 'application/octet-stream'
             response['Content-Disposition'] = f'attachment; filename="{file_name}"'
             return response
+    
+    print("\nERROR: Download failed. Either the school did not have a csv file available or the path was incorrect.\n")
+    return HttpResponseRedirect(reverse("index"))
     
 # An untested function for deleting school csv files
 @login_required

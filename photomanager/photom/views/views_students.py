@@ -157,7 +157,8 @@ def upload_csv(request):
     all_schools = SchoolAccount.objects.all()
 
     # Set csv form dropdown options
-    school_options = [(-1, 'Select a School')] + [(school.pk, school.school_name) for school in all_schools if school.user.is_active]
+    school_options = [(-1, 'Select a School')] + [(school.pk, school.school_name) for school in all_schools if school.user.is_active and school.user.is_superuser == False]   
+
     csv_form.fields['school'].choices = school_options
     
     context = {
