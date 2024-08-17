@@ -98,26 +98,34 @@
   width: 150px;
   height: 150px;
   padding: 10px 5px 5px 5px;
-  /*background-color:rgb(203, 234, 205);*/
   border: 2px solid var(--light-green);
   text-align: center;
 }
 
-.index-student-card img {
+/*.index-student-card img {*/
+.isc-photo-id {
   width: 120px;
   height: 100px;
   margin: auto;
   object-fit: cover;
 }
 
-.index-student-card img:hover {
-  /*background-color: #f9f9f9;*/
+/*.index-student-card img:hover {*/
+.isc-photo-id:hover {
   cursor: pointer;
 }
 
 .index-student-card p {
- /* padding-top: 10px;*/
+  position: relative;
   font-size: 15px;
+}
+
+.isc-photo-check {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  top: -100px;
+  left: 100px;
 }
 
 /**************** BUTTONS ****************/

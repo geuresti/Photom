@@ -44,9 +44,16 @@
                     <div class="index-student-card">
                         <a href="{% url 'student_settings' student.pk %}">
                             <p class="primary-key" style="display: none;"> {{ student.pk }} </p>
-                            <img src="{% get_media_prefix %}{{ student.student_photo_ID }}">
+                            <img class="isc-photo-id" src="{% get_media_prefix %}{{ student.student_photo_ID }}">
+                            {% if student in students_that_have_photos %}
+                            <img class="isc-photo-check" src="{% static 'photom/check-mark.png'%}">
+                            {% endif %}
                         </a>
+                        {% if student in students_that_have_photos %}
+                        <p style="bottom: 30px;">{{ student.first_name }} {{ student.last_name }}</p>
+                        {% else %}
                         <p>{{ student.first_name }} {{ student.last_name }}</p>
+                        {% endif %}
                     </div>
                     {% endfor %}
                 </div>

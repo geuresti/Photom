@@ -119,16 +119,32 @@ def organize_classes(school):
 # Home page
 @login_required
 def index(request):
+
+    if request.user.is_superuser:
+        return HttpResponseRedirect(reverse('schools_dashboard'))
+    
     school = SchoolAccount.objects.get(user=request.user)
     classes = organize_classes(school)
     notifications = Notification.objects.filter(school=school, hidden=False).order_by('-date_sent')
+    
+    students_that_have_photos = []
+
+    # Track which students have photos so that they will have a check mark
+    # added next to their icon in the index template
+    for cls in classes:
+        for student in cls.student_set.all():
+            student_photo = Photo.objects.filter(student=student)
+            if len(student_photo) > 0:
+                print("\n student:", student, "has photo")
+                students_that_have_photos.append(student)
 
     # classes are needed for main display
     # school and notifications are needed for most views for the header
     context = {
         "notifications":notifications,
         "classes":classes,
-        "school":school
+        "school":school,
+        "students_that_have_photos": students_that_have_photos
     }
 
     return render(request, "photom/index.html", context)
