@@ -114,6 +114,18 @@ def upload_csv(request):
     errs = None
     school = SchoolAccount.objects.get(user=request.user)
 
+    csv_form = CSVUploadForm()
+    all_schools = SchoolAccount.objects.all()
+
+    # Set csv form dropdown options
+    school_options = [(-1, 'Select a School')] + [(school.pk, school.school_name) for school in all_schools if school.user.is_active and school.user.is_superuser == False]   
+    csv_form.fields['school'].choices = school_options
+
+    context = {
+        "school": school,
+        "csv_form": csv_form,
+    }
+
     if request.method == "POST":
         # Check that there is an csv file in the request
         if request.FILES["csv_file"]:
@@ -124,48 +136,38 @@ def upload_csv(request):
                 if school_id == '-1':
                     print("\n ERROR: please select a school \n")
                     errs = ('You must select a school')
+                    context["errs"] = errs
+                    return render(request, "photom/upload_csv.html", context)
                 # Update the school's classes and students
                 else:
                     school_to_update = SchoolAccount.objects.get(pk=school_id)
-                    return read_students_csv(request, request.FILES["csv_file"], school_to_update)
             else:
-                # If the user is not an admin, update the user's school
-                print("\nSchool to update:", school, "\n")
-                f = request.FILES["csv_file"]
-                file_name = "/" + school.school_name + ".csv"
+                school_to_update = school
 
-                # Check if the school's file exists
-                # If not, make a new directory using the school's name
-                if os.path.exists("student_data/" + school.school_name) == False:
-                    print("\nDirectory doesn't exist\n")
-                    os.mkdir("student_data/" + school.school_name)
-                else:
-                    print("\nDirectory DOES exist\n")
+            # If the user is not an admin, update the user's school
+            print("\nSchool to update:", school_to_update, "\n")
+            f = request.FILES["csv_file"]
+            file_name = "/" + school_to_update.school_name + ".csv"
 
-                file_path = "student_data/" + school.school_name + file_name
+            # Check if the school's file exists
+            # If not, make a new directory using the school's name
+            if os.path.exists("student_data/" + school_to_update.school_name) == False:
+                print("\nDirectory doesn't exist\n")
+                os.mkdir("student_data/" + school_to_update.school_name)
+            else:
+                print("\nDirectory DOES exist\n")
 
-                # Add .csv file to the student data folder
-                with open(file_path, "wb+") as destination:
-                    for chunk in f.chunks():
-                        destination.write(chunk)
-                # Update the school's classes and students
-                return read_students_csv(request, file_path, school)
+            file_path = "student_data/" + school_to_update.school_name + file_name
+
+            # Add .csv file to the student data folder
+            with open(file_path, "wb+") as destination:
+                for chunk in f.chunks():
+                    destination.write(chunk)
+
+            # Update the school's classes and students
+            return read_students_csv(request, file_path, school_to_update)
         else:
             print("\nERROR: Received non csv file\n")
-
-    csv_form = CSVUploadForm()
-    all_schools = SchoolAccount.objects.all()
-
-    # Set csv form dropdown options
-    school_options = [(-1, 'Select a School')] + [(school.pk, school.school_name) for school in all_schools if school.user.is_active and school.user.is_superuser == False]   
-
-    csv_form.fields['school'].choices = school_options
-    
-    context = {
-        "school": school,
-        "csv_form": csv_form,
-        "errs": errs
-    }
 
     return render(request, "photom/upload_csv.html", context)
 
