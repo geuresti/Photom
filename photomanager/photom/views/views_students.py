@@ -215,9 +215,9 @@ def read_students_csv(request, file_path, school):
         # Create new class
         if not class_already_exists and row['Teacher'] not in new_classes:
             new_class = Class(
-                class_name = row['Teacher'] + " " + row['Grade'],
-                class_teacher = row['Teacher'],
-                class_grade = row['Grade'],
+                class_name = row['Teacher'].strip() + " " + row['Grade'].strip(),
+                class_teacher = row['Teacher'].strip(),
+                class_grade = row['Grade'].strip(),
                 class_school = school
             )
 
@@ -244,10 +244,10 @@ def read_students_csv(request, file_path, school):
                 # Create a new student
                 print("\n student isnt in my class yet yipeee")
                 student = Student(
-                    first_name = row['Student First Name'],
-                    last_name = row['Student Last Name'],
+                    first_name = row['Student First Name'].strip(),
+                    last_name = row['Student Last Name'].strip(),
                     student_class = class_to_add_student_to,
-                    student_ID = row['Id Number']
+                    student_ID = row['Id Number'].strip()
                 )            
 
                 student.save()
@@ -311,7 +311,8 @@ def student_settings(request, student_id):
                 "notifications": notifications
             }
 
-            return render(request, "photom/view_student.html", context)
+            #return render(request, "photom/index.html", context)
+            return HttpResponseRedirect(reverse('index'))
     else:
         # Display form and update context
         student_form = StudentForm(instance=student_instance, user=request.user)

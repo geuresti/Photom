@@ -265,7 +265,7 @@ def schools_dashboard(request):
     notifications = Notification.objects.filter(school=school, hidden=False)
     all_schools = SchoolAccount.objects.all()
 
-    filtered_schools = [s for s in all_schools if s.user.is_superuser == False]
+    filtered_schools = [s for s in all_schools if s.user.is_superuser == False and s.user.is_active == True]
 
     context = {
         "school": school,
@@ -448,7 +448,7 @@ def account_settings(request):
             # Update database object
             print("\n ACCOUNT FORM VALID \n")
             account_form.save()
-            return HttpResponseRedirect(reverse("manage_classes"))
+            return HttpResponseRedirect(reverse("index"))
         else:
             print("\n ACCOUNT FORM INVALID \n")
 
@@ -492,4 +492,4 @@ def delete_student(request, student_id):
     student_instance = get_object_or_404(Student, pk=student_id)
     student_instance.delete()
     print("\n STUDENT SUCCESSFULLY DELETED \n")
-    return HttpResponseRedirect(reverse("manage_classes"))
+    return HttpResponseRedirect(reverse('index'))

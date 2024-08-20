@@ -46,14 +46,12 @@
                             <p class="primary-key" style="display: none;"> {{ student.pk }} </p>
                             <img class="isc-photo-id" src="{% get_media_prefix %}{{ student.student_photo_ID }}">
                             {% if student in students_that_have_photos %}
-                            <img class="isc-photo-check" src="{% static 'photom/check-mark.png'%}">
+                            <img class="isc-photo-check" title="This student has a portrait" src="{% static 'photom/check-mark.png'%}">
+                            {% else %}
+                            <img class="isc-photo-check" title="This student does not have a portrait" src="{% static 'photom/check-mark-gray.png'%}">
                             {% endif %}
                         </a>
-                        {% if student in students_that_have_photos %}
                         <p style="bottom: 30px;">{{ student.first_name }} {{ student.last_name }}</p>
-                        {% else %}
-                        <p>{{ student.first_name }} {{ student.last_name }}</p>
-                        {% endif %}
                     </div>
                     {% endfor %}
                 </div>

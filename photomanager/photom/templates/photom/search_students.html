@@ -20,12 +20,12 @@
         {% for result in search_results %}
         <div class="search-result">
             <div class="img-result">
-                <a href="{% url 'view_student' result.pk %}">
+                <a href="{% url 'student_settings' result.pk %}">
                     <img class="img-result-photo" src="{% get_media_prefix %}{{ result.student_photo_ID }}" loading="lazy" alt="student-photo">
                 </a>
             </div>
             <div class="text-result">
-                <a href="{% url 'view_student' result.pk %}">{{ result.first_name }} {{ result.last_name }}</a>
+                <a href="{% url 'student_settings' result.pk %}">{{ result.first_name }} {{ result.last_name }}</a>
                 <p> #{{ result.student_ID }} </p>
             </div>
         </div>
