@@ -113,6 +113,7 @@ def upload_csv(request):
 
     errs = None
     school = SchoolAccount.objects.get(user=request.user)
+    notifications = Notification.objects.filter(school=school, hidden=False)
 
     csv_form = CSVUploadForm()
     all_schools = SchoolAccount.objects.all()
@@ -124,6 +125,7 @@ def upload_csv(request):
     context = {
         "school": school,
         "csv_form": csv_form,
+        "notifications": notifications
     }
 
     if request.method == "POST":
