@@ -50,7 +50,10 @@ def download_school_photos(request, pk):
                 file_name = str(file_path).split('\\')[-1]
                 # Add image to zip file and add it to a folder named after the class it belongs to             
                 if file_name in subset:
-                    zip_file.write(file_path, arcname = school_name + "/" + subset[-1] + "/" + file_path.name)
+                    photo_instance = Photo.objects.get(photo="student-pictures/" + file_name)
+                    filename = photo_instance.student.first_name + "_" + photo_instance.student.last_name + ".png"
+
+                    zip_file.write(file_path, arcname = school_name + "/" + subset[-1] + "/" + filename)
 
     # Add file to response and return it
     zip_buffer.seek(0)
@@ -99,7 +102,9 @@ def download_class_photos(request, pk):
         for file_path in media_directory.iterdir():
             file_name = str(file_path).split('\\')[-1]               
             if file_name in photos:
-                zip_file.write(file_path, arcname = clss.class_name + "/" + file_path.name)
+                photo_instance = Photo.objects.get(photo="student-pictures/" + file_name)
+                filename = photo_instance.student.first_name + "_" + photo_instance.student.last_name + ".png"
+                zip_file.write(file_path, arcname = clss.class_name + "/" + filename)
 
     zip_buffer.seek(0)
     response = HttpResponse(zip_buffer, content_type='application/zip')

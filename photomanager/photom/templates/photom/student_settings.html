@@ -13,9 +13,11 @@
     <div class="form-outer-wrapper">
         <div class="form-wrapper">
 
-            <div id="form-header">
-                <!-- <h1 class="form-title"><i><a class="form-title-link" href="">{{ student }}</a></i></h1> -->
-                <h1 class="form-title"><i> {{ student.first_name }} {{ student.last_name }} </i></h1>            
+            <div id="student-settings-form-header">
+                <h1 class="form-title"><i> {{ student.first_name }} {{ student.last_name }} </i></h1>  
+                {% if student_photo_pk %}
+                <button class="button-link" onclick="location.href='{% url 'download_photo' student_photo_pk %}'"> Download Portrait </button>
+                {% endif %}
             </div>
             
             <form class="form" enctype="multipart/form-data" action="{% url 'student_settings' student.pk %}" method="post">
@@ -56,6 +58,3 @@
     </div>
 
 {% endblock %}
-
-
-

@@ -180,6 +180,20 @@ def read_students_csv(request, file_path, school):
     new_classes = []
     csv_file_content = []
 
+    school = SchoolAccount.objects.get(user=request.user)
+    notifications = Notification.objects.filter(school=school, hidden=False)
+    all_schools = SchoolAccount.objects.all()
+
+    # Set csv form dropdown options
+    school_options = [(-1, 'Select a School')] + [(school.pk, school.school_name) for school in all_schools if school.user.is_active and school.user.is_superuser == False]   
+    csv_form.fields['school'].choices = school_options
+
+    context = {
+        "school": school,
+        "csv_form": csv_form,
+        "notifications": notifications
+    }
+
     # Open the file path provided and add the content to 'csv_file_content'
     with open(file_path, mode ='r') as f:    
         csvFile = csv.DictReader(f)
@@ -193,10 +207,8 @@ def read_students_csv(request, file_path, school):
         for key in correct_keys:
             if key not in row.keys():
                 print("\n ERROR: Incorrectly formatted csv file \n")
-                context = {
-                    "csv_form": csv_form,
-                    "errs": "Incorrectly formatted file was given"
-                }
+                context["csv_form"] = csv_form
+                context["errs"] = "Incorrectly formatted file was given"
                 return render(request, "photom/upload_csv.html", context)
     
     school_classes = school.class_set.all()
@@ -272,11 +284,8 @@ def read_students_csv(request, file_path, school):
     school.has_csv = True
     school.save()
     
-    context = {
-        "school": school,
-        "csv_form": csv_form,
-        "success": "Successfully uploaded csv"
-    }
+    context["csv_form"] = csv_form
+    context["success"] = "Successfully uploaded csv"
 
     return render(request, "photom/upload_csv.html", context)
 
@@ -290,6 +299,17 @@ def student_settings(request, student_id):
     student_instance = get_object_or_404(Student, pk=student_id)
     school = SchoolAccount.objects.get(user=request.user)
     notifications = Notification.objects.filter(school=school, hidden=False)
+    student_photo = Photo.objects.filter(student=student_instance)
+
+    context = {
+        "student_id":student_id,
+        "student":student_instance,
+        "school": school,
+        "notifications": notifications
+    }
+
+    if len(student_photo) > 0:
+        context["student_photo_pk"] = student_photo[0].pk
 
     # Student information is being updated
     if request.method == "POST":
@@ -307,26 +327,15 @@ def student_settings(request, student_id):
 
             render_form = StudentForm(request.POST, instance=student_instance, user=request.user)
 
-            context = {
-                "student_id":student_id,
-                "student":student_instance,
-                "student_form": render_form,
-                "school": school,
-                "notifications": notifications
-            }
+            context["student_form"] = render_form
 
-            #return render(request, "photom/index.html", context)
             return HttpResponseRedirect(reverse('index'))
     else:
         # Display form and update context
         student_form = StudentForm(instance=student_instance, user=request.user)
-        context = {
-            "student_id":student_id,
-            "student":student_instance,
-            "student_form": student_form,
-            "school": school,
-            "notifications": notifications
-        }
+        
+        context["student_form"] = student_form
+
         return render(request, "photom/student_settings.html", context)
     
 # Note: This view is currently unused

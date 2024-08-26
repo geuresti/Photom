@@ -93,6 +93,12 @@
     margin-bottom: 10px;
 }
 
+#student-settings-form-header {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
 /**************** FORM SUBMIT ****************/
 
 .form-submit {
