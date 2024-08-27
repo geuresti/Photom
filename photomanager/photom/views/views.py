@@ -284,14 +284,19 @@ def schools_dashboard(request):
 def download_school_csv(request, pk):
     school = SchoolAccount.objects.get(pk=pk)
 
-    # Check that there is a csv to download
+    # Check that there is a file to download
     if school.has_csv:
-        file_name = school.school_name + ".csv"
-        directory = 'student_data\\' + school.school_name + "\\" + file_name
-        file_path = os.path.join(settings.BASE_DIR, directory)
+       
+        directory = os.path.join(settings.BASE_DIR, 'student_data\\' + school.school_name)
+    
+        files = os.listdir(directory)
+        
+        # Check that there are files in the directory
+        if len(files) > 0:
+            file_name = files[0]
+            file_path = os.path.join(directory, file_name)
 
-        # Check that the file path exists and return file in response
-        if os.path.exists(file_path):
+            # Add file in response
             response = FileResponse(open(file_path, 'rb'))
             response['Content-Type'] = 'application/octet-stream'
             response['Content-Disposition'] = f'attachment; filename="{file_name}"'

@@ -16,16 +16,16 @@
 
         <div class="schools-dashboard-wrapper">
 
-            <h1 class="sd-title"> School CSV Files </h1>
+            <h1 class="sd-title"> Uploaded School Files </h1>
 
             <div class="sd-menu">
                 {% for school in all_schools %}
                 <div class="sd-card">
                     <p> {{ school.school_name }} </p>
                     {% if school.has_csv %}
-                    <button type="button" class="download-csv" onclick="location.href='{% url 'download_school_csv' school.pk %}'"> Download CSV </button>
+                    <button type="button" class="download-csv" onclick="location.href='{% url 'download_school_csv' school.pk %}'"> Download File </button>
                     {% else %}
-                    <p class="download-csv-null"> No CSV Available </p>
+                    <p class="download-csv-null"> No File Available </p>
                     {% endif %}
                 </div>
                 {% endfor %}

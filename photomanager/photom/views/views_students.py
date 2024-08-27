@@ -149,7 +149,6 @@ def upload_csv(request):
             # If the user is not an admin, update the user's school
             print("\nSchool to update:", school_to_update, "\n")
             f = request.FILES["csv_file"]
-            file_name = "/" + school_to_update.school_name + ".csv"
 
             # Check if the school's file exists
             # If not, make a new directory using the school's name
@@ -158,16 +157,25 @@ def upload_csv(request):
                 os.mkdir("student_data/" + school_to_update.school_name)
             else:
                 print("\nDirectory DOES exist\n")
+                directory = "student_data/" + school_to_update.school_name
+                # Empty the folder before uploading the new file
+                for filename in os.listdir(directory):
+                    file_to_remove = os.path.join(directory, filename)
+                    if os.path.isfile(file_to_remove):
+                        os.remove(file_to_remove)
 
-            file_path = "student_data/" + school_to_update.school_name + file_name
+            file_path = "student_data/" + school_to_update.school_name + "/" + f.name
 
-            # Add .csv file to the student data folder
+            # Add file to the student data folder
             with open(file_path, "wb+") as destination:
                 for chunk in f.chunks():
                     destination.write(chunk)
 
-            # Update the school's classes and students
-            return read_students_csv(request, file_path, school_to_update)
+            context['success'] = "Successfully uploaded file"
+
+            school_to_update.has_csv = True
+            school_to_update.save()
+            #return read_students_csv(request, file_path, school_to_update)
         else:
             print("\nERROR: Received non csv file\n")
 
@@ -175,6 +183,8 @@ def upload_csv(request):
 
 @login_required
 def read_students_csv(request, file_path, school):
+    print("\n READ STUDENT CSV CALLED \n")
+
     csv_form = CSVUploadForm()
     errors = []
     new_classes = []
