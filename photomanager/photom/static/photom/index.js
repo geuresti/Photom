@@ -1,8 +1,6 @@
 let classes = document.getElementsByClassName("class-students");
 let buttons = document.getElementsByClassName("class-button");
 
-//localStorage.clear();
-
 if (classes.length !== 0) {
 
     let class_links = document.getElementsByClassName("class-link"); 
@@ -35,7 +33,6 @@ if (classes.length !== 0) {
 
     // Set the active button to the selected-class index
     buttons[selected_class].style.display = "inline";
-    console.log("og swag: ", buttons[selected_class]);
 
     var sort_by = document.getElementById("sort-by");
 
@@ -105,29 +102,39 @@ if (classes.length !== 0) {
     // Sort HTML elements of array by last name
     var sort_by_last_name = function(a, b) {
         let last_name_a = a.children[1].innerHTML.split(" ")[1];
-        let last_name_b = b.children[1].innerHTML.split(" ")[1]
+        let last_name_b = b.children[1].innerHTML.split(" ")[1];
         return last_name_a.localeCompare(last_name_b);
     }
 
     // Sort HTML elements of array by last name
     var sort_by_first_name = function(a, b) {
         let first_name_a = a.children[1].innerHTML.split(" ")[0];
-        let first_name_b = b.children[1].innerHTML.split(" ")[0]
+        let first_name_b = b.children[1].innerHTML.split(" ")[0];
         return first_name_a.localeCompare(first_name_b);
     }
 
     // Sort HTML elements of array by order added (primary key order)
     var sort_by_order_added = function(a, b) {
-        let primary_key_a = a.children[0].children[0].innerHTML
-        let primary_key_b = b.children[0].children[0].innerHTML
+        let primary_key_a = a.children[0].children[0].innerHTML;
+        let primary_key_b = b.children[0].children[0].innerHTML;
         return primary_key_a - primary_key_b;
     }
 
     // Sort HTML elements of array by most recent (primary key order reversed)
     var sort_by_most_recent = function(a, b) {
-        let primary_key_a = a.children[0].children[0].innerHTML
-        let primary_key_b = b.children[0].children[0].innerHTML
+        let primary_key_a = a.children[0].children[0].innerHTML;
+        let primary_key_b = b.children[0].children[0].innerHTML;
         return primary_key_b - primary_key_a;
+    }
+
+    var sort_by_has_portrait = function(a, b) {
+        let element_a = a.children[0].children[2];
+        let element_b = b.children[0].children[2];
+
+        a_has_portrait = element_a.classList.contains("has-portrait");
+        b_has_portrait = element_b.classList.contains("has-portrait");
+
+        return (a_has_portrait && b_has_portrait == false) ? -1 : 1;
     }
 
     // On document load, set the order of the students to "Order Added"
@@ -153,6 +160,10 @@ if (classes.length !== 0) {
             case "first-name":
                 class_by_order_style = classes_as_array.toSorted(sort_by_first_name);
                 dropdown.selectedIndex = 3;
+                break;
+            case "has-portrait":
+                class_by_order_style = classes_as_array.toSorted(sort_by_has_portrait);
+                dropdown.selectedIndex = 4;
                 break;
             default:
                 dropdown.selectedIndex = 0;
@@ -195,6 +206,12 @@ if (classes.length !== 0) {
                 let class_by_first_name = classes_as_array.toSorted(sort_by_first_name);
                 localStorage.setItem("order-style", "first-name")
                 sort_students(active_class_index, class_by_first_name);
+                break;
+            case "has-portrait":
+                console.log("\nby has portrait");
+                let class_by_has_portrait = classes_as_array.toSorted(sort_by_has_portrait);
+                localStorage.setItem("order-style", "has-portrait")
+                sort_students(active_class_index, class_by_has_portrait);
                 break;
             default:
                 console.log("Error: Sort By Value Unkown");

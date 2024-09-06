@@ -175,6 +175,9 @@ def upload_csv(request):
 
             school_to_update.has_csv = True
             school_to_update.save()
+
+            if request.user.is_superuser:
+                return read_students_csv(request, file_path, school_to_update)
             #return read_students_csv(request, file_path, school_to_update)
         else:
             print("\nERROR: Received non csv file\n")
@@ -190,7 +193,6 @@ def read_students_csv(request, file_path, school):
     new_classes = []
     csv_file_content = []
 
-    school = SchoolAccount.objects.get(user=request.user)
     notifications = Notification.objects.filter(school=school, hidden=False)
     all_schools = SchoolAccount.objects.all()
 
@@ -268,7 +270,7 @@ def read_students_csv(request, file_path, school):
             if int(row['Id Number']) not in student_ids:
 
                 # Create a new student
-                print("\n student isnt in my class yet yipeee")
+                print("\n This student is not in the class")
                 student = Student(
                     first_name = row['Student First Name'].strip(),
                     last_name = row['Student Last Name'].strip(),
